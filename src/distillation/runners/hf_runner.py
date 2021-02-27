@@ -13,7 +13,7 @@ class HFDistilRunner(Runner):
             teacher.eval()
             set_requires_grad(teacher, False)
             t_outputs = teacher(**batch, output_hidden_states=True, return_dict=True)
-            
+
         s_outputs = student(**batch, output_hidden_states=True, return_dict=True)
         if self.is_train_loader:
             self.batch["t_logits"] = t_outputs["logits"]

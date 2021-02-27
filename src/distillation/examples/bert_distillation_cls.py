@@ -29,17 +29,17 @@ def main(args):
         lambda e: tokenizer(
             e["text"], truncation=True, padding="max_length", max_length=128
         ),
-        batched=True
+        batched=True,
     )
-    datasets = datasets.map(
-        lambda e: {"labels": e["label"]},
-        batched=True
-    )
+    datasets = datasets.map(lambda e: {"labels": e["label"]}, batched=True)
     datasets.set_format(
-        type="torch", columns=["input_ids", "token_type_ids", "attention_mask", "labels"]
+        type="torch",
+        columns=["input_ids", "token_type_ids", "attention_mask", "labels"],
     )
     loaders = {
-        "train": DataLoader(datasets["train"], batch_size=args.batch_size, shuffle=True),
+        "train": DataLoader(
+            datasets["train"], batch_size=args.batch_size, shuffle=True
+        ),
         "valid": DataLoader(datasets["test"], batch_size=args.batch_size),
     }
     metric_callback = LoaderMetricCallback(
@@ -69,24 +69,18 @@ def main(args):
 
     slct_callback = ControlFlowCallback(
         HiddensSlctCallback(hiddens_key="t_hidden_states", layers=[1, 3]),
-        loaders="train"
+        loaders="train",
     )
 
-    mse_hiddens = ControlFlowCallback(
-        MSEHiddensCallback(),
-        loaders="train"
-    )
+    mse_hiddens = ControlFlowCallback(MSEHiddensCallback(), loaders="train")
 
-    kl_div = ControlFlowCallback(
-        KLDivCallback(),
-        loaders="train"
-    )
+    kl_div = ControlFlowCallback(KLDivCallback(), loaders="train")
 
     aggregator = ControlFlowCallback(
         MetricAggregationCallback(
             weights={"kl_div_loss": 0.2, "mse_loss": 0.2, "task_loss": 0.6}
         ),
-        loaders="train"
+        loaders="train",
     )
 
     runner = HFDistilRunner()
@@ -102,7 +96,7 @@ def main(args):
         check=True,
         num_epochs=args.num_distil_epochs,
         valid_metric="accuracy",
-        minimize_valid_metric=False
+        minimize_valid_metric=False,
     )
 
 

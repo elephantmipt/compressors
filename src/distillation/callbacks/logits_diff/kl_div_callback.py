@@ -10,8 +10,7 @@ class KLDivCallback(Callback):
 
     def on_batch_end(self, runner):
         runner.batch_metrics[self.output_key] = kl_div_loss(
-            s_logits=runner.batch["s_logits"],
-            t_logits=runner.batch["t_logits"],
+            s_logits=runner.batch["s_logits"], t_logits=runner.batch["t_logits"],
         )
 
 

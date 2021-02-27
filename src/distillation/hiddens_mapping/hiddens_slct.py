@@ -16,11 +16,9 @@ def hiddens_slct(
     Returns:
         FloatTensor: Selected hidden states
     """
-    
+
     if isinstance(layers, list):
-        return tuple(
-            [hidden_states[l_idx] for l_idx in layers]
-        )
+        return tuple([hidden_states[l_idx] for l_idx in layers])
     return hidden_states[layers]
 
 

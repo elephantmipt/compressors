@@ -6,7 +6,9 @@ from src.distillation.hiddens_mapping.hiddens_slct import hiddens_slct
 
 
 class HiddensSlctCallback(Callback):
-    def __init__(self, layers: Union[int, List[int]], hiddens_key: str = "t_hidden_states"):
+    def __init__(
+        self, layers: Union[int, List[int]], hiddens_key: str = "t_hidden_states"
+    ):
         super().__init__(order=CallbackOrder.hiddens_slct)
         self.layers = layers
         self.hiddens_key = hiddens_key

@@ -24,7 +24,7 @@ def mse_loss(
     Returns:
         FloatTensor: loss
     """
-    
+
     if normalize:
         loss_fn = lambda inp: F.normalize(nn.MSELoss(reduction="mean")(inp))
     else:
@@ -33,8 +33,7 @@ def mse_loss(
     return torch.stack(
         [
             loss_fn(s_hiddens, t_hiddens)
-            for s_hiddens, t_hiddens in
-            zip(s_hidden_states, t_hidden_states)
+            for s_hiddens, t_hiddens in zip(s_hidden_states, t_hidden_states)
         ]
     ).mean()
 
