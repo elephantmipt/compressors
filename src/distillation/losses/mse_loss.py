@@ -18,15 +18,12 @@ def mse_loss(
         t_hidden_states (Tuple[FloatTensor]): teacher hiddens
         normalize (bool, optional): normalize embeddings. Defaults to False.
 
-    Raises:
-        NotImplementedError: if attention mask is not None
-
     Returns:
         FloatTensor: loss
     """
 
     if normalize:
-        loss_fn = lambda inp: F.normalize(nn.MSELoss(reduction="mean")(inp))
+        loss_fn = lambda s, t: nn.MSELoss(reduction="mean")(F.normalize(s), F.normalize(t))
     else:
         loss_fn = nn.MSELoss(reduction="mean")
 
