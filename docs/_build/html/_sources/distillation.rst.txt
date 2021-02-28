@@ -1,0 +1,12 @@
+Distillation
+============
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+.. automodule:: src.distillation.callbacks
+    :members:
+
+.. automodule:: src.distillation.losses
+    :members:

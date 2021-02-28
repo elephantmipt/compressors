@@ -29,7 +29,7 @@ def mse_loss(
 
     return torch.stack(
         [
-            loss_fn(s_hiddens, t_hiddens)
+            loss_fn(s_hiddens[:, 0], t_hiddens[:, 0])  # loss for CLS token
             for s_hiddens, t_hiddens in zip(s_hidden_states, t_hidden_states)
         ]
     ).mean()
