@@ -4,7 +4,7 @@ from src.distillation.callbacks import (
     MSEHiddensCallback,
     KLDivCallback,
     LambdaWrp,
-    LambdaSlctCallback
+    LambdaSlctCallback,
 )
 from src.distillation.hiddens_mapping import hiddens_slct
 from src.distillation.runners import HFDistilRunner
@@ -20,5 +20,5 @@ __all__ = [
     "HFDistilRunner",
     "init_bert_model_with_teacher",
     "LambdaWrp",
-    "LambdaSlctCallback"
+    "LambdaSlctCallback",
 ]

@@ -23,13 +23,15 @@ def mse_loss(
     """
 
     if normalize:
-        loss_fn = lambda s, t: nn.MSELoss(reduction="mean")(F.normalize(s), F.normalize(t))
+        loss_fn = lambda s, t: nn.MSELoss(reduction="mean")(
+            F.normalize(s), F.normalize(t)
+        )
     else:
         loss_fn = nn.MSELoss(reduction="mean")
 
     return torch.stack(
         [
-            loss_fn(s_hiddens[:, 0], t_hiddens[:, 0])  # loss for CLS token
+            loss_fn(s_hiddens, t_hiddens)  # loss for CLS token
             for s_hiddens, t_hiddens in zip(s_hidden_states, t_hidden_states)
         ]
     ).mean()

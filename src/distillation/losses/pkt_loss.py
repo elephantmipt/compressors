@@ -6,7 +6,9 @@ from torch import FloatTensor
 
 
 def cosine_similarity_loss(
-    s_hidden_states: Tuple[FloatTensor], t_hidden_states: Tuple[FloatTensor], eps: float = 1e-7
+    s_hidden_states: Tuple[FloatTensor],
+    t_hidden_states: Tuple[FloatTensor],
+    eps: float = 1e-7,
 ) -> FloatTensor:
     """Loss between distributions over features similarity with cosine similarity kernel.
 

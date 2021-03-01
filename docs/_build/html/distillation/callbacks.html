@@ -12,10 +12,9 @@
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
 
       <!-- sphinx script_files -->
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
 
       
       <script src="../_static/theme-vendors.js"></script>
@@ -23,8 +22,8 @@
     
   <link rel="index" title="Index" href="../genindex.html" />
   <link rel="search" title="Search" href="../search.html" />
-  <link rel="next" title="Quantization" href="../Quantization/quantization.html" />
-  <link rel="prev" title="Loss functions" href="loss_functions.html" /> 
+  <link rel="next" title="Utils" href="utils.html" />
+  <link rel="prev" title="Runners" href="runners.html" /> 
   </head>
 
   <body>
@@ -92,6 +91,12 @@
           </li>
 
         
+          <li class="toctree-l1 "><a href="../Examples/examples.html" class="reference internal ">Examples</a>
+
+            
+          </li>
+
+        
       </ul>
     </div>
   
@@ -112,12 +117,12 @@
 
   <ul class="page-nav">
   <li class="prev">
-    <a href="loss_functions.html"
-       title="previous chapter">← Loss functions</a>
+    <a href="runners.html"
+       title="previous chapter">← Runners</a>
   </li>
   <li class="next">
-    <a href="../Quantization/quantization.html"
-       title="next chapter">Quantization →</a>
+    <a href="utils.html"
+       title="next chapter">Utils →</a>
   </li>
 </ul>
   
@@ -133,9 +138,9 @@
 <h2>Logits difference callbacks<a class="headerlink" href="#logits-difference-callbacks" title="Permalink to this headline">¶</a></h2>
 <p>Callbacks which use difference between probabilities distribution over last layers.
 Useful for classification task.</p>
-<span class="target" id="module-src.distillation.callbacks.logits_diff"></span><dl class="class">
+<span class="target" id="module-src.distillation.callbacks.logits_diff"></span><dl class="py class">
 <dt id="src.distillation.callbacks.logits_diff.KLDivCallback">
-<em class="property">class </em><code class="sig-prename descclassname">src.distillation.callbacks.logits_diff.</code><code class="sig-name descname">KLDivCallback</code><span class="sig-paren">(</span><em class="sig-param">output_key: str = 'kl_div_loss'</em><span class="sig-paren">)</span><a class="headerlink" href="#src.distillation.callbacks.logits_diff.KLDivCallback" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">src.distillation.callbacks.logits_diff.</span></code><code class="sig-name descname"><span class="pre">KLDivCallback</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'kl_div_loss'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.distillation.callbacks.logits_diff.KLDivCallback" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
@@ -143,9 +148,9 @@ Useful for classification task.</p>
 <h2>Wrappers<a class="headerlink" href="#wrappers" title="Permalink to this headline">¶</a></h2>
 <p>Wrappers is useful when your callback inputs something defferent then hidden states or logits,
 but you don’t want to modify batch in your runner.</p>
-<span class="target" id="module-src.distillation.callbacks.wrappers"></span><dl class="class">
+<span class="target" id="module-src.distillation.callbacks.wrappers"></span><dl class="py class">
 <dt id="src.distillation.callbacks.wrappers.LambdaWrp">
-<em class="property">class </em><code class="sig-prename descclassname">src.distillation.callbacks.wrappers.</code><code class="sig-name descname">LambdaWrp</code><span class="sig-paren">(</span><em class="sig-param">base_callback: catalyst.core.callback.Callback, lambda_fn: Callable, keys_to_apply: Union[List[str], str] = ['s_hidden_states', 't_hidden_states']</em><span class="sig-paren">)</span><a class="headerlink" href="#src.distillation.callbacks.wrappers.LambdaWrp" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">src.distillation.callbacks.wrappers.</span></code><code class="sig-name descname"><span class="pre">LambdaWrp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_callback</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">catalyst.core.callback.Callback</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambda_fn</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys_to_apply</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">['s_hidden_states',</span> <span class="pre">'t_hidden_states']</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.distillation.callbacks.wrappers.LambdaWrp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wraps input for your callback with specified function.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -165,14 +170,14 @@ Defaults to [“s_hidden_states”, “t_hidden_states”].</p></li>
 </div>
 <div class="section" id="module-src.distillation.callbacks.hiddens_mapping">
 <span id="hiddens-mapping-callbacks"></span><h2>Hiddens mapping callbacks<a class="headerlink" href="#module-src.distillation.callbacks.hiddens_mapping" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="src.distillation.callbacks.hiddens_mapping.HiddensSlctCallback">
-<em class="property">class </em><code class="sig-prename descclassname">src.distillation.callbacks.hiddens_mapping.</code><code class="sig-name descname">HiddensSlctCallback</code><span class="sig-paren">(</span><em class="sig-param">layers: Union[int, List[int]], hiddens_key: str = 't_hidden_states'</em><span class="sig-paren">)</span><a class="headerlink" href="#src.distillation.callbacks.hiddens_mapping.HiddensSlctCallback" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">src.distillation.callbacks.hiddens_mapping.</span></code><code class="sig-name descname"><span class="pre">HiddensSlctCallback</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layers</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hiddens_key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'t_hidden_states'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.distillation.callbacks.hiddens_mapping.HiddensSlctCallback" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="src.distillation.callbacks.hiddens_mapping.LambdaSlctCallback">
-<em class="property">class </em><code class="sig-prename descclassname">src.distillation.callbacks.hiddens_mapping.</code><code class="sig-name descname">LambdaSlctCallback</code><span class="sig-paren">(</span><em class="sig-param">lambda_fn: Callable, keys_to_apply: Union[List[str], str] = ['s_hidden_states', 't_hidden_states']</em><span class="sig-paren">)</span><a class="headerlink" href="#src.distillation.callbacks.hiddens_mapping.LambdaSlctCallback" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">src.distillation.callbacks.hiddens_mapping.</span></code><code class="sig-name descname"><span class="pre">LambdaSlctCallback</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lambda_fn</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys_to_apply</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">['s_hidden_states',</span> <span class="pre">'t_hidden_states']</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.distillation.callbacks.hiddens_mapping.LambdaSlctCallback" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filters output with your lambda function. Inplace analog of <code class="docutils literal notranslate"><span class="pre">LambdaWrp</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -192,9 +197,9 @@ Defaults to [“s_hidden_states”, “t_hidden_states”].</p></li>
 </div>
 <div class="section" id="module-src.distillation.callbacks.hiddens_diff">
 <span id="hiddens-difference-callbacks"></span><h2>Hiddens difference callbacks<a class="headerlink" href="#module-src.distillation.callbacks.hiddens_diff" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="src.distillation.callbacks.hiddens_diff.MSEHiddensCallback">
-<em class="property">class </em><code class="sig-prename descclassname">src.distillation.callbacks.hiddens_diff.</code><code class="sig-name descname">MSEHiddensCallback</code><span class="sig-paren">(</span><em class="sig-param">output_key: str = 'mse_loss'</em><span class="sig-paren">)</span><a class="headerlink" href="#src.distillation.callbacks.hiddens_diff.MSEHiddensCallback" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">src.distillation.callbacks.hiddens_diff.</span></code><code class="sig-name descname"><span class="pre">MSEHiddensCallback</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'mse_loss'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.distillation.callbacks.hiddens_diff.MSEHiddensCallback" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
@@ -205,17 +210,17 @@ Defaults to [“s_hidden_states”, “t_hidden_states”].</p></li>
           <div class="page-nav">
             <div class="inner"><ul class="page-nav">
   <li class="prev">
-    <a href="loss_functions.html"
-       title="previous chapter">← Loss functions</a>
+    <a href="runners.html"
+       title="previous chapter">← Runners</a>
   </li>
   <li class="next">
-    <a href="../Quantization/quantization.html"
-       title="next chapter">Quantization →</a>
+    <a href="utils.html"
+       title="next chapter">Utils →</a>
   </li>
 </ul><div class="footer" role="contentinfo">
       &#169; Copyright 2021, Nikita Balagansky.
     <br>
-    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a>.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.1 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a>.
 </div>
             </div>
           </div>

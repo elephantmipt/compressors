@@ -16,6 +16,7 @@ from src.distillation.callbacks import (
     HiddensSlctCallback,
     MSEHiddensCallback,
     KLDivCallback,
+    LambdaSlctCallback,
 )
 from src.distillation.runners import HFDistilRunner
 from src.distillation.student_init.bert import init_bert_model_with_teacher
@@ -72,6 +73,16 @@ def main(args):
         loaders="train",
     )
 
+    lambda_hiddens_callback = ControlFlowCallback(
+        LambdaSlctCallback(
+            lambda s_hiddens, t_hiddens: (
+                (c_s[:, 0] for c_s in s_hiddens),
+                (t_s[:, 0] for t_s in t_hiddens),  # tooks only CLS token
+            )
+        ),
+        loaders="train",
+    )
+
     mse_hiddens = ControlFlowCallback(MSEHiddensCallback(), loaders="train")
 
     kl_div = ControlFlowCallback(KLDivCallback(), loaders="train")
@@ -92,7 +103,14 @@ def main(args):
         model={"teacher": teacher_model, "student": student_model,},
         loaders=loaders,
         optimizer=torch.optim.Adam(student_model.parameters(), lr=args.distil_lr),
-        callbacks=[metric_callback, slct_callback, mse_hiddens, kl_div, aggregator],
+        callbacks=[
+            metric_callback,
+            slct_callback,
+            lambda_hiddens_callback,
+            mse_hiddens,
+            kl_div,
+            aggregator,
+        ],
         check=True,
         num_epochs=args.num_distil_epochs,
         valid_metric="accuracy",
