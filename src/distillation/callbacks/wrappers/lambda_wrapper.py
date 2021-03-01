@@ -4,6 +4,7 @@ from copy import deepcopy
 
 from torch import FloatTensor
 
+
 class LambdaWrp(Callback):
     """Wraps input for your callback with specified function.
 
@@ -16,12 +17,12 @@ class LambdaWrp(Callback):
         Raises:
             TypeError: When keys_to_apply is not str or list.
     """
+
     def __init__(
-        self, 
-        base_callback: Callback, 
+        self,
+        base_callback: Callback,
         lambda_fn: Callable,
-        keys_to_apply: Union[List[str], str] =\
-            ["s_hidden_states", "t_hidden_states"]
+        keys_to_apply: Union[List[str], str] = ["s_hidden_states", "t_hidden_states"],
     ):
         """Wraps input for your callback with specified function.
 
@@ -34,9 +35,9 @@ class LambdaWrp(Callback):
         Raises:
             TypeError: When keys_to_apply is not str or list.
         """
-        super().__init__(order = base_callback.order)
+        super().__init__(order=base_callback.order)
         self.base_callback = base_callback
-        if not(isinstance(keys_to_apply, list) or isinstance(keys_to_apply, str)):
+        if not (isinstance(keys_to_apply, list) or isinstance(keys_to_apply, str)):
             raise TypeError("keys to apply should be str or list of str.")
         self.keys_to_apply = keys_to_apply
         self.lambda_fn = lambda_fn

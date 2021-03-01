@@ -12,10 +12,9 @@
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
 
       <!-- sphinx script_files -->
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
 
       
       <script src="../_static/theme-vendors.js"></script>
@@ -23,7 +22,7 @@
     
   <link rel="index" title="Index" href="../genindex.html" />
   <link rel="search" title="Search" href="../search.html" />
-  <link rel="next" title="Callbacks" href="callbacks.html" />
+  <link rel="next" title="Runners" href="runners.html" />
   <link rel="prev" title="Distillation" href="distillation.html" /> 
   </head>
 
@@ -70,23 +69,29 @@
   
     <div class="sidebar-group">
       <p class="caption">
-        <span class="caption-text"><a href="distillation.html#distillation">distillation</a></span>
+        <span class="caption-text"><a href="../index.html#why-compressors">Contents:</a></span>
       </p>
-      <ul class="current">
+      <ul class="">
         
-          <li class="toctree-l1 current"><a href="#" class="reference internal current">Loss functions</a>
+          <li class="toctree-l1 "><a href="distillation.html" class="reference internal ">Distillation</a>
 
-            
-              <ul>
-                
-                  <li class="toctree-l2"><a href="#loss-functions" class="reference internal">Loss functions</a></li>
-                
-              </ul>
             
           </li>
 
         
-          <li class="toctree-l1 "><a href="callbacks.html" class="reference internal ">Callbacks</a>
+          <li class="toctree-l1 "><a href="../Quantization/quantization.html" class="reference internal ">Quantization</a>
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 "><a href="../Pruning/pruning.html" class="reference internal ">Pruning</a>
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 "><a href="../Examples/examples.html" class="reference internal ">Examples</a>
 
             
           </li>
@@ -116,8 +121,8 @@
        title="previous chapter">← Distillation</a>
   </li>
   <li class="next">
-    <a href="callbacks.html"
-       title="next chapter">Callbacks →</a>
+    <a href="runners.html"
+       title="next chapter">Runners →</a>
   </li>
 </ul>
   
@@ -129,9 +134,9 @@
 <h1>Loss functions<a class="headerlink" href="#loss-functions" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
-<span class="target" id="module-src.distillation.losses"></span><dl class="function">
+<span class="target" id="module-src.distillation.losses"></span><dl class="py function">
 <dt id="src.distillation.losses.cosine_loss">
-<code class="sig-prename descclassname">src.distillation.losses.</code><code class="sig-name descname">cosine_loss</code><span class="sig-paren">(</span><em class="sig-param">s_hidden_states: torch.FloatTensor</em>, <em class="sig-param">t_hidden_states: torch.FloatTensor</em>, <em class="sig-param">attention_mask: torch.LongTensor = None</em><span class="sig-paren">)</span> &#x2192; torch.FloatTensor<a class="headerlink" href="#src.distillation.losses.cosine_loss" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">src.distillation.losses.</span></code><code class="sig-name descname"><span class="pre">cosine_loss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s_hidden_states</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torch.FloatTensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_hidden_states</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torch.FloatTensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attention_mask</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">torch.LongTensor</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torch.FloatTensor</span><a class="headerlink" href="#src.distillation.losses.cosine_loss" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cosine loss between hidden states.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -151,9 +156,9 @@ Defaults to None.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="src.distillation.losses.kl_div_loss">
-<code class="sig-prename descclassname">src.distillation.losses.</code><code class="sig-name descname">kl_div_loss</code><span class="sig-paren">(</span><em class="sig-param">s_logits: torch.FloatTensor</em>, <em class="sig-param">t_logits: torch.FloatTensor</em>, <em class="sig-param">temperature: float = 1.0</em><span class="sig-paren">)</span> &#x2192; torch.FloatTensor<a class="headerlink" href="#src.distillation.losses.kl_div_loss" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">src.distillation.losses.</span></code><code class="sig-name descname"><span class="pre">kl_div_loss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s_logits</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torch.FloatTensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_logits</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torch.FloatTensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torch.FloatTensor</span><a class="headerlink" href="#src.distillation.losses.kl_div_loss" title="Permalink to this definition">¶</a></dt>
 <dd><p>KL-devergence loss</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -173,9 +178,9 @@ Defaults to 1.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="src.distillation.losses.mse_loss">
-<code class="sig-prename descclassname">src.distillation.losses.</code><code class="sig-name descname">mse_loss</code><span class="sig-paren">(</span><em class="sig-param">s_hidden_states: Tuple[torch.FloatTensor], t_hidden_states: Tuple[torch.FloatTensor], normalize: bool = False</em><span class="sig-paren">)</span> &#x2192; torch.FloatTensor<a class="headerlink" href="#src.distillation.losses.mse_loss" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">src.distillation.losses.</span></code><code class="sig-name descname"><span class="pre">mse_loss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s_hidden_states</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">torch.FloatTensor</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_hidden_states</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">torch.FloatTensor</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torch.FloatTensor</span><a class="headerlink" href="#src.distillation.losses.mse_loss" title="Permalink to this definition">¶</a></dt>
 <dd><p>mse loss for hidden states</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -185,14 +190,11 @@ Defaults to 1.</p></li>
 <li><p><strong>normalize</strong> (<em>bool</em><em>, </em><em>optional</em>) – normalize embeddings. Defaults to False.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>NotImplementedError</strong> – if attention mask is not None</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>loss</p>
 </dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>loss</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>FloatTensor</p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>FloatTensor</p>
 </dd>
 </dl>
 </dd></dl>
@@ -208,13 +210,13 @@ Defaults to 1.</p></li>
        title="previous chapter">← Distillation</a>
   </li>
   <li class="next">
-    <a href="callbacks.html"
-       title="next chapter">Callbacks →</a>
+    <a href="runners.html"
+       title="next chapter">Runners →</a>
   </li>
 </ul><div class="footer" role="contentinfo">
       &#169; Copyright 2021, Nikita Balagansky.
     <br>
-    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a>.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.1 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a>.
 </div>
             </div>
           </div>

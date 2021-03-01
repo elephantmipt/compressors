@@ -3,6 +3,7 @@ from typing import Union, List, Callable
 from catalyst.core import Callback
 from src.distillation.callbacks.order import CallbackOrder
 
+
 class LambdaSlctCallback(Callback):
     """Filters output with your lambda function. Inplace analog of ``LambdaWrp``.
 
@@ -15,11 +16,11 @@ class LambdaSlctCallback(Callback):
         Raises:
             TypeError: When keys_to_apply is not str or list.
     """
+
     def __init__(
-        self, 
+        self,
         lambda_fn: Callable,
-        keys_to_apply: Union[List[str], str] =\
-            ["s_hidden_states", "t_hidden_states"]
+        keys_to_apply: Union[List[str], str] = ["s_hidden_states", "t_hidden_states"],
     ):
         """Filters output with your lambda function.
 
@@ -32,13 +33,13 @@ class LambdaSlctCallback(Callback):
             TypeError: When keys_to_apply is not str or list.
         """
         super().__init__(order=CallbackOrder.HiddensSlct)
-        if not(isinstance(keys_to_apply, list) or isinstance(keys_to_apply, str)):
+        if not (isinstance(keys_to_apply, list) or isinstance(keys_to_apply, str)):
             raise TypeError("keys to apply should be str or list of str.")
         self.keys_to_apply = keys_to_apply
         self.lambda_fn = lambda_fn
-    
+
     def on_batch_end(self, runner):
-        
+
         if isinstance(self.keys_to_apply, list):
             fn_inp = [runner.batch[key] for key in self.keys_to_apply]
             fn_output = self.lambda_fn(*fn_inp)
@@ -56,7 +57,4 @@ class LambdaSlctCallback(Callback):
             runner.batch[self.keys_to_apply] = self.lambda_fn(self.keys_to_apply)
 
 
-__all__ = [
-    "LambdaSlctCallback"
-]
-    
+__all__ = ["LambdaSlctCallback"]
