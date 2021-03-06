@@ -1,0 +1,39 @@
+Callbacks
+=========
+
+.. toctree::
+
+
+Logits difference callbacks
+---------------------------
+Callbacks which use difference between probabilities distribution over last layers. 
+Useful for classification task.
+
+.. automodule:: src.distillation.callbacks.logits_diff
+    :members:
+    :exclude-members: on_batch_end
+
+
+Wrappers
+--------
+Wrappers is useful when your callback inputs something defferent then hidden states or logits,
+but you don't want to modify batch in your runner.
+
+.. automodule:: src.distillation.callbacks.wrappers
+    :members:
+    :exclude-members: on_batch_end
+
+Hiddens mapping callbacks
+-------------------------
+
+.. automodule:: src.distillation.callbacks.hiddens_mapping
+    :members:
+    :exclude-members: on_batch_end
+
+Hiddens difference callbacks
+----------------------------
+
+.. automodule:: src.distillation.callbacks.hiddens_diff
+    :members:
+    :exclude-members: on_batch_end
+

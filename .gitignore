@@ -1,5 +1,11 @@
-*
+*.pyc
+.vscode
+*.html
+*.DS_Store
+*.doctree
+*.buildinfo
+*.js
+
 
 !.gitignore
-!**/*.py
-!**/*.rst
+
