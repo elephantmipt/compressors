@@ -26,4 +26,5 @@ There are two ways to use Compressors: with Catalyst or just use functional API.
    Distillation/distillation
    Quantization/quantization
    Pruning/pruning
-   Examples/examples
+   runners
+   examples

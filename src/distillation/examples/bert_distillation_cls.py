@@ -13,13 +13,12 @@ from src.runners.hf_runner import HFRunner
 from src.metrics.hf_metric import HFMetric
 from src.distillation.callbacks import (
     MetricAggregationCallback,
-    HiddensSlctCallback,
-    MSEHiddensCallback,
+    HiddenStatesSelectCallback,
+    MSEHiddenStatesCallback,
     KLDivCallback,
-    LambdaSlctCallback,
+    LambdaSelectCallback,
 )
 from src.distillation.runners import HFDistilRunner
-from src.distillation.student_init.bert import init_bert_model_with_teacher
 
 
 def main(args):
@@ -69,12 +68,12 @@ def main(args):
     )
 
     slct_callback = ControlFlowCallback(
-        HiddensSlctCallback(hiddens_key="t_hidden_states", layers=[1, 3]),
+        HiddenStatesSelectCallback(hiddens_key="t_hidden_states", layers=[1, 3]),
         loaders="train",
     )
 
     lambda_hiddens_callback = ControlFlowCallback(
-        LambdaSlctCallback(
+        LambdaSelectCallback(
             lambda s_hiddens, t_hiddens: (
                 (c_s[:, 0] for c_s in s_hiddens),
                 (t_s[:, 0] for t_s in t_hiddens),  # tooks only CLS token
@@ -83,7 +82,7 @@ def main(args):
         loaders="train",
     )
 
-    mse_hiddens = ControlFlowCallback(MSEHiddensCallback(), loaders="train")
+    mse_hiddens = ControlFlowCallback(MSEHiddenStatesCallback(), loaders="train")
 
     kl_div = ControlFlowCallback(KLDivCallback(), loaders="train")
 

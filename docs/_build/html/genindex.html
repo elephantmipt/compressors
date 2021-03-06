@@ -13,9 +13,10 @@
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
 
       <!-- sphinx script_files -->
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
 
       
       <script src="_static/theme-vendors.js"></script>
@@ -90,6 +91,18 @@
           </li>
 
         
+          <li class="toctree-l1 "><a href="runners.html" class="reference internal ">Runners</a>
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 "><a href="examples.html" class="reference internal ">Examples</a>
+
+            
+          </li>
+
+        
       </ul>
     </div>
   
@@ -118,6 +131,7 @@
 
 <div class="genindex-jumpbox">
  <a href="#C"><strong>C</strong></a>
+ | <a href="#D"><strong>D</strong></a>
  | <a href="#H"><strong>H</strong></a>
  | <a href="#K"><strong>K</strong></a>
  | <a href="#L"><strong>L</strong></a>
@@ -133,10 +147,22 @@
   </ul></td>
 </tr></table>
 
+<h2 id="D">D</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Distillation/runners.html#src.distillation.runners.DistilRunner">DistilRunner (class in src.distillation.runners)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="Distillation/callbacks.html#src.distillation.callbacks.hiddens_mapping.HiddensSlctCallback">HiddensSlctCallback (class in src.distillation.callbacks.hiddens_mapping)</a>
+      <li><a href="Distillation/runners.html#src.distillation.runners.HFDistilRunner">HFDistilRunner (class in src.distillation.runners)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Distillation/callbacks.html#src.distillation.callbacks.hidden_states.HiddenStatesSelectCallback">HiddenStatesSelectCallback (class in src.distillation.callbacks.hidden_states)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -156,7 +182,7 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="Distillation/callbacks.html#src.distillation.callbacks.hiddens_mapping.LambdaSlctCallback">LambdaSlctCallback (class in src.distillation.callbacks.hiddens_mapping)</a>
+      <li><a href="Distillation/callbacks.html#src.distillation.callbacks.hidden_states.LambdaSelectCallback">LambdaSelectCallback (class in src.distillation.callbacks.hidden_states)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -168,26 +194,11 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
-    module
-
-      <ul>
-        <li><a href="Distillation/callbacks.html#module-src.distillation.callbacks.hiddens_diff">src.distillation.callbacks.hiddens_diff</a>
-</li>
-        <li><a href="Distillation/callbacks.html#module-src.distillation.callbacks.hiddens_mapping">src.distillation.callbacks.hiddens_mapping</a>
-</li>
-        <li><a href="Distillation/callbacks.html#module-src.distillation.callbacks.logits_diff">src.distillation.callbacks.logits_diff</a>
-</li>
-        <li><a href="Distillation/callbacks.html#module-src.distillation.callbacks.wrappers">src.distillation.callbacks.wrappers</a>
-</li>
-        <li><a href="Distillation/loss_functions.html#module-src.distillation.losses">src.distillation.losses</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="Distillation/loss_functions.html#src.distillation.losses.mse_loss">mse_loss() (in module src.distillation.losses)</a>
 </li>
-      <li><a href="Distillation/callbacks.html#src.distillation.callbacks.hiddens_diff.MSEHiddensCallback">MSEHiddensCallback (class in src.distillation.callbacks.hiddens_diff)</a>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Distillation/callbacks.html#src.distillation.callbacks.hidden_states.MSEHiddenStatesCallback">MSEHiddenStatesCallback (class in src.distillation.callbacks.hidden_states)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -195,43 +206,20 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
-    src.distillation.callbacks.hiddens_diff
-
-      <ul>
-        <li><a href="Distillation/callbacks.html#module-src.distillation.callbacks.hiddens_diff">module</a>
+      <li><a href="Distillation/callbacks.html#module-src.distillation.callbacks.hidden_states">src.distillation.callbacks.hidden_states (module)</a>
 </li>
-      </ul></li>
-      <li>
-    src.distillation.callbacks.hiddens_mapping
-
-      <ul>
-        <li><a href="Distillation/callbacks.html#module-src.distillation.callbacks.hiddens_mapping">module</a>
+      <li><a href="Distillation/callbacks.html#module-src.distillation.callbacks.logits_diff">src.distillation.callbacks.logits_diff (module)</a>
 </li>
-      </ul></li>
-      <li>
-    src.distillation.callbacks.logits_diff
-
-      <ul>
-        <li><a href="Distillation/callbacks.html#module-src.distillation.callbacks.logits_diff">module</a>
+      <li><a href="Distillation/callbacks.html#module-src.distillation.callbacks.wrappers">src.distillation.callbacks.wrappers (module)</a>
 </li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
-    src.distillation.callbacks.wrappers
-
-      <ul>
-        <li><a href="Distillation/callbacks.html#module-src.distillation.callbacks.wrappers">module</a>
+      <li><a href="Distillation/loss_functions.html#module-src.distillation.losses">src.distillation.losses (module)</a>
 </li>
-      </ul></li>
-      <li>
-    src.distillation.losses
-
-      <ul>
-        <li><a href="Distillation/loss_functions.html#module-src.distillation.losses">module</a>
+      <li><a href="Distillation/runners.html#module-src.distillation.runners">src.distillation.runners (module)</a>
 </li>
-      </ul></li>
+      <li><a href="runners.html#module-src.runners">src.runners (module)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -243,7 +231,7 @@
 </ul><div class="footer" role="contentinfo">
       &#169; Copyright 2021, Nikita Balagansky.
     <br>
-    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.1 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a>.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a>.
 </div>
             </div>
           </div>

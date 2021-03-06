@@ -23,17 +23,11 @@ but you don't want to modify batch in your runner.
     :members:
     :exclude-members: on_batch_end
 
-Hiddens mapping callbacks
+Hiddens states
 -------------------------
 
-.. automodule:: src.distillation.callbacks.hiddens_mapping
+.. automodule:: src.distillation.callbacks.hidden_states
     :members:
     :exclude-members: on_batch_end
 
-Hiddens difference callbacks
-----------------------------
-
-.. automodule:: src.distillation.callbacks.hiddens_diff
-    :members:
-    :exclude-members: on_batch_end
 
