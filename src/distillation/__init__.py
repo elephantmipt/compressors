@@ -7,7 +7,7 @@ from src.distillation.callbacks import (
     LambdaSlctCallback,
 )
 from src.distillation.hiddens_mapping import hiddens_slct
-from src.distillation.runners import HFDistilRunner
+from src.distillation.runners import HFDistilRunner, DistilRunner
 from src.distillation.student_init import init_bert_model_with_teacher
 
 
@@ -21,4 +21,5 @@ __all__ = [
     "init_bert_model_with_teacher",
     "LambdaWrp",
     "LambdaSlctCallback",
+    "DistilRunner",
 ]

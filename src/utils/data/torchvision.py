@@ -7,6 +7,7 @@ class TorchvisionDatasetWrapper(data.Dataset):
     Args:
         torchvision_dataset (data.Dataset): base dataset.
     """
+
     def __init__(self, torchvision_dataset: data.Dataset):
         """Simple wrapper. We need all datasets to output dict.
 
