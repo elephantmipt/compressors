@@ -3,9 +3,7 @@ from catalyst.runners import Runner
 
 
 class DistilRunner(Runner):
-    def __init__(
-        self, output_hidden_states: bool = True, *runner_args, **runner_kwargs
-    ):
+    def __init__(self, output_hidden_states: bool = True, *runner_args, **runner_kwargs):
         super().__init__(*runner_args, **runner_kwargs)
         self.output_hidden_states = output_hidden_states
 
@@ -21,9 +19,7 @@ class DistilRunner(Runner):
                 return_dict=True,
             )
         s_outputs = student(
-            batch["features"],
-            output_hidden_states=self.output_hidden_states,
-            return_dict=True,
+            batch["features"], output_hidden_states=self.output_hidden_states, return_dict=True,
         )
         self.batch["s_logits"] = s_outputs["logits"]
         if self.is_train_loader:

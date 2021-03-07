@@ -1,3 +1,4 @@
+import torch
 from torch.utils import data
 
 
@@ -19,8 +20,8 @@ class TorchvisionDatasetWrapper(data.Dataset):
     def __getitem__(self, item):
         features, targets = self.dataset[item]
         return {
-            "features": features,
-            "targets": targets,
+            "features": torch.tensor(features, dtype=torch.float32),
+            "targets": torch.tensor(targets, dtype=torch.long),
         }
 
     def __len__(self):

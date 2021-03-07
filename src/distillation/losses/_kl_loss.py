@@ -22,7 +22,6 @@ def kl_div_loss(
     """
     loss_fn = nn.KLDivLoss()
     loss = loss_fn(
-        F.log_softmax(s_logits / temperature, dim=1),
-        F.softmax(t_logits / temperature, dim=1),
+        F.log_softmax(s_logits / temperature, dim=1), F.softmax(t_logits / temperature, dim=1),
     ) * (temperature ** 2)
     return loss

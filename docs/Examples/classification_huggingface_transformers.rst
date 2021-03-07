@@ -3,6 +3,26 @@ Huggingface transformers
 
 .. code-block:: python
 
+    import torch
+    from torch.utils.data import DataLoader
+
+    from datasets import load_dataset, load_metric
+    from transformers import AutoTokenizer, AutoModelForSequenceClassification
+    from catalyst.runners import Runner
+    from catalyst.callbacks.metric import LoaderMetricCallback
+    from catalyst.callbacks import ControlFlowCallback
+
+    from src.runners.hf_runner import HFRunner
+    from src.metrics.hf_metric import HFMetric
+    from src.distillation.callbacks import (
+        MetricAggregationCallback,
+        HiddenStatesSelectCallback,
+        MSEHiddenStatesCallback,
+        KLDivCallback,
+        LambdaSelectCallback,
+    )
+    from src.distillation.runners import HFDistilRunner
+
     datasets = load_dataset(args.dataset)
 
     tokenizer = AutoTokenizer.from_pretrained("google/bert_uncased_L-4_H-128_A-2")

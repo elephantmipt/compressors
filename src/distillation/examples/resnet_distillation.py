@@ -56,13 +56,9 @@ def main(args):
     )
 
     train_dataset = Wrp(
-        datasets.CIFAR10(
-            root=os.getcwd(), train=True, transform=transform_train, download=True
-        )
+        datasets.CIFAR10(root=os.getcwd(), train=True, transform=transform_train, download=True)
     )
-    valid_dataset = Wrp(
-        datasets.CIFAR10(root=os.getcwd(), train=False, transform=transform_test)
-    )
+    valid_dataset = Wrp(datasets.CIFAR10(root=os.getcwd(), train=False, transform=transform_test))
     train_dataloader = DataLoader(
         dataset=train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=2
     )
@@ -107,26 +103,20 @@ def main(args):
     if is_kd:
         metrics = {}
         callbacks.append(
-            CriterionCallback(
-                input_key="s_logits", target_key="targets", metric_key="cls_loss"
-            )
+            CriterionCallback(input_key="s_logits", target_key="targets", metric_key="cls_loss")
         )
         callbacks.append(ControlFlowCallback(KLDivCallback(), loaders="train"))
         coefs = get_loss_coefs(args.alpha, args.beta)
         metrics["cls_loss"] = coefs[0]
         metrics["diff_output_loss"] = coefs[1]
         if is_kd_on_hiddens:
-            callbacks.append(
-                ControlFlowCallback(MSEHiddensCallback(), loaders="train",)
-            )
+            callbacks.append(ControlFlowCallback(MSEHiddensCallback(), loaders="train",))
             metrics["diff_hidden_loss"] = coefs[2]
 
         aggregator_callback = MetricAggregationCallback(
             prefix="loss", metrics=metrics, mode="weighted_sum"
         )
-        wrapped_agg_callback = ControlFlowCallback(
-            aggregator_callback, loaders=["train"]
-        )
+        wrapped_agg_callback = ControlFlowCallback(aggregator_callback, loaders=["train"])
         callbacks.append(wrapped_agg_callback)
 
     runner.train(
@@ -144,13 +134,9 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--model", default="pa_resnet50", type=str, help="model to train"
-    )
+    parser.add_argument("--model", default="pa_resnet50", type=str, help="model to train")
     parser.add_argument("--teacher-model", default=None, type=str, help="teacher arch")
-    parser.add_argument(
-        "--teacher-path", default=None, type=str, help="path to teacher weights"
-    )
+    parser.add_argument("--teacher-path", default=None, type=str, help="path to teacher weights")
     parser.add_argument("--optimizer", default="sgd", type=str)
     parser.add_argument("--lr", default=0.001, type=float)
     parser.add_argument("--batch-size", default=128, type=int)
@@ -163,8 +149,6 @@ if __name__ == "__main__":
     parser.add_argument(
         "--alpha", default=None, type=float, help="weight for output diff loss",
     )
-    parser.add_argument(
-        "--beta", default=None, type=float, help="weight for hidden diff loss"
-    )
+    parser.add_argument("--beta", default=None, type=float, help="weight for hidden diff loss")
     args = parser.parse_args()
     main(args)

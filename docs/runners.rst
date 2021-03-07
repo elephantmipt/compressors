@@ -2,4 +2,5 @@ Runners
 =======
 
 .. automodule:: src.runners
-   :members:
+    :members:
+    :exclude-members: handle_batch

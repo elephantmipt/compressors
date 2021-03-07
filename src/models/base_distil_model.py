@@ -6,11 +6,7 @@ class BaseDistilModel(Module):
     """Base model for running knoweledge distillation"""
 
     def forward(
-        self,
-        output_hidden_states: bool = False,
-        return_dict: bool = False,
-        *args,
-        **kwargs,
+        self, output_hidden_states: bool = False, return_dict: bool = False, *args, **kwargs,
     ) -> Union[Tuple, Mapping]:
         """Forward method for model.
 

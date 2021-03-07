@@ -1,7 +1,8 @@
 from src.distillation.callbacks.hidden_states import (
     MSEHiddenStatesCallback,
     LambdaSelectCallback,
-    HiddenStatesSelectCallback
+    HiddenStatesSelectCallback,
+    CosineHiddenStatesCallback,
 )
 from src.distillation.callbacks.logits_diff import KLDivCallback
 from src.distillation.callbacks.metric_aggregation import MetricAggregationCallback
@@ -15,4 +16,5 @@ __all__ = [
     "MSEHiddenStatesCallback",
     "KLDivCallback",
     "LambdaWrp",
+    "CosineLoss"
 ]

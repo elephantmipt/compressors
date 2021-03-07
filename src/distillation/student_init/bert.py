@@ -105,15 +105,11 @@ def _extract_layers(
             ]
 
     # extract vocab
-    compressed_sd["cls.predictions.decoder.weight"] = state_dict[
-        "cls.predictions.decoder.weight"
-    ]
+    compressed_sd["cls.predictions.decoder.weight"] = state_dict["cls.predictions.decoder.weight"]
     compressed_sd["cls.predictions.bias"] = state_dict["cls.predictions.bias"]
 
     for w in ["weight", "bias"]:
-        compressed_sd[f"vocab_transform.{w}"] = state_dict[
-            f"cls.predictions.transform.dense.{w}"
-        ]
+        compressed_sd[f"vocab_transform.{w}"] = state_dict[f"cls.predictions.transform.dense.{w}"]
         compressed_sd[f"vocab_layer_norm.{w}"] = state_dict[
             f"cls.predictions.transform.LayerNorm.{w}"
         ]

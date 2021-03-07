@@ -5,6 +5,7 @@
 *.doctree
 *.buildinfo
 *.js
+html
 
 
 !.gitignore

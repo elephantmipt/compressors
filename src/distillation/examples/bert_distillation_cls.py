@@ -26,26 +26,19 @@ def main(args):
 
     tokenizer = AutoTokenizer.from_pretrained("google/bert_uncased_L-4_H-128_A-2")
     datasets = datasets.map(
-        lambda e: tokenizer(
-            e["text"], truncation=True, padding="max_length", max_length=128
-        ),
+        lambda e: tokenizer(e["text"], truncation=True, padding="max_length", max_length=128),
         batched=True,
     )
     datasets = datasets.map(lambda e: {"labels": e["label"]}, batched=True)
     datasets.set_format(
-        type="torch",
-        columns=["input_ids", "token_type_ids", "attention_mask", "labels"],
+        type="torch", columns=["input_ids", "token_type_ids", "attention_mask", "labels"],
     )
     loaders = {
-        "train": DataLoader(
-            datasets["train"], batch_size=args.batch_size, shuffle=True
-        ),
+        "train": DataLoader(datasets["train"], batch_size=args.batch_size, shuffle=True),
         "valid": DataLoader(datasets["test"], batch_size=args.batch_size),
     }
     metric_callback = LoaderMetricCallback(
-        metric=HFMetric(metric=load_metric("accuracy")),
-        input_key="logits",
-        target_key="labels",
+        metric=HFMetric(metric=load_metric("accuracy")), input_key="logits", target_key="labels",
     )
     teacher_model = AutoModelForSequenceClassification.from_pretrained(
         "google/bert_uncased_L-4_H-128_A-2", num_labels=args.num_labels
@@ -62,14 +55,11 @@ def main(args):
         check=True,
     )
     metric_callback = LoaderMetricCallback(
-        metric=HFMetric(metric=load_metric("accuracy")),
-        input_key="s_logits",
-        target_key="labels",
+        metric=HFMetric(metric=load_metric("accuracy")), input_key="s_logits", target_key="labels",
     )
 
     slct_callback = ControlFlowCallback(
-        HiddenStatesSelectCallback(hiddens_key="t_hidden_states", layers=[1, 3]),
-        loaders="train",
+        HiddenStatesSelectCallback(hiddens_key="t_hidden_states", layers=[1, 3]), loaders="train",
     )
 
     lambda_hiddens_callback = ControlFlowCallback(
@@ -87,9 +77,7 @@ def main(args):
     kl_div = ControlFlowCallback(KLDivCallback(), loaders="train")
 
     aggregator = ControlFlowCallback(
-        MetricAggregationCallback(
-            weights={"kl_div_loss": 0.2, "mse_loss": 0.2, "task_loss": 0.6}
-        ),
+        MetricAggregationCallback(weights={"kl_div_loss": 0.2, "mse_loss": 0.2, "task_loss": 0.6}),
         loaders="train",
     )
 
