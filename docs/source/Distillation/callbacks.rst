@@ -6,7 +6,7 @@ Callbacks
 
 Logits difference callbacks
 ---------------------------
-Callbacks which use difference between probabilities distribution over last layers. 
+Callbacks which use difference between probabilities distribution over last layers.
 Useful for classification task.
 
 .. automodule:: compressors.distillation.callbacks.logits_diff
@@ -29,5 +29,3 @@ Hiddens states
 .. automodule:: compressors.distillation.callbacks.hidden_states
     :members:
     :exclude-members: on_batch_end
-
-

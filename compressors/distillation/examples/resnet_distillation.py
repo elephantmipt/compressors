@@ -14,13 +14,12 @@ from catalyst.runners import SupervisedRunner
 from catalyst.utils import set_global_seed
 
 from compressors.distillation.callbacks import (
-    MSEHiddenStateCallback,
     MetricAggregationCallback,
     KLDivCallback,
 )
 from src.utils.data import TorchvisionDatasetWrapper as Wrp
 from src.distillation.runners import DistilRunner
-from src.compressors.distillation.utils import get_loss_coefs, load_model_from_path
+from compressors.distillation.utils import get_loss_coefs, load_model_from_path
 
 
 NAME2MODEL = {

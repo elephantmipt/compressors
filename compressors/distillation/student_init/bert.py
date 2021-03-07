@@ -1,5 +1,5 @@
 from typing import List
-from src.settings import IS_TRANSFORMERS_AVAILABLE
+from compressors.settings import IS_TRANSFORMERS_AVAILABLE
 
 if IS_TRANSFORMERS_AVAILABLE:
     from transformers import BertModel

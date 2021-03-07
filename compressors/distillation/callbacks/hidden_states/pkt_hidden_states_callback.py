@@ -1,4 +1,4 @@
-from compressors.distillation.losses import _pkt_loss
+from compressors.distillation.losses import pkt_loss
 from compressors.distillation.callbacks.order import CallbackOrder
 from catalyst.core import Callback
 
@@ -35,7 +35,7 @@ class PKTHiddenStatesCallback(Callback):
         if self.last_only:
             s_hiddens = s_hiddens[-1]
             t_hiddens = t_hiddens[-1]
-        runner.batch_metrics[self.output_key] = _pkt_loss(
+        runner.batch_metrics[self.output_key] = pkt_loss(
             s_hidden_states=s_hiddens,
             t_hidden_states=t_hiddens,
         )

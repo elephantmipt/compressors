@@ -4,14 +4,13 @@ from catalyst.callbacks import ControlFlowCallback
 from catalyst.runners import Runner
 from catalyst.utils import get_nn_from_ddp_module, set_requires_grad
 
-from compressors.distillation.losses import mse_loss, pkt_loss, cosine_loss, kl_div_loss
+from compressors.distillation.losses import mse_loss, pkt_loss, kl_div_loss
 from compressors.distillation.callbacks import MetricAggregationCallback
 
 
 NAME2LOSS = {
     "mse_loss": mse_loss,
     "pkt_loss": pkt_loss,
-    "cosine_loss": cosine_loss
 }
 
 NAME2LOGITSLOSS = {
