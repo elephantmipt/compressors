@@ -7,9 +7,9 @@ from torch.utils.data import DataLoader
 from catalyst.contrib.datasets import MNIST
 from catalyst.callbacks import AccuracyCallback
 
-from src.distillation.runners import EndToEndDistilRunner
-from src.models import BaseDistilModel
-from src.utils.data import TorchvisionDatasetWrapper as Wrp
+from compressors.distillation.runners import EndToEndDistilRunner
+from compressors.models import BaseDistilModel
+from compressors.utils.data import TorchvisionDatasetWrapper as Wrp
 
 
 class ExampleModel(BaseDistilModel):

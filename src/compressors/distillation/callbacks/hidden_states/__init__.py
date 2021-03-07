@@ -1,23 +1,26 @@
-from src.distillation.callbacks.hidden_states.hidden_states_select_callback import (
+from .hidden_states_select_callback import (
     HiddenStatesSelectCallback,
 )
-from src.distillation.callbacks.hidden_states.lambda_select_callback import LambdaSelectCallback
+from .lambda_select_callback import LambdaSelectCallback
 
-from src.distillation.callbacks.hidden_states.mse_hidden_states_callback import (
+from .mse_hidden_states_callback import (
     MSEHiddenStatesCallback,
 )
-from src.distillation.callbacks.hidden_states.cosine_hidden_states_callback import (
+from .cosine_hidden_states_callback import (
     CosineHiddenStatesCallback,
 )
-from src.distillation.callbacks.hidden_states.pkt_hidden_states_callback import (
+from .pkt_hidden_states_callback import (
     PKTHiddenStatesCallback,
 )
+from .attention_hidden_states_callback import AttentionHiddenStatesCallback
 
+from .crd_hidden_states_callback import CRDHiddenStatesCallback
 
 __all__ = [
     "MSEHiddenStatesCallback",
     "LambdaSelectCallback",
     "HiddenStatesSelectCallback",
     "CosineHiddenStatesCallback",
-    "PKTHiddenStatesCallback"
+    "PKTHiddenStatesCallback",
+    "AttentionHiddenStatesCallback"
 ]

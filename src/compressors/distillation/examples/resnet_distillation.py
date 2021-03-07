@@ -8,13 +8,13 @@ from torch.utils.data import DataLoader
 
 from torchvision import transforms
 from torchvision import datasets
-from models.resnet import PreActResNet18, PreActResNet50
+from compressors.models.resnet import PreActResNet18, PreActResNet50
 from catalyst.callbacks import AccuracyCallback, CriterionCallback, ControlFlowCallback
 from catalyst.runners import SupervisedRunner
 from catalyst.utils import set_global_seed
 
-from src.distillation.callbacks import (
-    MSEHiddensCallback,
+from compressors.distillation.callbacks import (
+    MSEHiddenStateCallback,
     MetricAggregationCallback,
     KLDivCallback,
 )

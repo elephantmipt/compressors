@@ -1,5 +1,5 @@
-from src.distillation.losses import _pkt_loss
-from src.distillation.callbacks.order import CallbackOrder
+from compressors.distillation.losses import _pkt_loss
+from compressors.distillation.callbacks.order import CallbackOrder
 from catalyst.core import Callback
 
 

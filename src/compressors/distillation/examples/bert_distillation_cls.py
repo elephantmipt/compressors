@@ -9,16 +9,16 @@ from catalyst.runners import Runner
 from catalyst.callbacks.metric import LoaderMetricCallback
 from catalyst.callbacks import ControlFlowCallback
 
-from src.runners.hf_runner import HFRunner
-from src.metrics.hf_metric import HFMetric
-from src.distillation.callbacks import (
+from compressors.runners.hf_runner import HFRunner
+from compressors.metrics.hf_metric import HFMetric
+from compressors.distillation.callbacks import (
     MetricAggregationCallback,
     HiddenStatesSelectCallback,
     MSEHiddenStatesCallback,
     KLDivCallback,
     LambdaSelectCallback,
 )
-from src.distillation.runners import HFDistilRunner
+from compressors.distillation.runners import HFDistilRunner
 
 
 def main(args):

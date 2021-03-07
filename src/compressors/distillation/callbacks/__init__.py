@@ -1,14 +1,21 @@
-from src.distillation.callbacks.logits_diff import KLDivCallback
-from src.distillation.callbacks.metric_aggregation import MetricAggregationCallback
-from src.compressors.distillation.callbacks.wrappers import LambdaWrp
-
+from .metric_aggregation import MetricAggregationCallback
+from .hidden_states import (
+    MSEHiddenStatesCallback,
+    LambdaSelectCallback,
+    HiddenStatesSelectCallback,
+    CosineHiddenStatesCallback,
+    PKTHiddenStatesCallback,
+    AttentionHiddenStatesCallback
+)
+from .logits_diff import KLDivCallback
 
 __all__ = [
     "MetricAggregationCallback",
-    "HiddenStatesSelectCallback",
-    "LambdaSelectCallback",
     "MSEHiddenStatesCallback",
+    "LambdaSelectCallback",
+    "HiddenStatesSelectCallback",
+    "CosineHiddenStatesCallback",
+    "PKTHiddenStatesCallback",
+    "AttentionHiddenStatesCallback",
     "KLDivCallback",
-    "LambdaWrp",
-    "CosineLoss"
 ]

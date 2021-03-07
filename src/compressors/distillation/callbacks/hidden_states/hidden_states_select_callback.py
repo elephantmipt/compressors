@@ -1,14 +1,13 @@
 from typing import Union, List
 
 from catalyst.core import Callback
-from src.distillation.callbacks.order import CallbackOrder
-from src.distillation.hidden_states import hidden_states_select
+from compressors.distillation.callbacks.order import CallbackOrder
+from compressors.distillation.hidden_states import hidden_states_select
 
 
 class HiddenStatesSelectCallback(Callback):
     def __init__(self, layers: Union[int, List[int]], hiddens_key: str = "t_hidden_states"):
         """
-
 
         Args:
             layers:

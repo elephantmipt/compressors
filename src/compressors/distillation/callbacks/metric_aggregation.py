@@ -1,6 +1,6 @@
 from typing import Dict
 from catalyst.core import Callback
-from src.distillation.callbacks.order import CallbackOrder
+from compressors.distillation.callbacks.order import CallbackOrder
 
 
 class MetricAggregationCallback(Callback):

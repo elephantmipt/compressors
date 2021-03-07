@@ -1,4 +1,4 @@
-from src.utils.data.torchvision import TorchvisionDatasetWrapper
+from .torchvision import TorchvisionDatasetWrapper
 
 
 __all__ = ["TorchvisionDatasetWrapper"]

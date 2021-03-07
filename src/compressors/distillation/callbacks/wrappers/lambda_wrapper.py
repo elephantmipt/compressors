@@ -1,8 +1,6 @@
-from typing import Tuple, Callable, Union, List
+from typing import Callable, Union, List
 from catalyst.core import Callback
 from copy import deepcopy
-
-from torch import FloatTensor
 
 
 class LambdaWrp(Callback):

@@ -1,4 +1,4 @@
-from src.compressors.distillation.callbacks.wrappers import LambdaWrp
+from .lambda_wrapper import LambdaWrp
 
 
 __all__ = ["LambdaWrp"]

@@ -1,4 +1,4 @@
-from src.models.cv.preact_resnet import (
+from .preact_resnet import (
     PreActResNet18,
     PreActResNet34,
     PreActResNet50,

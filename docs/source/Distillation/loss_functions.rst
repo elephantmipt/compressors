@@ -3,6 +3,6 @@ Loss functions
 
 .. toctree::
 
-.. automodule:: src.distillation.losses
+.. automodule:: compressors.distillation.losses
     :members:
 

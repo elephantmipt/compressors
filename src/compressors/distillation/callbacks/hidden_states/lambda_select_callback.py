@@ -1,7 +1,7 @@
 from typing import Union, List, Callable
 
 from catalyst.core import Callback
-from src.distillation.callbacks.order import CallbackOrder
+from compressors.distillation.callbacks.order import CallbackOrder
 
 
 class LambdaSelectCallback(Callback):

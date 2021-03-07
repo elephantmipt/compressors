@@ -1,4 +1,4 @@
-from src.runners.hf_runner import HFRunner
+from .hf_runner import HFRunner
 
 
 __all__ = ["HFRunner"]

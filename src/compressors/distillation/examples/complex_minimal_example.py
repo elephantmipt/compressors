@@ -6,15 +6,15 @@ from catalyst.contrib.datasets import MNIST
 from catalyst.callbacks import AccuracyCallback, CriterionCallback
 from catalyst.runners import SupervisedRunner
 
-from src.utils.data import TorchvisionDatasetWrapper as Wrp
-from src.models import BaseDistilModel
-from src.distillation.callbacks import (
+from compressors.utils.data import TorchvisionDatasetWrapper as Wrp
+from compressors.models import BaseDistilModel
+from compressors.distillation.callbacks import (
     MSEHiddenStatesCallback,
     HiddenStatesSelectCallback,
     KLDivCallback,
     MetricAggregationCallback,
 )
-from src.distillation.runners import DistilRunner
+from compressors.distillation.runners import DistilRunner
 
 
 class ExampleModel(BaseDistilModel):
