@@ -6,8 +6,6 @@ from torch.optim.lr_scheduler import MultiStepLR
 from torch import nn
 from torch.utils.data import DataLoader
 
-import wandb
-
 from torchvision import transforms
 from torchvision import datasets
 from models.resnet import PreActResNet18, PreActResNet50
@@ -22,7 +20,7 @@ from src.distillation.callbacks import (
 )
 from src.utils.data import TorchvisionDatasetWrapper as Wrp
 from src.distillation.runners import DistilRunner
-from src.distillation.utils import get_loss_coefs, load_model_from_path
+from src.compressors.distillation.utils import get_loss_coefs, load_model_from_path
 
 
 NAME2MODEL = {

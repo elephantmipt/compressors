@@ -3,14 +3,14 @@ from torch import FloatTensor, LongTensor
 from torch import nn
 
 
-class CosineLoss(nn.Module):
+class CosineHiddenStateLoss(nn.Module):
     def __init__(
         self,
         need_mapping: bool = False,
         teacher_hidden_state_dim: int = None,
         student_hidden_state_dim: int = None
     ):
-        super(CosineLoss, self).__init__()
+        super(CosineHiddenStateLoss, self).__init__()
         self.loss_fn = nn.CosineEmbeddingLoss()
         self.need_mapping = need_mapping
         if need_mapping:

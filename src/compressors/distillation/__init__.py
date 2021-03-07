@@ -1,4 +1,5 @@
-from src.distillation.callbacks import (
+# @TODO refactor
+from compressors.distillation.callbacks import (
     MetricAggregationCallback,
     HiddenStatesSelectCallback,
     MSEHiddenStatesCallback,
@@ -6,9 +7,9 @@ from src.distillation.callbacks import (
     LambdaWrp,
     LambdaSelectCallback,
 )
-from src.distillation.hidden_states import hidden_states_select
-from src.distillation.runners import HFDistilRunner, DistilRunner
-from src.distillation.student_init import init_bert_model_with_teacher
+from compressors.distillation.hidden_states import hidden_states_select
+from compressors.distillation.runners import HFDistilRunner, DistilRunner
+from compressors.distillation.student_init import init_bert_model_with_teacher
 
 
 __all__ = [
