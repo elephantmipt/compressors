@@ -104,3 +104,14 @@ runner.train(
     check=True
 )
 ```
+
+## Losses
+
+| Loss               | References        | Status      |
+| ----------------   | ----------------- | ----------- |
+| KL-divergence      | [Hinton et al.](https://arxiv.org/abs/1503.02531)     | Implemented |
+| MSE                | [Hinton et al.](https://arxiv.org/abs/1503.02531)     | Implemented |
+| Probabilistic KT   | [Passalis et al.](https://arxiv.org/abs/1803.10837)   | Implemented |
+| Cosine             | ???                                                   | Implemented |
+| Attention Transfer | [Zagoruyko et al.](https://arxiv.org/abs/1612.03928)  | Implemented |
+| Constrative Representation Distillation | [Tian et al.](https://arxiv.org/pdf/1910.10699.pdf)| Implemented (without dataset) |
