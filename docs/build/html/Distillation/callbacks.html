@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>Callbacks</title>
+    
+      <link rel="stylesheet" href="../_static/pygments.css">
+      <link rel="stylesheet" href="../_static/theme.css">
+      <link rel="stylesheet" href="../_static/sphinx_press_theme.css">
+      
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+
+      <!-- sphinx script_files -->
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+
+      
+      <script src="../_static/theme-vendors.js"></script>
+      <script src="../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../genindex.html" />
+  <link rel="search" title="Search" href="../search.html" />
+  <link rel="next" title="Runners" href="runners.html" />
+  <link rel="prev" title="Loss functions" href="loss_functions.html" /> 
+  </head>
+
+  <body>
+    <div id="app" class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../index.html" class="home-link">
+    
+      <span class="site-name">Caompressors</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../index.html#why-compressors">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 "><a href="distillation.html" class="reference internal ">Distillation</a>
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 "><a href="../Quantization/quantization.html" class="reference internal ">Quantization</a>
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 "><a href="../Pruning/pruning.html" class="reference internal ">Pruning</a>
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 "><a href="../examples.html" class="reference internal ">Examples</a>
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="distillation.html">Distillation</a> &raquo;</li>
+    
+    <li>Callbacks</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="loss_functions.html"
+       title="previous chapter">← Loss functions</a>
+  </li>
+  <li class="next">
+    <a href="runners.html"
+       title="next chapter">Runners →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main">
+            
+  <div class="section" id="callbacks">
+<h1>Callbacks<a class="headerlink" href="#callbacks" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="logits-difference-callbacks">
+<h2>Logits difference callbacks<a class="headerlink" href="#logits-difference-callbacks" title="Permalink to this headline">¶</a></h2>
+<p>Callbacks which use difference between probabilities distribution over last layers.
+Useful for classification task.</p>
+<span class="target" id="module-compressors.distillation.callbacks.logits_diff"></span><dl class="py class">
+<dt id="compressors.distillation.callbacks.logits_diff.KLDivCallback">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">compressors.distillation.callbacks.logits_diff.</span></code><code class="sig-name descname"><span class="pre">KLDivCallback</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'kl_div_loss'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.callbacks.logits_diff.KLDivCallback" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="wrappers">
+<h2>Wrappers<a class="headerlink" href="#wrappers" title="Permalink to this headline">¶</a></h2>
+<p>Wrappers is useful when your callback inputs something defferent then hidden states or logits,
+but you don’t want to modify batch in your runner.</p>
+<span class="target" id="module-compressors.distillation.callbacks.wrappers"></span><dl class="py class">
+<dt id="compressors.distillation.callbacks.wrappers.LambdaWrp">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">compressors.distillation.callbacks.wrappers.</span></code><code class="sig-name descname"><span class="pre">LambdaWrp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_callback</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">catalyst.core.callback.Callback</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambda_fn</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys_to_apply</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">['s_hidden_states',</span> <span class="pre">'t_hidden_states']</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.callbacks.wrappers.LambdaWrp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wraps input for your callback with specified function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>base_callback</strong> (<em>Callback</em>) – Base callback.</p></li>
+<li><p><strong>lambda_fn</strong> (<em>Callable</em>) – Function to apply.</p></li>
+<li><p><strong>keys_to_apply</strong> (<em>Union</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Keys in batch dict to apply function.
+Defaults to [“s_hidden_states”, “t_hidden_states”].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>TypeError</strong> – When keys_to_apply is not str or list.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-compressors.distillation.callbacks.hidden_states">
+<span id="hiddens-states"></span><h2>Hiddens states<a class="headerlink" href="#module-compressors.distillation.callbacks.hidden_states" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="compressors.distillation.callbacks.hidden_states.AttentionHiddenStatesCallback">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">compressors.distillation.callbacks.hidden_states.</span></code><code class="sig-name descname"><span class="pre">AttentionHiddenStatesCallback</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'attention_loss'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_first_and_last</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.callbacks.hidden_states.AttentionHiddenStatesCallback" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_key</strong> – name for loss. Defaults to attention_loss.</p></li>
+<li><p><strong>exclude_first_and_last</strong> – If set to True takes only last hidden state.
+Usually cosine loss applied in this way. Defaults to True.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="compressors.distillation.callbacks.hidden_states.CosineHiddenStatesCallback">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">compressors.distillation.callbacks.hidden_states.</span></code><code class="sig-name descname"><span class="pre">CosineHiddenStatesCallback</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'cosine_loss'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_only</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">need_mapping</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">teacher_hidden_state_dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">student_hidden_state_dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.callbacks.hidden_states.CosineHiddenStatesCallback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cosine loss for difference between hidden states of teacher and student model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_key</strong> – name for loss. Defaults to cosine_loss.</p></li>
+<li><p><strong>last_only</strong> – If set to True takes only last hidden state.
+Usually cosine loss applied in this way. Defaults to True.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="compressors.distillation.callbacks.hidden_states.HiddenStatesSelectCallback">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">compressors.distillation.callbacks.hidden_states.</span></code><code class="sig-name descname"><span class="pre">HiddenStatesSelectCallback</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layers</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hiddens_key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'t_hidden_states'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.callbacks.hidden_states.HiddenStatesSelectCallback" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt id="compressors.distillation.callbacks.hidden_states.LambdaSelectCallback">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">compressors.distillation.callbacks.hidden_states.</span></code><code class="sig-name descname"><span class="pre">LambdaSelectCallback</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lambda_fn</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys_to_apply</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">['s_hidden_states',</span> <span class="pre">'t_hidden_states']</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.callbacks.hidden_states.LambdaSelectCallback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filters output with your lambda function. Inplace analog of <code class="docutils literal notranslate"><span class="pre">LambdaWrp</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>base_callback</strong> (<em>Callback</em>) – Base callback.</p></li>
+<li><p><strong>lambda_fn</strong> (<em>Callable</em>) – Function to apply.</p></li>
+<li><p><strong>keys_to_apply</strong> (<em>Union</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Keys in batch dict to apply function.
+Defaults to [“s_hidden_states”, “t_hidden_states”].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>TypeError</strong> – When keys_to_apply is not str or list.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="compressors.distillation.callbacks.hidden_states.MSEHiddenStatesCallback">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">compressors.distillation.callbacks.hidden_states.</span></code><code class="sig-name descname"><span class="pre">MSEHiddenStatesCallback</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'mse_loss'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">need_mapping</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">teacher_hidden_state_dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">student_hidden_state_dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_layers</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.callbacks.hidden_states.MSEHiddenStatesCallback" title="Permalink to this definition">¶</a></dt>
+<dd><p>MSE loss aka Hint loss for difference between hidden
+states of teacher and student model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>output_key</strong> – name for loss. Defaults to mse_loss.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="compressors.distillation.callbacks.hidden_states.PKTHiddenStatesCallback">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">compressors.distillation.callbacks.hidden_states.</span></code><code class="sig-name descname"><span class="pre">PKTHiddenStatesCallback</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'pkt_loss'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_only</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.callbacks.hidden_states.PKTHiddenStatesCallback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Probabilistic Knowlewdge Transfer loss for difference between hidden states
+of teacher and student model.
+Proposed in <a class="reference external" href="https://arxiv.org/abs/1803.10837">https://arxiv.org/abs/1803.10837</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_key</strong> – name for loss. Defaults to mse_loss.</p></li>
+<li><p><strong>last_only</strong> – If set to True takes only last hidden state.
+Usually pkt loss applied in this way. Defaults to True.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="loss_functions.html"
+       title="previous chapter">← Loss functions</a>
+  </li>
+  <li class="next">
+    <a href="runners.html"
+       title="next chapter">Runners →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2021, Nikita Balagansky.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a>.
+</div>
+            </div>
+          </div>
+      </page>
+    </div>
+    
+    
+  </body>
+</html>

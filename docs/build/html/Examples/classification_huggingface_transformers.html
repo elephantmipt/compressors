@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>Huggingface transformers</title>
+    
+      <link rel="stylesheet" href="../_static/pygments.css">
+      <link rel="stylesheet" href="../_static/theme.css">
+      <link rel="stylesheet" href="../_static/sphinx_press_theme.css">
+      
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+
+      <!-- sphinx script_files -->
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+
+      
+      <script src="../_static/theme-vendors.js"></script>
+      <script src="../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../genindex.html" />
+  <link rel="search" title="Search" href="../search.html" />
+  <link rel="prev" title="Examples" href="../examples.html" /> 
+  </head>
+
+  <body>
+    <div id="app" class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../index.html" class="home-link">
+    
+      <span class="site-name">Caompressors</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../index.html#why-compressors">Contents:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 "><a href="../Distillation/distillation.html" class="reference internal ">Distillation</a>
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 "><a href="../Quantization/quantization.html" class="reference internal ">Quantization</a>
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 "><a href="../Pruning/pruning.html" class="reference internal ">Pruning</a>
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 "><a href="../examples.html" class="reference internal ">Examples</a>
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../examples.html">Examples</a> &raquo;</li>
+    
+    <li>Huggingface transformers</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="../examples.html"
+       title="previous chapter">← Examples</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main">
+            
+  <div class="section" id="huggingface-transformers">
+<h1>Huggingface transformers<a class="headerlink" href="#huggingface-transformers" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">DataLoader</span>
+
+<span class="kn">from</span> <span class="nn">datasets</span> <span class="kn">import</span> <span class="n">load_dataset</span><span class="p">,</span> <span class="n">load_metric</span>
+<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span><span class="p">,</span> <span class="n">AutoModelForSequenceClassification</span>
+<span class="kn">from</span> <span class="nn">catalyst.runners</span> <span class="kn">import</span> <span class="n">Runner</span>
+<span class="kn">from</span> <span class="nn">catalyst.callbacks.metric</span> <span class="kn">import</span> <span class="n">LoaderMetricCallback</span>
+<span class="kn">from</span> <span class="nn">catalyst.callbacks</span> <span class="kn">import</span> <span class="n">ControlFlowCallback</span>
+
+<span class="kn">from</span> <span class="nn">compressors.runners.hf_runner</span> <span class="kn">import</span> <span class="n">HFRunner</span>
+<span class="kn">from</span> <span class="nn">compressors.metrics.hf_metric</span> <span class="kn">import</span> <span class="n">HFMetric</span>
+<span class="kn">from</span> <span class="nn">compressors.distillation.callbacks</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">MetricAggregationCallback</span><span class="p">,</span>
+    <span class="n">HiddenStatesSelectCallback</span><span class="p">,</span>
+    <span class="n">MSEHiddenStatesCallback</span><span class="p">,</span>
+    <span class="n">KLDivCallback</span><span class="p">,</span>
+    <span class="n">LambdaSelectCallback</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">compressors.distillation.runners</span> <span class="kn">import</span> <span class="n">HFDistilRunner</span>
+
+<span class="n">datasets</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span>
+
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">&quot;google/bert_uncased_L-4_H-128_A-2&quot;</span><span class="p">)</span>
+<span class="n">datasets</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="n">tokenizer</span><span class="p">(</span>
+        <span class="n">e</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">],</span> <span class="n">truncation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;max_length&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">128</span>
+    <span class="p">),</span>
+    <span class="n">batched</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">datasets</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;labels&quot;</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]},</span> <span class="n">batched</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">datasets</span><span class="o">.</span><span class="n">set_format</span><span class="p">(</span>
+    <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;torch&quot;</span><span class="p">,</span>
+    <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">,</span> <span class="s2">&quot;token_type_ids&quot;</span><span class="p">,</span> <span class="s2">&quot;attention_mask&quot;</span><span class="p">,</span> <span class="s2">&quot;labels&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+<span class="n">loaders</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;train&quot;</span><span class="p">:</span> <span class="n">DataLoader</span><span class="p">(</span>
+        <span class="n">datasets</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">],</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;valid&quot;</span><span class="p">:</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">datasets</span><span class="p">[</span><span class="s2">&quot;test&quot;</span><span class="p">],</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">batch_size</span><span class="p">),</span>
+<span class="p">}</span>
+<span class="n">metric_callback</span> <span class="o">=</span> <span class="n">LoaderMetricCallback</span><span class="p">(</span>
+    <span class="n">metric</span><span class="o">=</span><span class="n">HFMetric</span><span class="p">(</span><span class="n">metric</span><span class="o">=</span><span class="n">load_metric</span><span class="p">(</span><span class="s2">&quot;accuracy&quot;</span><span class="p">)),</span>
+    <span class="n">input_key</span><span class="o">=</span><span class="s2">&quot;logits&quot;</span><span class="p">,</span>
+    <span class="n">target_key</span><span class="o">=</span><span class="s2">&quot;labels&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">teacher_model</span> <span class="o">=</span> <span class="n">AutoModelForSequenceClassification</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+    <span class="s2">&quot;google/bert_uncased_L-4_H-128_A-2&quot;</span><span class="p">,</span> <span class="n">num_labels</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">num_labels</span>
+<span class="p">)</span>
+<span class="n">runner</span> <span class="o">=</span> <span class="n">HFRunner</span><span class="p">()</span>
+<span class="n">runner</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">teacher_model</span><span class="p">,</span>
+    <span class="n">loaders</span><span class="o">=</span><span class="n">loaders</span><span class="p">,</span>
+    <span class="n">optimizer</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">teacher_model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">train_lr</span><span class="p">),</span>
+    <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">metric_callback</span><span class="p">],</span>
+    <span class="n">num_epochs</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">num_train_epochs</span><span class="p">,</span>
+    <span class="n">valid_metric</span><span class="o">=</span><span class="s2">&quot;accuracy&quot;</span><span class="p">,</span>
+    <span class="n">minimize_valid_metric</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">metric_callback</span> <span class="o">=</span> <span class="n">LoaderMetricCallback</span><span class="p">(</span>
+    <span class="n">metric</span><span class="o">=</span><span class="n">HFMetric</span><span class="p">(</span><span class="n">metric</span><span class="o">=</span><span class="n">load_metric</span><span class="p">(</span><span class="s2">&quot;accuracy&quot;</span><span class="p">)),</span>
+    <span class="n">input_key</span><span class="o">=</span><span class="s2">&quot;s_logits&quot;</span><span class="p">,</span>
+    <span class="n">target_key</span><span class="o">=</span><span class="s2">&quot;labels&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">slct_callback</span> <span class="o">=</span> <span class="n">ControlFlowCallback</span><span class="p">(</span>
+    <span class="n">HiddenStatesSelectCallback</span><span class="p">(</span><span class="n">hiddens_key</span><span class="o">=</span><span class="s2">&quot;t_hidden_states&quot;</span><span class="p">,</span> <span class="n">layers</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]),</span>
+    <span class="n">loaders</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">lambda_hiddens_callback</span> <span class="o">=</span> <span class="n">ControlFlowCallback</span><span class="p">(</span>
+    <span class="n">LambdaSelectCallback</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">s_hiddens</span><span class="p">,</span> <span class="n">t_hiddens</span><span class="p">:</span> <span class="p">(</span>
+            <span class="p">(</span><span class="n">c_s</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">c_s</span> <span class="ow">in</span> <span class="n">s_hiddens</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">t_s</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">t_s</span> <span class="ow">in</span> <span class="n">t_hiddens</span><span class="p">),</span>  <span class="c1"># tooks only CLS token</span>
+        <span class="p">)</span>
+    <span class="p">),</span>
+    <span class="n">loaders</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">mse_hiddens</span> <span class="o">=</span> <span class="n">ControlFlowCallback</span><span class="p">(</span><span class="n">MSEHiddenStatesCallback</span><span class="p">(),</span> <span class="n">loaders</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">)</span>
+
+<span class="n">kl_div</span> <span class="o">=</span> <span class="n">ControlFlowCallback</span><span class="p">(</span><span class="n">KLDivCallback</span><span class="p">(),</span> <span class="n">loaders</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">)</span>
+
+<span class="n">aggregator</span> <span class="o">=</span> <span class="n">ControlFlowCallback</span><span class="p">(</span>
+    <span class="n">MetricAggregationCallback</span><span class="p">(</span>
+        <span class="n">weights</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;kl_div_loss&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span> <span class="s2">&quot;mse_loss&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span> <span class="s2">&quot;task_loss&quot;</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">}</span>
+    <span class="p">),</span>
+    <span class="n">loaders</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">runner</span> <span class="o">=</span> <span class="n">HFDistilRunner</span><span class="p">()</span>
+
+<span class="n">student_model</span> <span class="o">=</span> <span class="n">AutoModelForSequenceClassification</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+    <span class="s2">&quot;google/bert_uncased_L-2_H-128_A-2&quot;</span><span class="p">,</span> <span class="n">num_labels</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">num_labels</span>
+<span class="p">)</span>
+<span class="n">runner</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;teacher&quot;</span><span class="p">:</span> <span class="n">teacher_model</span><span class="p">,</span> <span class="s2">&quot;student&quot;</span><span class="p">:</span> <span class="n">student_model</span><span class="p">,},</span>
+    <span class="n">loaders</span><span class="o">=</span><span class="n">loaders</span><span class="p">,</span>
+    <span class="n">optimizer</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">student_model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">distil_lr</span><span class="p">),</span>
+    <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">metric_callback</span><span class="p">,</span>
+        <span class="n">slct_callback</span><span class="p">,</span>
+        <span class="n">lambda_hiddens_callback</span><span class="p">,</span>
+        <span class="n">mse_hiddens</span><span class="p">,</span>
+        <span class="n">kl_div</span><span class="p">,</span>
+        <span class="n">aggregator</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">num_epochs</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">num_distil_epochs</span><span class="p">,</span>
+    <span class="n">valid_metric</span><span class="o">=</span><span class="s2">&quot;accuracy&quot;</span><span class="p">,</span>
+    <span class="n">minimize_valid_metric</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="../examples.html"
+       title="previous chapter">← Examples</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2021, Nikita Balagansky.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a>.
+</div>
+            </div>
+          </div>
+      </page>
+    </div>
+    
+    
+  </body>
+</html>

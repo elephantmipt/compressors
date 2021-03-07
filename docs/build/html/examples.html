@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>Examples</title>
+    
+      <link rel="stylesheet" href="_static/pygments.css">
+      <link rel="stylesheet" href="_static/theme.css">
+      <link rel="stylesheet" href="_static/sphinx_press_theme.css">
+      
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+
+      <!-- sphinx script_files -->
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+      
+      <script src="_static/theme-vendors.js"></script>
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="Huggingface transformers" href="Examples/classification_huggingface_transformers.html" />
+  <link rel="prev" title="Pruning" href="Pruning/pruning.html" /> 
+  </head>
+
+  <body>
+    <div id="app" class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">Caompressors</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#why-compressors">Contents:</a></span>
+      </p>
+      <ul class="current">
+        
+          <li class="toctree-l1 "><a href="Distillation/distillation.html" class="reference internal ">Distillation</a>
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 "><a href="Quantization/quantization.html" class="reference internal ">Quantization</a>
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 "><a href="Pruning/pruning.html" class="reference internal ">Pruning</a>
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 current"><a href="#" class="reference internal current">Examples</a>
+
+            
+              <ul>
+                
+                  <li class="toctree-l2"><a href="#minimal-example" class="reference internal">Minimal Example</a></li>
+                
+                  <li class="toctree-l2"><a href="#minimal-complex-example" class="reference internal">Minimal Complex Example</a></li>
+                
+                  <li class="toctree-l2"><a href="#nlp" class="reference internal">NLP</a></li>
+                
+                  <li class="toctree-l2"><a href="#cv" class="reference internal">CV</a></li>
+                
+              </ul>
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+    <li>Examples</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="Pruning/pruning.html"
+       title="previous chapter">← Pruning</a>
+  </li>
+  <li class="next">
+    <a href="Examples/classification_huggingface_transformers.html"
+       title="next chapter">Huggingface transformers →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main">
+            
+  <div class="section" id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="minimal-example">
+<h2>Minimal Example<a class="headerlink" href="#minimal-example" title="Permalink to this headline">¶</a></h2>
+<p>Imports</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">DataLoader</span>
+
+<span class="kn">from</span> <span class="nn">catalyst.contrib.datasets</span> <span class="kn">import</span> <span class="n">MNIST</span>
+<span class="kn">from</span> <span class="nn">catalyst.callbacks</span> <span class="kn">import</span> <span class="n">AccuracyCallback</span>
+
+<span class="kn">from</span> <span class="nn">compressors.distillation.runners</span> <span class="kn">import</span> <span class="n">EndToEndDistilRunner</span>
+<span class="kn">from</span> <span class="nn">compressors.models</span> <span class="kn">import</span> <span class="n">BaseDistilModel</span>
+<span class="kn">from</span> <span class="nn">compressors.utils.data</span> <span class="kn">import</span> <span class="n">TorchvisionDatasetWrapper</span> <span class="k">as</span> <span class="n">Wrp</span>
+</pre></div>
+</div>
+<p>Now we can create tiny model class.
+The main and the only difference from ordinary pytorch model
+is that forward should also supports <code class="docutils literal notranslate"><span class="pre">output_hidden_states</span></code> and <code class="docutils literal notranslate"><span class="pre">return_dict</span></code> args.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">output_hidden_states</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code> model should also output tuple of hidden states.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">return_dict</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code> model should be type of dict.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ExampleModel</span><span class="p">(</span><span class="n">BaseDistilModel</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_layers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">hidden_dim</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">128</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="n">layers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flatten</span> <span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">Flatten</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_layers</span> <span class="o">=</span> <span class="n">num_layers</span>
+        <span class="k">for</span> <span class="n">layer_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_layers</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">layer_idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">28</span><span class="o">*</span><span class="mi">28</span><span class="p">,</span> <span class="n">hidden_dim</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">layer_idx</span> <span class="o">==</span> <span class="n">num_layers</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_dim</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_dim</span><span class="p">,</span> <span class="n">hidden_dim</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span><span class="n">layers</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inp</span><span class="p">,</span> <span class="n">output_hidden_states</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">return_dict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="n">cur_hidden</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">output_hidden_states</span><span class="p">:</span>
+            <span class="n">hiddens</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">layer_idx</span><span class="p">,</span> <span class="n">layer</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">):</span>
+
+            <span class="n">cur_hidden</span> <span class="o">=</span> <span class="n">layer</span><span class="p">(</span><span class="n">cur_hidden</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">output_hidden_states</span><span class="p">:</span>  <span class="c1">#  accumulate hidden states</span>
+                <span class="n">hiddens</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cur_hidden</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">layer_idx</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_layers</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># last layer case</span>
+                <span class="n">cur_hidden</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">cur_hidden</span><span class="p">)</span>
+
+        <span class="n">logits</span> <span class="o">=</span> <span class="n">cur_hidden</span>
+        <span class="k">if</span> <span class="n">return_dict</span><span class="p">:</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;logits&quot;</span><span class="p">:</span> <span class="n">logits</span><span class="p">}</span>
+            <span class="k">if</span> <span class="n">output_hidden_states</span><span class="p">:</span>
+                <span class="n">output</span><span class="p">[</span><span class="s2">&quot;hidden_states&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">hiddens</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">output</span>
+
+        <span class="k">if</span> <span class="n">output_hidden_states</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">logits</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">hiddens</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">logits</span>
+</pre></div>
+</div>
+<p>Distillation starts here:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">teacher</span> <span class="o">=</span> <span class="n">ExampleModel</span><span class="p">(</span><span class="n">num_layers</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">student</span> <span class="o">=</span> <span class="n">ExampleModel</span><span class="p">(</span><span class="n">num_layers</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="n">datasets</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;train&quot;</span><span class="p">:</span> <span class="n">Wrp</span><span class="p">(</span><span class="n">MNIST</span><span class="p">(</span><span class="s2">&quot;./data&quot;</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">download</span><span class="o">=</span><span class="kc">True</span><span class="p">)),</span>
+    <span class="s2">&quot;valid&quot;</span><span class="p">:</span> <span class="n">Wrp</span><span class="p">(</span><span class="n">MNIST</span><span class="p">(</span><span class="s2">&quot;./data&quot;</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
+<span class="p">}</span>
+
+<span class="n">loaders</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">dl_key</span><span class="p">:</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="n">dl_key</span> <span class="o">==</span> <span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">dl_key</span><span class="p">,</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">datasets</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">chain</span><span class="p">(</span><span class="n">teacher</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">student</span><span class="o">.</span><span class="n">parameters</span><span class="p">()))</span>
+
+<span class="n">runner</span> <span class="o">=</span> <span class="n">EndToEndDistilRunner</span><span class="p">(</span>
+    <span class="n">hidden_state_loss</span><span class="o">=</span><span class="s2">&quot;pkt_loss&quot;</span><span class="p">,</span>
+    <span class="n">num_train_teacher_epochs</span><span class="o">=</span><span class="mi">5</span>
+<span class="p">)</span>
+
+<span class="n">runner</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;teacher&quot;</span><span class="p">:</span> <span class="n">teacher</span><span class="p">,</span> <span class="s2">&quot;student&quot;</span><span class="p">:</span> <span class="n">student</span><span class="p">},</span>
+    <span class="n">loaders</span><span class="o">=</span><span class="n">loaders</span><span class="p">,</span>
+    <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span>
+    <span class="n">num_epochs</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">AccuracyCallback</span><span class="p">(</span><span class="n">input_key</span><span class="o">=</span><span class="s2">&quot;logits&quot;</span><span class="p">,</span> <span class="n">target_key</span><span class="o">=</span><span class="s2">&quot;targets&quot;</span><span class="p">)],</span>
+    <span class="n">valid_metric</span><span class="o">=</span><span class="s2">&quot;accuracy01&quot;</span><span class="p">,</span>
+    <span class="n">minimize_valid_metric</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">logdir</span><span class="o">=</span><span class="s2">&quot;./logs&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="minimal-complex-example">
+<h2>Minimal Complex Example<a class="headerlink" href="#minimal-complex-example" title="Permalink to this headline">¶</a></h2>
+<p>First of all imports:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">DataLoader</span>
+
+<span class="kn">from</span> <span class="nn">catalyst.contrib.datasets</span> <span class="kn">import</span> <span class="n">MNIST</span>
+<span class="kn">from</span> <span class="nn">catalyst.callbacks</span> <span class="kn">import</span> <span class="n">AccuracyCallback</span><span class="p">,</span> <span class="n">CriterionCallback</span>
+<span class="kn">from</span> <span class="nn">catalyst.runners</span> <span class="kn">import</span> <span class="n">SupervisedRunner</span>
+
+<span class="kn">from</span> <span class="nn">compressors.utils.data</span> <span class="kn">import</span> <span class="n">TorchvisionDatasetWrapper</span> <span class="k">as</span> <span class="n">Wrp</span>
+<span class="kn">from</span> <span class="nn">compressors.models</span> <span class="kn">import</span> <span class="n">BaseDistilModel</span>
+<span class="kn">from</span> <span class="nn">compressors.distillation.callbacks</span> <span class="kn">import</span> <span class="n">MSEHiddenStatesCallback</span><span class="p">,</span> <span class="n">HiddenStatesSelectCallback</span><span class="p">,</span> <span class="n">KLDivCallback</span><span class="p">,</span> <span class="n">MetricAggregationCallback</span>
+<span class="kn">from</span> <span class="nn">compressors.distillation.runners</span> <span class="kn">import</span> <span class="n">DistilRunner</span>
+</pre></div>
+</div>
+<p>Now we can create tiny model class.
+The main and the only difference from ordinary pytorch model
+is that forward should also supports <code class="docutils literal notranslate"><span class="pre">output_hidden_states</span></code> and <code class="docutils literal notranslate"><span class="pre">return_dict</span></code> args.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">output_hidden_states</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code> model should also output tuple of hidden states.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">return_dict</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code> model should be type of dict.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ExampleModel</span><span class="p">(</span><span class="n">BaseDistilModel</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_layers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">hidden_dim</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">128</span><span class="p">):</span>
+        <span class="n">layers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_layers</span> <span class="o">=</span> <span class="n">num_layers</span>
+        <span class="k">for</span> <span class="n">layer_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_layers</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">layer_idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">28</span><span class="o">*</span><span class="mi">28</span><span class="p">,</span> <span class="n">hidden_dim</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">layer_idx</span> <span class="o">==</span> <span class="n">num_layers</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_dim</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_dim</span><span class="p">,</span> <span class="n">hidden_dim</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span><span class="o">*</span><span class="n">layers</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">inp</span><span class="p">,</span>
+        <span class="n">output_hidden_states</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">return_dict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">):</span>
+        <span class="n">cur_hidden</span> <span class="o">=</span> <span class="n">inp</span>
+        <span class="k">if</span> <span class="n">output_hidden_states</span><span class="p">:</span>
+            <span class="n">hiddens</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">layer_idx</span><span class="p">,</span> <span class="n">layer</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">):</span>
+            <span class="n">cur_hidden</span> <span class="o">=</span> <span class="n">layer</span><span class="p">(</span><span class="n">cur_hidden</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">output_hidden_states</span><span class="p">:</span>  <span class="c1">#  accumulate hidden states</span>
+                <span class="n">hiddens</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cur_hidden</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">layer_idx</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_layers</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># last layer case</span>
+                <span class="n">cur_hidden</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">cur_hidden</span><span class="p">)</span>
+
+        <span class="n">logits</span> <span class="o">=</span> <span class="n">cur_hidden</span>
+        <span class="k">if</span> <span class="n">return_dict</span><span class="p">:</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;logits&quot;</span><span class="p">:</span> <span class="n">logits</span><span class="p">}</span>
+            <span class="k">if</span> <span class="n">output_hidden_states</span><span class="p">:</span>
+                <span class="n">output</span><span class="p">[</span><span class="s2">&quot;hidden_states&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">hiddens</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">output</span>
+
+        <span class="k">if</span> <span class="n">output_hidden_states</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">logits</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">hiddens</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">logits</span>
+</pre></div>
+</div>
+<p>Now we are all-set. Let’s begin and define our teacher and student models.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">teacher</span> <span class="o">=</span> <span class="n">ExampleModel</span><span class="p">(</span><span class="n">num_layers</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">student</span> <span class="o">=</span> <span class="n">ExampleModel</span><span class="p">(</span><span class="n">num_layers</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here is data preprocessing:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">datasets</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;train&quot;</span><span class="p">:</span> <span class="n">Wrp</span><span class="p">(</span><span class="n">MNIST</span><span class="p">(</span><span class="s2">&quot;./data&quot;</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">download</span><span class="o">=</span><span class="kc">True</span><span class="p">)),</span>
+    <span class="s2">&quot;valid&quot;</span><span class="p">:</span> <span class="n">Wrp</span><span class="p">(</span><span class="n">MNIST</span><span class="p">(</span><span class="s2">&quot;./data&quot;</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+<span class="p">}</span>
+
+<span class="n">loaders</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">dl_key</span><span class="p">:</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="n">dl_key</span><span class="o">==</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span> <span class="k">for</span> <span class="n">dl_key</span><span class="p">,</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">datasets</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Now we are ready to train our teacher. This is just simple supervised learning pipeline.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">teacher</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">)</span>
+
+<span class="n">runner</span> <span class="o">=</span> <span class="n">SupervisedRunner</span><span class="p">()</span>
+
+<span class="n">runner</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">teacher</span><span class="p">,</span>
+    <span class="n">loaders</span><span class="o">=</span><span class="n">loaders</span><span class="p">,</span>
+    <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span>
+    <span class="n">criterion</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span><span class="p">(),</span>
+    <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">AccuracyCallback</span><span class="p">(</span><span class="n">input_key</span><span class="o">=</span><span class="s2">&quot;logits&quot;</span><span class="p">,</span> <span class="n">target_key</span><span class="o">=</span><span class="s2">&quot;targets&quot;</span><span class="p">)],</span>
+    <span class="n">valid_metric</span><span class="o">=</span><span class="s2">&quot;accuracy01&quot;</span><span class="p">,</span>
+    <span class="n">minimize_valid_metric</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">num_epochs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Here begins distillation code.</p>
+<p>First of all let’s define our losses: in addition to <code class="docutils literal notranslate"><span class="pre">CrossEntropyLoss</span></code>
+we will count <code class="docutils literal notranslate"><span class="pre">MSELoss</span></code> between hidden states of teacher and student model and
+<code class="docutils literal notranslate"><span class="pre">KLDivLoss</span></code> between output distributions of class probabilities.</p>
+<p>But our teacher model has more layers then student model and has more hidden states.
+Therefore we will took only last two hidden states of teacher model. We can do it with
+<code class="docutils literal notranslate"><span class="pre">HiddenStatesSelectCallback</span></code> and set <code class="docutils literal notranslate"><span class="pre">layers=[2,</span> <span class="pre">3]</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">select_last_hidden_states</span> <span class="o">=</span> <span class="n">HiddenStatesSelectCallback</span><span class="p">(</span><span class="n">layers</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Now we can simply initialize <code class="docutils literal notranslate"><span class="pre">MSEHiddenStatesCallback</span></code> for MSE loss and <code class="docutils literal notranslate"><span class="pre">KLDivCallback</span></code> for KL-divergence loss</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mse_callback</span> <span class="o">=</span> <span class="n">MSEHiddenStatesCallback</span><span class="p">()</span>
+<span class="n">kl_callback</span> <span class="o">=</span> <span class="n">KLDivCallback</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Here we can initialize our <code class="docutils literal notranslate"><span class="pre">DistilRunner</span></code> and set <code class="docutils literal notranslate"><span class="pre">output_hidden_states=True</span></code> as we are using hidden_states in loss</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">runner</span> <span class="o">=</span> <span class="n">DistilRunner</span><span class="p">(</span><span class="n">output_hidden_states</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can provide only students parameters to optimizer.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">student</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now we can run distillation! We also add <code class="docutils literal notranslate"><span class="pre">MetricAggregationCallback</span></code> to
+callbacks, as we need final loss to be sum of the several losses.</p>
+<div class="math notranslate nohighlight">
+\[L_\text{loss} = w_1\cdot L_\text{task loss} + w_2\cdot L_\text{KL} + w_3\cdot L_\text{MSE}\]</div>
+<p>We are also setting weights to losses.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">runner</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;teacher&quot;</span><span class="p">:</span> <span class="n">teacher</span><span class="p">,</span> <span class="s2">&quot;student&quot;</span><span class="p">:</span> <span class="n">student</span><span class="p">},</span>
+    <span class="n">loaders</span><span class="o">=</span><span class="n">loaders</span><span class="p">,</span>
+    <span class="n">optimier</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span>
+    <span class="n">criterion</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span><span class="p">(),</span>
+    <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">AccuracyCallback</span><span class="p">(</span><span class="n">input_key</span><span class="o">=</span><span class="s2">&quot;s_logits&quot;</span><span class="p">,</span> <span class="n">target_key</span><span class="o">=</span><span class="s2">&quot;targets&quot;</span><span class="p">),</span>
+        <span class="n">CriterionCallback</span><span class="p">(</span><span class="n">input_key</span><span class="o">=</span><span class="s2">&quot;s_logits&quot;</span><span class="p">),</span>
+        <span class="n">mse_callback</span><span class="p">,</span>
+        <span class="n">select_last_hidden_states</span><span class="p">,</span>
+        <span class="n">kl_callback</span><span class="p">,</span>
+        <span class="n">MetricAggregationCallback</span><span class="p">({</span>
+            <span class="s2">&quot;kl_loss&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>
+            <span class="s2">&quot;mse_loss&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>
+            <span class="s2">&quot;loss&quot;</span><span class="p">:</span> <span class="mf">0.6</span>
+        <span class="p">})</span>
+    <span class="p">],</span>
+    <span class="n">valid_metric</span><span class="o">=</span><span class="s2">&quot;accuracy01&quot;</span><span class="p">,</span>
+    <span class="n">minimize_valid_metric</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">num_epochs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="nlp">
+<h2>NLP<a class="headerlink" href="#nlp" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Examples/classification_huggingface_transformers.html">Huggingface transformers</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="cv">
+<h2>CV<a class="headerlink" href="#cv" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="Pruning/pruning.html"
+       title="previous chapter">← Pruning</a>
+  </li>
+  <li class="next">
+    <a href="Examples/classification_huggingface_transformers.html"
+       title="next chapter">Huggingface transformers →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2021, Nikita Balagansky.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a>.
+</div>
+            </div>
+          </div>
+      </page>
+    </div>
+    
+    
+  </body>
+</html>
