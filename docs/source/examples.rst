@@ -17,9 +17,9 @@ Imports
     from catalyst.contrib.datasets import MNIST
     from catalyst.callbacks import AccuracyCallback
 
-    from src.distillation.runners import EndToEndDistilRunner
-    from src.models import BaseDistilModel
-    from src.utils.data import TorchvisionDatasetWrapper as Wrp
+    from compressors.distillation.runners import EndToEndDistilRunner
+    from compressors.models import BaseDistilModel
+    from compressors.utils.data import TorchvisionDatasetWrapper as Wrp
 
 Now we can create tiny model class.
 The main and the only difference from ordinary pytorch model
@@ -123,10 +123,10 @@ First of all imports:
     from catalyst.callbacks import AccuracyCallback, CriterionCallback
     from catalyst.runners import SupervisedRunner
 
-    from src.utils.data import TorchvisionDatasetWrapper as Wrp
-    from src.models import BaseDistilModel
-    from src.distillation.callbacks import MSEHiddenStatesCallback, HiddenStatesSelectCallback, KLDivCallback, MetricAggregationCallback
-    from src.distillation.runners import DistilRunner
+    from compressors.utils.data import TorchvisionDatasetWrapper as Wrp
+    from compressors.models import BaseDistilModel
+    from compressors.distillation.callbacks import MSEHiddenStatesCallback, HiddenStatesSelectCallback, KLDivCallback, MetricAggregationCallback
+    from compressors.distillation.runners import DistilRunner
 
 Now we can create tiny model class.
 The main and the only difference from ordinary pytorch model
