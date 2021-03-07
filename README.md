@@ -116,3 +116,9 @@ runner.train(
     check=True
 )
 ```
+
+## Install
+
+```bash
+pip install git+https://github.com/elephantmipt/compressors.git
+```
