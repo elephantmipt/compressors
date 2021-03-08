@@ -1,20 +1,30 @@
-from typing import Mapping, Any, Union, Callable, Dict
+import inspect
+from typing import Mapping, Any, Union, Callable, Dict, OrderedDict
 
 from catalyst.callbacks import ControlFlowCallback
+from catalyst.core import Callback
 from catalyst.runners import Runner
 from catalyst.utils import get_nn_from_ddp_module, set_requires_grad
 
-from compressors.distillation.losses import mse_loss, pkt_loss, kl_div_loss
+from compressors.distillation.callbacks import (
+    MSEHiddenStatesCallback,
+    PKTHiddenStatesCallback,
+    CosineHiddenStatesCallback,
+    KLDivCallback,
+    AttentionHiddenStatesCallback,
+)
 from compressors.distillation.callbacks import MetricAggregationCallback
 
 
 NAME2LOSS = {
-    "mse_loss": mse_loss,
-    "pkt_loss": pkt_loss,
+    "mse": MSEHiddenStatesCallback,
+    "pkt": PKTHiddenStatesCallback,
+    "at": AttentionHiddenStatesCallback,
+    "cos": CosineHiddenStatesCallback,
 }
 
 NAME2LOGITSLOSS = {
-    "kl_loss": kl_div_loss
+    "kl_loss": KLDivCallback
 }
 
 
@@ -72,19 +82,21 @@ class EndToEndDistilRunner(Runner):
         self.loss_weights = loss_weights
         self.num_train_teacher_epochs = num_train_teacher_epochs
         if self.hidden_state_loss is not None:
-            if isinstance(hidden_state_loss, Callable):
+            if inspect.isclass(hidden_state_loss) and issubclass(hidden_state_loss, Callback):
                 self.hidden_state_loss_fn = hidden_state_loss
             elif isinstance(hidden_state_loss, str):
                 self.hidden_state_loss_fn = self.get_hidden_state_loss(hidden_state_loss)
             else:
-                raise TypeError("Hidden state loss should be string or function")
+                raise TypeError("Hidden state loss should be string or callback")
         if self.logits_diff_loss is not None:
-            if isinstance(logits_diff_loss, Callable):
+            if inspect.isclass(logits_diff_loss) and issubclass(logits_diff_loss, Callback):
                 self.logits_diff_loss_fn = logits_diff_loss
             elif isinstance(logits_diff_loss, str):
                 self.logits_diff_loss_fn = self.get_logits_diff_loss(logits_diff_loss)
+
+
             else:
-                raise TypeError("Logits diff loss should be string or function")
+                raise TypeError("Logits diff loss should be string or callback")
 
     @property
     def stages(self):
@@ -102,6 +114,16 @@ class EndToEndDistilRunner(Runner):
     def get_callbacks(self, stage: str) -> "OrderedDict[str, Callback]":
         callbacks = super().get_callbacks(stage)
         if stage == "distillation":
+            if self.hidden_state_loss_fn is not None:
+                callbacks["_hidden_state_loss"] = ControlFlowCallback(
+                    self.hidden_state_loss_fn(output_key="hidden_state_loss"),
+                    loaders="train"
+                )
+            if self.logits_diff_loss_fn is not None:
+                callbacks["_logits_diff_loss"] = ControlFlowCallback(
+                    self.logits_diff_loss_fn(output_key="logits_diff_loss"),
+                    loaders="train"
+                )
             callbacks["_aggregation"] = ControlFlowCallback(
                 MetricAggregationCallback(weights=self.loss_weights),
                 loaders="train"
@@ -139,20 +161,9 @@ class EndToEndDistilRunner(Runner):
         self.batch["s_logits"] = s_outputs["logits"]
         if self.is_train_loader:
             self.batch["t_logits"] = t_outputs["logits"]
-            if self.logits_diff_loss is not None:
-                self.batch_metrics["logits_diff_loss"] = self.logits_diff_loss_fn(
-                    self.batch["s_logits"],
-                    self.batch["t_logits"]
-                )
         if self.output_hidden_states and self.is_train_loader:
-            self.batch["student_hidden_states"] = s_outputs["hidden_states"]
-            self.batch["teacher_hidden_states"] = t_outputs["hidden_states"]
-            if self.hidden_state_loss is not None:
-                student_hidden_state = self.batch["student_hidden_states"][-1]
-                teacher_hidden_state = self.batch["teacher_hidden_states"][-1]
-                self.batch_metrics["hidden_state_loss"] = self.hidden_state_loss_fn(
-                    student_hidden_state, teacher_hidden_state
-                )
+            self.batch["s_hidden_states"] = s_outputs["hidden_states"]
+            self.batch["t_hidden_states"] = t_outputs["hidden_states"]
         self.batch_metrics["task_loss"] = self.criterion(batch["s_logits"], batch["targets"])
         self.batch["logits"] = self.batch["s_logits"]  # for accuracy callback or other metric callback
 
@@ -161,14 +172,14 @@ class EndToEndDistilRunner(Runner):
         if loss_name in NAME2LOSS.keys():
             return NAME2LOSS[loss_name]
         else:
-            raise TypeError(f"Hidden state loss should be in {NAME2LOSS.keys()}")
+            raise TypeError(f"Hidden state loss should be in {NAME2LOSS.keys()}, got {loss_name}")
 
     @staticmethod
     def get_logits_diff_loss(loss_name: str):
         if loss_name in NAME2LOGITSLOSS.keys():
             return NAME2LOGITSLOSS[loss_name]
         else:
-            raise TypeError(f"Loggits diff loss should be in {NAME2LOGITSLOSS.keys()}")
+            raise TypeError(f"Loggits diff loss should be in {NAME2LOGITSLOSS.keys()}, got {loss_name}")
 
     def predict_batch(self, batch: Mapping[str, Any], **kwargs) -> Mapping[str, Any]:
         return self.model["student"](batch["features"])

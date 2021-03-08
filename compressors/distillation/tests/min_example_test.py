@@ -70,7 +70,7 @@ def test():
     optimizer = torch.optim.Adam(chain(teacher.parameters(), student.parameters()))
 
     runner = EndToEndDistilRunner(
-        hidden_state_loss="pkt_loss",
+        hidden_state_loss="mse",
         num_train_teacher_epochs=5
     )
 
