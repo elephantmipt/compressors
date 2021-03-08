@@ -12,9 +12,11 @@
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
 
       <!-- sphinx script_files -->
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
       
       <script src="../_static/theme-vendors.js"></script>
@@ -130,79 +132,8 @@
 <hr>
           <div class="content" role="main">
             
-  <div class="section" id="module-compressors.distillation.runners">
-<span id="runners"></span><h1>Runners<a class="headerlink" href="#module-compressors.distillation.runners" title="Permalink to this headline">¶</a></h1>
-<dl class="py class">
-<dt id="compressors.distillation.runners.DistilRunner">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">compressors.distillation.runners.</span></code><code class="sig-name descname"><span class="pre">DistilRunner</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_hidden_states</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">runner_args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">runner_kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.runners.DistilRunner" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py class">
-<dt id="compressors.distillation.runners.EndToEndDistilRunner">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">compressors.distillation.runners.</span></code><code class="sig-name descname"><span class="pre">EndToEndDistilRunner</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hidden_state_loss</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logits_diff_loss</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'kl_loss'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_weights</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_train_teacher_epochs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">runner_args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">runner_kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.runners.EndToEndDistilRunner" title="Permalink to this definition">¶</a></dt>
-<dd><p>End to end runner for distillation. Can be used without additional callbacks.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>hidden_state_loss</strong> – loss between last hidden states. Defaults to None.</p></li>
-<li><p><strong>logits_diff_loss</strong> – loss between logits. Defaults to kl_loss.</p></li>
-<li><p><strong>loss_weights</strong> – weights for losses in final sum.</p></li>
-<li><p><strong>num_train_teacher_epochs</strong> – If set to None, then just distilling the knowledge.
-If int then train teacher model for provided number of epochs. Defaults to None.</p></li>
-<li><p><strong>*runner_args</strong> – runner args</p></li>
-<li><p><strong>**runner_kwargs</strong> – runner kwargs</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt id="compressors.distillation.runners.EndToEndDistilRunner.get_callbacks">
-<code class="sig-name descname"><span class="pre">get_callbacks</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stage</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">OrderedDict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Callback</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#compressors.distillation.runners.EndToEndDistilRunner.get_callbacks" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the callbacks for a given stage.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="compressors.distillation.runners.EndToEndDistilRunner.get_stage_len">
-<code class="sig-name descname"><span class="pre">get_stage_len</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stage</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">int</span><a class="headerlink" href="#compressors.distillation.runners.EndToEndDistilRunner.get_stage_len" title="Permalink to this definition">¶</a></dt>
-<dd><p>&#64;TODO: docs.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="compressors.distillation.runners.EndToEndDistilRunner.predict_batch">
-<code class="sig-name descname"><span class="pre">predict_batch</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#compressors.distillation.runners.EndToEndDistilRunner.predict_batch" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run model inference on specified data batch.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>batch</strong> (<em>Mapping</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – dictionary with data batches
-from DataLoader.</p></li>
-<li><p><strong>**kwargs</strong> – additional kwargs to pass to the model</p></li>
-</ul>
-</dd>
-</dl>
-<p># noqa: DAR202
-:returns: model output dictionary
-:rtype: Mapping[str, Any]</p>
-<dl class="field-list simple">
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><strong>NotImplementedError</strong> – if not implemented yet</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="compressors.distillation.runners.EndToEndDistilRunner.stages">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">stages</span></code><a class="headerlink" href="#compressors.distillation.runners.EndToEndDistilRunner.stages" title="Permalink to this definition">¶</a></dt>
-<dd><p>Experiment’s stage names (array with one value).</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="compressors.distillation.runners.HFDistilRunner">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">compressors.distillation.runners.</span></code><code class="sig-name descname"><span class="pre">HFDistilRunner</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.runners.HFDistilRunner" title="Permalink to this definition">¶</a></dt>
-<dd><p>Simple runner for transformer model.</p>
-</dd></dl>
-
+  <div class="section" id="runners">
+<h1>Runners<a class="headerlink" href="#runners" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -220,7 +151,7 @@ from DataLoader.</p></li>
 </ul><div class="footer" role="contentinfo">
       &#169; Copyright 2021, Nikita Balagansky.
     <br>
-    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a>.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a>.
 </div>
             </div>
           </div>
