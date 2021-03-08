@@ -132,8 +132,144 @@
 <hr>
           <div class="content" role="main">
             
-  <div class="section" id="loss-functions">
-<h1>Loss functions<a class="headerlink" href="#loss-functions" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-compressors.distillation.losses">
+<span id="loss-functions"></span><h1>Loss functions<a class="headerlink" href="#module-compressors.distillation.losses" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="compressors.distillation.losses.kl_div_loss">
+<code class="sig-prename descclassname">compressors.distillation.losses.</code><code class="sig-name descname">kl_div_loss</code><span class="sig-paren">(</span><em class="sig-param">s_logits: torch.FloatTensor</em>, <em class="sig-param">t_logits: torch.FloatTensor</em>, <em class="sig-param">temperature: float = 1.0</em><span class="sig-paren">)</span> &#x2192; torch.FloatTensor<a class="headerlink" href="#compressors.distillation.losses.kl_div_loss" title="Permalink to this definition">¶</a></dt>
+<dd><p>KL-devergence loss</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s_logits</strong> (<em>FloatTensor</em>) – output for student model.</p></li>
+<li><p><strong>t_logits</strong> (<em>FloatTensor</em>) – output for teacher model.</p></li>
+<li><p><strong>temperature</strong> (<em>float</em><em>, </em><em>optional</em>) – Temperature for teacher distribution.
+Defaults to 1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Divergence between student and teachers distribution.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>FloatTensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="compressors.distillation.losses.mse_loss">
+<code class="sig-prename descclassname">compressors.distillation.losses.</code><code class="sig-name descname">mse_loss</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.losses.mse_loss" title="Permalink to this definition">¶</a></dt>
+<dd><p>mse loss for hidden states</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s_hidden_states</strong> (<em>Tuple</em><em>[</em><em>FloatTensor</em><em>]</em>) – student hiddens</p></li>
+<li><p><strong>t_hidden_states</strong> (<em>Tuple</em><em>[</em><em>FloatTensor</em><em>]</em>) – teacher hiddens</p></li>
+<li><p><strong>normalize</strong> (<em>bool</em><em>, </em><em>optional</em>) – normalize embeddings. Defaults to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>loss</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>FloatTensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="compressors.distillation.losses.pkt_loss">
+<code class="sig-prename descclassname">compressors.distillation.losses.</code><code class="sig-name descname">pkt_loss</code><span class="sig-paren">(</span><em class="sig-param">s_hidden_states: torch.FloatTensor</em>, <em class="sig-param">t_hidden_states: torch.FloatTensor</em>, <em class="sig-param">eps: float = 1e-07</em><span class="sig-paren">)</span> &#x2192; torch.FloatTensor<a class="headerlink" href="#compressors.distillation.losses.pkt_loss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loss between distributions over features similarity with cosine similarity kernel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s_hidden_states</strong> (<em>FloatTensor</em>) – student hidden states</p></li>
+<li><p><strong>t_hidden_states</strong> (<em>FloatTensor</em>) – teacher hidden states</p></li>
+<li><p><strong>eps</strong> (<em>float</em><em>, </em><em>optional</em>) – small value. Defaults to 1e-7.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>loss</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>FloatTensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="compressors.distillation.losses.MSEHiddenStatesLoss">
+<em class="property">class </em><code class="sig-prename descclassname">compressors.distillation.losses.</code><code class="sig-name descname">MSEHiddenStatesLoss</code><span class="sig-paren">(</span><em class="sig-param">normalize: bool = False</em>, <em class="sig-param">need_mapping: bool = False</em>, <em class="sig-param">teacher_hidden_state_dim: int = None</em>, <em class="sig-param">student_hidden_state_dim: int = None</em>, <em class="sig-param">num_layers: int = None</em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.losses.MSEHiddenStatesLoss" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="compressors.distillation.losses.MSEHiddenStatesLoss.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.losses.MSEHiddenStatesLoss.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="compressors.distillation.losses.AttentionLoss">
+<em class="property">class </em><code class="sig-prename descclassname">compressors.distillation.losses.</code><code class="sig-name descname">AttentionLoss</code><span class="sig-paren">(</span><em class="sig-param">p: int = 2</em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.losses.AttentionLoss" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="compressors.distillation.losses.AttentionLoss.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.losses.AttentionLoss.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="compressors.distillation.losses.CRDLoss">
+<em class="property">class </em><code class="sig-prename descclassname">compressors.distillation.losses.</code><code class="sig-name descname">CRDLoss</code><span class="sig-paren">(</span><em class="sig-param">student_dim: int</em>, <em class="sig-param">teacher_dim: int</em>, <em class="sig-param">n_data: int</em>, <em class="sig-param">feature_dim: int = 128</em>, <em class="sig-param">nce_k: int = 16384</em>, <em class="sig-param">nce_t: float = 0.07</em>, <em class="sig-param">nce_m: float = 0.5</em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.losses.CRDLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>CRD Loss function
+includes two symmetric parts:
+(a) using teacher as anchor, choose positive and negatives over the student side
+(b) using student as anchor, choose positive and negatives over the teacher side
+:param student_dim: the dimension of student’s feature
+:param teacher_dim: the dimension of teacher’s feature
+:param feature_dim: the dimension of the projection space
+:param nce_k: number of negatives paired with each positive
+:param nce_t: the temperature
+:param nce_m: the momentum for updating the memory buffer
+:param n_data: the number of samples in the training set, therefor the memory buffer is: opt.n_data x opt.feat_dim</p>
+<dl class="method">
+<dt id="compressors.distillation.losses.CRDLoss.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">f_s</em>, <em class="sig-param">f_t</em>, <em class="sig-param">idx</em>, <em class="sig-param">contrast_idx=None</em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.losses.CRDLoss.forward" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f_s</strong> – the feature of student network, size [batch_size, s_dim]</p></li>
+<li><p><strong>f_t</strong> – the feature of teacher network, size [batch_size, t_dim]</p></li>
+<li><p><strong>idx</strong> – the indices of these positive samples in the dataset, size [batch_size]</p></li>
+<li><p><strong>contrast_idx</strong> – the indices of negative samples, size [batch_size, nce_k]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The contrastive loss</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 

@@ -140,14 +140,120 @@
 <h2>Logits difference callbacks<a class="headerlink" href="#logits-difference-callbacks" title="Permalink to this headline">¶</a></h2>
 <p>Callbacks which use difference between probabilities distribution over last layers.
 Useful for classification task.</p>
+<span class="target" id="module-compressors.distillation.callbacks.logits_diff"></span><dl class="class">
+<dt id="compressors.distillation.callbacks.logits_diff.KLDivCallback">
+<em class="property">class </em><code class="sig-prename descclassname">compressors.distillation.callbacks.logits_diff.</code><code class="sig-name descname">KLDivCallback</code><span class="sig-paren">(</span><em class="sig-param">output_key: str = 'kl_div_loss'</em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.callbacks.logits_diff.KLDivCallback" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </div>
 <div class="section" id="wrappers">
 <h2>Wrappers<a class="headerlink" href="#wrappers" title="Permalink to this headline">¶</a></h2>
-<p>Wrappers is useful when your callback inputs something defferent then hidden states or logits,
+<p>Wrappers is useful when your callback inputs something different then hidden states or logits,
 but you don’t want to modify batch in your runner.</p>
+<span class="target" id="module-compressors.distillation.callbacks.wrappers"></span><dl class="class">
+<dt id="compressors.distillation.callbacks.wrappers.LambdaWrp">
+<em class="property">class </em><code class="sig-prename descclassname">compressors.distillation.callbacks.wrappers.</code><code class="sig-name descname">LambdaWrp</code><a class="headerlink" href="#compressors.distillation.callbacks.wrappers.LambdaWrp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wraps input for your callback with specified function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>base_callback</strong> (<em>Callback</em>) – Base callback.</p></li>
+<li><p><strong>lambda_fn</strong> (<em>Callable</em>) – Function to apply.</p></li>
+<li><p><strong>keys_to_apply</strong> (<em>Union</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Keys in batch dict to apply function.
+Defaults to [“s_hidden_states”, “t_hidden_states”].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>TypeError</strong> – When keys_to_apply is not str or list.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
-<div class="section" id="hiddens-states">
-<h2>Hiddens states<a class="headerlink" href="#hiddens-states" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-compressors.distillation.callbacks.hidden_states">
+<span id="hiddens-states"></span><h2>Hiddens states<a class="headerlink" href="#module-compressors.distillation.callbacks.hidden_states" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="compressors.distillation.callbacks.hidden_states.MSEHiddenStatesCallback">
+<em class="property">class </em><code class="sig-prename descclassname">compressors.distillation.callbacks.hidden_states.</code><code class="sig-name descname">MSEHiddenStatesCallback</code><span class="sig-paren">(</span><em class="sig-param">output_key: str = 'mse_loss'</em>, <em class="sig-param">normalize: bool = False</em>, <em class="sig-param">need_mapping: bool = False</em>, <em class="sig-param">teacher_hidden_state_dim: int = None</em>, <em class="sig-param">student_hidden_state_dim: int = None</em>, <em class="sig-param">num_layers: int = None</em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.callbacks.hidden_states.MSEHiddenStatesCallback" title="Permalink to this definition">¶</a></dt>
+<dd><p>MSE loss aka Hint loss for difference between hidden
+states of teacher and student model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>output_key</strong> – name for loss. Defaults to mse_loss.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="compressors.distillation.callbacks.hidden_states.LambdaSelectCallback">
+<em class="property">class </em><code class="sig-prename descclassname">compressors.distillation.callbacks.hidden_states.</code><code class="sig-name descname">LambdaSelectCallback</code><a class="headerlink" href="#compressors.distillation.callbacks.hidden_states.LambdaSelectCallback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filters output with your lambda function. Inplace analog of <code class="docutils literal notranslate"><span class="pre">LambdaWrp</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>base_callback</strong> (<em>Callback</em>) – Base callback.</p></li>
+<li><p><strong>lambda_fn</strong> (<em>Callable</em>) – Function to apply.</p></li>
+<li><p><strong>keys_to_apply</strong> (<em>Union</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Keys in batch dict to apply function.
+Defaults to [“s_hidden_states”, “t_hidden_states”].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>TypeError</strong> – When keys_to_apply is not str or list.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="compressors.distillation.callbacks.hidden_states.HiddenStatesSelectCallback">
+<em class="property">class </em><code class="sig-prename descclassname">compressors.distillation.callbacks.hidden_states.</code><code class="sig-name descname">HiddenStatesSelectCallback</code><a class="headerlink" href="#compressors.distillation.callbacks.hidden_states.HiddenStatesSelectCallback" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="compressors.distillation.callbacks.hidden_states.CosineHiddenStatesCallback">
+<em class="property">class </em><code class="sig-prename descclassname">compressors.distillation.callbacks.hidden_states.</code><code class="sig-name descname">CosineHiddenStatesCallback</code><span class="sig-paren">(</span><em class="sig-param">output_key: str = 'cosine_loss'</em>, <em class="sig-param">last_only: bool = True</em>, <em class="sig-param">need_mapping: bool = False</em>, <em class="sig-param">teacher_hidden_state_dim: int = None</em>, <em class="sig-param">student_hidden_state_dim: int = None</em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.callbacks.hidden_states.CosineHiddenStatesCallback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cosine loss for difference between hidden states of teacher and student model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_key</strong> – name for loss. Defaults to cosine_loss.</p></li>
+<li><p><strong>last_only</strong> – If set to True takes only last hidden state.
+Usually cosine loss applied in this way. Defaults to True.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="compressors.distillation.callbacks.hidden_states.PKTHiddenStatesCallback">
+<em class="property">class </em><code class="sig-prename descclassname">compressors.distillation.callbacks.hidden_states.</code><code class="sig-name descname">PKTHiddenStatesCallback</code><span class="sig-paren">(</span><em class="sig-param">output_key: str = 'pkt_loss'</em>, <em class="sig-param">last_only: bool = True</em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.callbacks.hidden_states.PKTHiddenStatesCallback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Probabilistic Knowlewdge Transfer loss for difference between hidden states
+of teacher and student model.
+Proposed in <a class="reference external" href="https://arxiv.org/abs/1803.10837">https://arxiv.org/abs/1803.10837</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_key</strong> – name for loss. Defaults to mse_loss.</p></li>
+<li><p><strong>last_only</strong> – If set to True takes only last hidden state.
+Usually pkt loss applied in this way. Defaults to True.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="compressors.distillation.callbacks.hidden_states.AttentionHiddenStatesCallback">
+<em class="property">class </em><code class="sig-prename descclassname">compressors.distillation.callbacks.hidden_states.</code><code class="sig-name descname">AttentionHiddenStatesCallback</code><span class="sig-paren">(</span><em class="sig-param">output_key: str = 'attention_loss'</em>, <em class="sig-param">exclude_first_and_last: bool = True</em>, <em class="sig-param">p: int = 2</em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.callbacks.hidden_states.AttentionHiddenStatesCallback" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_key</strong> – name for loss. Defaults to attention_loss.</p></li>
+<li><p><strong>exclude_first_and_last</strong> – If set to True takes only last hidden state.
+Usually cosine loss applied in this way. Defaults to True.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 </div>
 

@@ -132,8 +132,61 @@
 <hr>
           <div class="content" role="main">
             
-  <div class="section" id="runners">
-<h1>Runners<a class="headerlink" href="#runners" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-compressors.distillation.runners">
+<span id="runners"></span><h1>Runners<a class="headerlink" href="#module-compressors.distillation.runners" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="compressors.distillation.runners.HFDistilRunner">
+<em class="property">class </em><code class="sig-prename descclassname">compressors.distillation.runners.</code><code class="sig-name descname">HFDistilRunner</code><a class="headerlink" href="#compressors.distillation.runners.HFDistilRunner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple runner for transformer model.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="compressors.distillation.runners.DistilRunner">
+<em class="property">class </em><code class="sig-prename descclassname">compressors.distillation.runners.</code><code class="sig-name descname">DistilRunner</code><span class="sig-paren">(</span><em class="sig-param">output_hidden_states: bool = True</em>, <em class="sig-param">*runner_args</em>, <em class="sig-param">**runner_kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.runners.DistilRunner" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="compressors.distillation.runners.EndToEndDistilRunner">
+<em class="property">class </em><code class="sig-prename descclassname">compressors.distillation.runners.</code><code class="sig-name descname">EndToEndDistilRunner</code><span class="sig-paren">(</span><em class="sig-param">hidden_state_loss: Union[str</em>, <em class="sig-param">Callable] = None</em>, <em class="sig-param">logits_diff_loss: Union[str</em>, <em class="sig-param">Callable] = 'kl_loss'</em>, <em class="sig-param">loss_weights: Dict = None</em>, <em class="sig-param">num_train_teacher_epochs: int = None</em>, <em class="sig-param">*runner_args</em>, <em class="sig-param">**runner_kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.runners.EndToEndDistilRunner" title="Permalink to this definition">¶</a></dt>
+<dd><p>End to end runner for distillation. Can be used without additional callbacks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hidden_state_loss</strong> – loss between last hidden states. Defaults to None.</p></li>
+<li><p><strong>logits_diff_loss</strong> – loss between logits. Defaults to kl_loss.</p></li>
+<li><p><strong>loss_weights</strong> – weights for losses in final sum.</p></li>
+<li><p><strong>num_train_teacher_epochs</strong> – If set to None, then just distilling the knowledge.
+If int then train teacher model for provided number of epochs. Defaults to None.</p></li>
+<li><p><strong>*runner_args</strong> – runner args</p></li>
+<li><p><strong>**runner_kwargs</strong> – runner kwargs</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="compressors.distillation.runners.EndToEndDistilRunner.predict_batch">
+<code class="sig-name descname">predict_batch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.runners.EndToEndDistilRunner.predict_batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run model inference on specified data batch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>batch</strong> (<em>Mapping</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – dictionary with data batches
+from DataLoader.</p></li>
+<li><p><strong>**kwargs</strong> – additional kwargs to pass to the model</p></li>
+</ul>
+</dd>
+</dl>
+<p># noqa: DAR202
+:returns: model output dictionary
+:rtype: Mapping[str, Any]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>NotImplementedError</strong> – if not implemented yet</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
