@@ -39,7 +39,7 @@ jobs:
         run: |
             git clone https://github.com/elephantmipt/compressors.git --branch gh_pages --single-branch gh_pages
             cp -r docs/build/* gh_pages/docs
-            cd gh-pages
+            cd gh_pages
             git config --local user.email "action@github.com"
             git config --local user.name "GitHub Action"
             git add .
