@@ -146,6 +146,52 @@
 <div class="section" id="minimal-example">
 <h2>Minimal Example<a class="headerlink" href="#minimal-example" title="Permalink to this headline">¶</a></h2>
 <p>Imports</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">DataLoader</span>
+
+<span class="kn">from</span> <span class="nn">catalyst.contrib.datasets</span> <span class="kn">import</span> <span class="n">MNIST</span>
+<span class="kn">from</span> <span class="nn">catalyst.callbacks</span> <span class="kn">import</span> <span class="n">AccuracyCallback</span>
+
+<span class="kn">from</span> <span class="nn">compressors.distillation.runners</span> <span class="kn">import</span> <span class="n">EndToEndDistilRunner</span>
+<span class="kn">from</span> <span class="nn">compressors.models</span> <span class="kn">import</span> <span class="n">MLP</span>
+<span class="kn">from</span> <span class="nn">compressors.utils.data</span> <span class="kn">import</span> <span class="n">TorchvisionDatasetWrapper</span> <span class="k">as</span> <span class="n">Wrp</span>
+
+
+<span class="n">teacher</span> <span class="o">=</span> <span class="n">MLP</span><span class="p">(</span><span class="n">num_layers</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">student</span> <span class="o">=</span> <span class="n">MLP</span><span class="p">(</span><span class="n">num_layers</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="n">datasets</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;train&quot;</span><span class="p">:</span> <span class="n">Wrp</span><span class="p">(</span><span class="n">MNIST</span><span class="p">(</span><span class="s2">&quot;./data&quot;</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">download</span><span class="o">=</span><span class="kc">True</span><span class="p">)),</span>
+    <span class="s2">&quot;valid&quot;</span><span class="p">:</span> <span class="n">Wrp</span><span class="p">(</span><span class="n">MNIST</span><span class="p">(</span><span class="s2">&quot;./data&quot;</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
+<span class="p">}</span>
+
+<span class="n">loaders</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">dl_key</span><span class="p">:</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="n">dl_key</span> <span class="o">==</span> <span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">dl_key</span><span class="p">,</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">datasets</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">chain</span><span class="p">(</span><span class="n">teacher</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">student</span><span class="o">.</span><span class="n">parameters</span><span class="p">()))</span>
+
+<span class="n">runner</span> <span class="o">=</span> <span class="n">EndToEndDistilRunner</span><span class="p">(</span>
+    <span class="n">hidden_state_loss</span><span class="o">=</span><span class="s2">&quot;mse&quot;</span><span class="p">,</span>
+    <span class="n">num_train_teacher_epochs</span><span class="o">=</span><span class="mi">5</span>
+<span class="p">)</span>
+
+<span class="n">runner</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;teacher&quot;</span><span class="p">:</span> <span class="n">teacher</span><span class="p">,</span> <span class="s2">&quot;student&quot;</span><span class="p">:</span> <span class="n">student</span><span class="p">},</span>
+    <span class="n">loaders</span><span class="o">=</span><span class="n">loaders</span><span class="p">,</span>
+    <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span>
+    <span class="n">num_epochs</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">AccuracyCallback</span><span class="p">(</span><span class="n">input_key</span><span class="o">=</span><span class="s2">&quot;logits&quot;</span><span class="p">,</span> <span class="n">target_key</span><span class="o">=</span><span class="s2">&quot;targets&quot;</span><span class="p">)],</span>
+    <span class="n">valid_metric</span><span class="o">=</span><span class="s2">&quot;accuracy01&quot;</span><span class="p">,</span>
+    <span class="n">minimize_valid_metric</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">logdir</span><span class="o">=</span><span class="s2">&quot;./logs&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="minimal-complex-example">
 <h2>Minimal Complex Example<a class="headerlink" href="#minimal-complex-example" title="Permalink to this headline">¶</a></h2>

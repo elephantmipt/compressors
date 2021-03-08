@@ -6,7 +6,7 @@ Minimal Example
 
 Imports
 
-.. literalinclude:: compressors/distillation/examples/minimal_example.py
+.. literalinclude:: ../../compressors/distillation/examples/minimal_example.py
     :language: python
 
 Minimal Complex Example
