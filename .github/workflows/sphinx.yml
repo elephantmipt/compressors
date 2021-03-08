@@ -46,3 +46,4 @@ jobs:
             git commit -m "Update documentation" -a || true
             # The above command will fail if no changes were present, so we ignore
             # the return code.
+            git push -u origin gh_pages
