@@ -33,7 +33,7 @@ jobs:
     # The command used to build your documentation.
           build-command: "sphinx-build source build"
     # Run before the build command, you can use this to install system level dependencies, for example with "apt-get update -y && apt-get install -y perl"
-          pre-build-command: pip3 install sphinx_press_theme
+          pre-build-command: pip3 install sphinx_press_theme && pip3 install -r requirements.txt
 
       - name: Commit documentation changes
         run: |

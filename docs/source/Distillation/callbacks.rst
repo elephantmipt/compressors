@@ -16,7 +16,7 @@ Useful for classification task.
 
 Wrappers
 --------
-Wrappers is useful when your callback inputs something defferent then hidden states or logits,
+Wrappers is useful when your callback inputs something different then hidden states or logits,
 but you don't want to modify batch in your runner.
 
 .. automodule:: compressors.distillation.callbacks.wrappers
