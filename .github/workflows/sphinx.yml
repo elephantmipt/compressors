@@ -40,7 +40,7 @@ jobs:
           pre-build-command: pip3 install sphinx_press_theme
 
       - name: Commit documentation changes
-          run: |
+        run: |
             git clone https://github.com/ammaraskar/sphinx-action-test.git --branch gh-pages --single-branch gh-pages
             cp -r docs/_build/html/* gh-pages/docs
             cd gh-pages
