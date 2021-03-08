@@ -5,7 +5,6 @@ from torch.utils.data import DataLoader
 
 from datasets import load_dataset, load_metric
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
-from catalyst.runners import Runner
 from catalyst.callbacks.metric import LoaderMetricCallback
 from catalyst.callbacks import ControlFlowCallback
 

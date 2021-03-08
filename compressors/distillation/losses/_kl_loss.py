@@ -6,6 +6,19 @@ from torch import nn
 from torch.nn import functional as F
 
 
+class KLDivLoss(nn.Module):
+    def __init__(self, temperature: float = 1.0):
+        super(KLDivLoss, self).__init__()
+        self.temperature = temperature
+        self.criterion = nn.KLDivLoss()
+
+    def forward(self, s_logits, t_logits):
+        return self.criterion(
+            F.log_softmax(s_logits / self.temperature, dim=1),
+            F.softmax(t_logits / self.temperature, dim=1)
+        ) * (self.temperature ** 2)
+
+
 def kl_div_loss(
     s_logits: FloatTensor, t_logits: FloatTensor, temperature: float = 1.0
 ) -> FloatTensor:

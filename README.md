@@ -18,6 +18,12 @@ Library separated into three parts:
 
 There are two ways to use Compressors: with Catalyst or just use functional API.
 
+## Install
+
+```bash
+pip install git+https://github.com/elephantmipt/compressors.git
+```
+
 ## Losses
 
 | Loss               | References        | Status      |
@@ -77,10 +83,4 @@ runner.train(
     minimize_valid_metric=False,
     logdir="./logs"
 )
-```
-
-## Install
-
-```bash
-pip install git+https://github.com/elephantmipt/compressors.git
 ```
