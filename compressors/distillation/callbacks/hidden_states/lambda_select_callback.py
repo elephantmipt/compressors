@@ -33,7 +33,7 @@ class LambdaSelectCallback(Callback):
             TypeError: When keys_to_apply is not str or list.
         """
         super().__init__(order=CallbackOrder.HiddensSlct)
-        if not (isinstance(keys_to_apply, list) or isinstance(keys_to_apply, str)):
+        if not isinstance(keys_to_apply, (list, str)):
             raise TypeError("keys to apply should be str or list of str.")
         self.keys_to_apply = keys_to_apply
         self.lambda_fn = lambda_fn

@@ -1,6 +1,8 @@
 # Compressors
 
-_Warning! Deep alpha version_
+_Warning! Deep alpha version! This is not product-ready solutiion so far._
+
+[![CodeFactor](https://www.codefactor.io/repository/github/elephantmipt/compressors/badge)](https://www.codefactor.io/repository/github/elephantmipt/compressors)
 
 Compressors is a library with a lot of pipelines connected with model compression without significantly performance lose.
 

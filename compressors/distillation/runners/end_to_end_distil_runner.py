@@ -93,8 +93,6 @@ class EndToEndDistilRunner(Runner):
                 self.logits_diff_loss_fn = logits_diff_loss
             elif isinstance(logits_diff_loss, str):
                 self.logits_diff_loss_fn = self.get_logits_diff_loss(logits_diff_loss)
-
-
             else:
                 raise TypeError("Logits diff loss should be string or callback")
 
@@ -102,8 +100,8 @@ class EndToEndDistilRunner(Runner):
     def stages(self):
         if self.num_train_teacher_epochs is not None:
             return ["teacher_training", "distillation"]
-        else:
-            return ["distillation"]
+
+        return ["distillation"]
 
     def get_stage_len(self, stage: str) -> int:
         if stage == "distillation":
@@ -171,15 +169,15 @@ class EndToEndDistilRunner(Runner):
     def get_hidden_state_loss(loss_name: str):
         if loss_name in NAME2LOSS.keys():
             return NAME2LOSS[loss_name]
-        else:
-            raise TypeError(f"Hidden state loss should be in {NAME2LOSS.keys()}, got {loss_name}")
+
+        raise TypeError(f"Hidden state loss should be in {NAME2LOSS.keys()}, got {loss_name}")
 
     @staticmethod
     def get_logits_diff_loss(loss_name: str):
         if loss_name in NAME2LOGITSLOSS.keys():
             return NAME2LOGITSLOSS[loss_name]
-        else:
-            raise TypeError(f"Loggits diff loss should be in {NAME2LOGITSLOSS.keys()}, got {loss_name}")
+
+        raise TypeError(f"Loggits diff loss should be in {NAME2LOGITSLOSS.keys()}, got {loss_name}")
 
     def predict_batch(self, batch: Mapping[str, Any], **kwargs) -> Mapping[str, Any]:
         return self.model["student"](batch["features"])
