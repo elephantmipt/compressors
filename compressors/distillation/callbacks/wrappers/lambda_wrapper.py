@@ -10,7 +10,7 @@ class LambdaWrp(Callback):
             base_callback (Callback): Base callback.
             lambda_fn (Callable): Function to apply.
             keys_to_apply (Union[List[str], str], optional): Keys in batch dict to apply function.
-                Defaults to \["s_hidden_states", "t_hidden_states"].
+                Defaults to \ ["s_hidden_states", "t_hidden_states"].
 
         Raises:
             TypeError: When keys_to_apply is not str or list.
@@ -28,7 +28,7 @@ class LambdaWrp(Callback):
             base_callback (Callback): Base callback.
             lambda_fn (Callable): Function to apply.
             keys_to_apply (Union[List[str], str], optional): Keys in batch dict to apply function.
-                Defaults to \["s_hidden_states", "t_hidden_states"].
+                Defaults to ["s_hidden_states", "t_hidden_states"].
 
         Raises:
             TypeError: When keys_to_apply is not str or list.
