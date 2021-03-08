@@ -1,6 +1,8 @@
 # Compressors
 
-Compressors is the library with a lot of pipelines connected with model compression without significantly performance lose.
+_Warning! Deep alpha version_
+
+Compressors is a library with a lot of pipelines connected with model compression without significantly performance lose.
 
 ## Why Compressors?
 
