@@ -47,7 +47,7 @@ jobs:
             # The above command will fail if no changes were present, so we ignore
             # the return code.
       - name: Push changes
-          uses: ad-m/github-push-action@master
-          with:
-            github_token: ${{ secrets.GITHUB_TOKEN }}
-            branch: gh_pages
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh_pages
