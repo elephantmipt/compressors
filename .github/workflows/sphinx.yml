@@ -37,9 +37,9 @@ jobs:
 
       - name: Commit documentation changes
         run: |
-            git clone https://github.com/elephantmipt/compressors.git --branch gh_pages --single-branch gh_pages
-            cp -r docs/build/* gh_pages/docs
-            cd gh_pages
+            git clone https://github.com/elephantmipt/compressors.git --branch gh_pages --single-branch gh-pages
+            cp -r docs/build/* gh-pages/docs
+            cd gh-pages
             git config --local user.email "action@github.com"
             git config --local user.name "GitHub Action"
             git add .
@@ -49,6 +49,6 @@ jobs:
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
-          branch: gh-pages
+          branch: gh_pages
           directory: gh-pages
           github_token: ${{ secrets.GITHUB_TOKEN }}
