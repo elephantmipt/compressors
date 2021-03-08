@@ -23,10 +23,6 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
       - name: Sphinx Build
       # You may pin to the exact commit or the version.
   # uses: ammaraskar/sphinx-action@8b4f60114d7fd1faeba1a712269168508d4750d2
@@ -41,8 +37,8 @@ jobs:
 
       - name: Commit documentation changes
         run: |
-            git clone https://github.com/elephantmipt/compressors.git --branch gh-pages --single-branch gh-pages
-            cp -r docs/build/* gh-pages/docs
+            git clone https://github.com/elephantmipt/compressors.git --branch gh_pages --single-branch gh_pages
+            cp -r docs/build/* gh_pages/docs
             cd gh-pages
             git config --local user.email "action@github.com"
             git config --local user.name "GitHub Action"
