@@ -12,11 +12,9 @@
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
 
       <!-- sphinx script_files -->
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
 
       
       <script src="../_static/theme-vendors.js"></script>
@@ -134,20 +132,14 @@
             
   <div class="section" id="module-compressors.distillation.runners">
 <span id="runners"></span><h1>Runners<a class="headerlink" href="#module-compressors.distillation.runners" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="compressors.distillation.runners.HFDistilRunner">
-<em class="property">class </em><code class="sig-prename descclassname">compressors.distillation.runners.</code><code class="sig-name descname">HFDistilRunner</code><a class="headerlink" href="#compressors.distillation.runners.HFDistilRunner" title="Permalink to this definition">¶</a></dt>
-<dd><p>Simple runner for transformer model.</p>
-</dd></dl>
-
-<dl class="class">
+<dl class="py class">
 <dt id="compressors.distillation.runners.DistilRunner">
-<em class="property">class </em><code class="sig-prename descclassname">compressors.distillation.runners.</code><code class="sig-name descname">DistilRunner</code><span class="sig-paren">(</span><em class="sig-param">output_hidden_states: bool = True</em>, <em class="sig-param">*runner_args</em>, <em class="sig-param">**runner_kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.runners.DistilRunner" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">compressors.distillation.runners.</span></code><code class="sig-name descname"><span class="pre">DistilRunner</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_hidden_states</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">runner_args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">runner_kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.runners.DistilRunner" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="compressors.distillation.runners.EndToEndDistilRunner">
-<em class="property">class </em><code class="sig-prename descclassname">compressors.distillation.runners.</code><code class="sig-name descname">EndToEndDistilRunner</code><span class="sig-paren">(</span><em class="sig-param">hidden_state_loss: Union[str</em>, <em class="sig-param">Callable] = None</em>, <em class="sig-param">logits_diff_loss: Union[str</em>, <em class="sig-param">Callable] = 'kl_loss'</em>, <em class="sig-param">loss_weights: Dict = None</em>, <em class="sig-param">num_train_teacher_epochs: int = None</em>, <em class="sig-param">*runner_args</em>, <em class="sig-param">**runner_kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.runners.EndToEndDistilRunner" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">compressors.distillation.runners.</span></code><code class="sig-name descname"><span class="pre">EndToEndDistilRunner</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hidden_state_loss</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logits_diff_loss</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'kl_loss'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_weights</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_train_teacher_epochs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">runner_args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">runner_kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.runners.EndToEndDistilRunner" title="Permalink to this definition">¶</a></dt>
 <dd><p>End to end runner for distillation. Can be used without additional callbacks.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -162,9 +154,9 @@ If int then train teacher model for provided number of epochs. Defaults to None.
 </ul>
 </dd>
 </dl>
-<dl class="method">
+<dl class="py method">
 <dt id="compressors.distillation.runners.EndToEndDistilRunner.predict_batch">
-<code class="sig-name descname">predict_batch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.runners.EndToEndDistilRunner.predict_batch" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">predict_batch</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#compressors.distillation.runners.EndToEndDistilRunner.predict_batch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run model inference on specified data batch.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -187,6 +179,12 @@ from DataLoader.</p></li>
 
 </dd></dl>
 
+<dl class="py class">
+<dt id="compressors.distillation.runners.HFDistilRunner">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">compressors.distillation.runners.</span></code><code class="sig-name descname"><span class="pre">HFDistilRunner</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">model:</span> <span class="pre">Optional[Union[torch.nn.modules.module.Module</span></em>, <em class="sig-param"><span class="pre">Dict[str</span></em>, <em class="sig-param"><span class="pre">torch.nn.modules.module.Module]]]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">device:</span> <span class="pre">Optional[Union[str</span></em>, <em class="sig-param"><span class="pre">torch.device]]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">experiment_fn:</span> <span class="pre">Callable</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'catalyst.experiments.experiment.Experiment'&gt;</span></em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.runners.HFDistilRunner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple runner for transformer model.</p>
+</dd></dl>
+
 </div>
 
 
@@ -204,7 +202,7 @@ from DataLoader.</p></li>
 </ul><div class="footer" role="contentinfo">
       &#169; Copyright 2021, Nikita Balagansky.
     <br>
-    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a>.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a>.
 </div>
             </div>
           </div>
