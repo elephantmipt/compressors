@@ -4,9 +4,9 @@ from torch import Tensor
 from torch import nn
 from torch.nn import functional as F
 
-from modules.resnet import PreActBlock, PreActBottleneck
+from .preact_modules import PreActBlock, PreActBottleneck
 
-from src.models import BaseDistilModel
+from compressors.models import BaseDistilModel
 
 
 class PreActResNet(BaseDistilModel):
