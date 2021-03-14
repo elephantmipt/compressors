@@ -27,4 +27,5 @@ There are two ways to use Compressors: with Catalyst or just use functional API.
    Quantization/quantization
    Pruning/pruning
    runners
+   models
    examples

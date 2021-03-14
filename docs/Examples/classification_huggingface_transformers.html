@@ -90,6 +90,12 @@
           </li>
 
         
+          <li class="toctree-l1 "><a href="../models.html" class="reference internal ">Models</a>
+
+            
+          </li>
+
+        
           <li class="toctree-l1 "><a href="../examples.html" class="reference internal ">Examples</a>
 
             
@@ -127,6 +133,154 @@
             
   <div class="section" id="huggingface-transformers">
 <h1>Huggingface transformers<a class="headerlink" href="#huggingface-transformers" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tqdm.autonotebook</span> <span class="kn">import</span> <span class="n">trange</span><span class="p">,</span> <span class="n">tqdm</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">DataLoader</span>
+
+<span class="kn">from</span> <span class="nn">datasets</span> <span class="kn">import</span> <span class="n">load_dataset</span><span class="p">,</span> <span class="n">load_metric</span>
+<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span><span class="p">,</span> <span class="n">AutoModelForSequenceClassification</span>
+
+<span class="kn">from</span> <span class="nn">compressors.distillation.losses</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">MSEHiddenStatesLoss</span><span class="p">,</span>
+    <span class="n">KLDivLoss</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">device</span> <span class="o">=</span> <span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span>
+
+<span class="n">datasets</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;ag_news&quot;</span><span class="p">)</span>
+<span class="n">metric_fn</span> <span class="o">=</span> <span class="n">load_metric</span><span class="p">(</span><span class="s2">&quot;accuracy&quot;</span><span class="p">)</span>
+
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">&quot;google/bert_uncased_L-4_H-512_A-8&quot;</span><span class="p">)</span>
+
+<span class="n">datasets</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="n">tokenizer</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">],</span> <span class="n">truncation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;max_length&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">128</span><span class="p">),</span>
+    <span class="n">batched</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">datasets</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;labels&quot;</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]},</span> <span class="n">batched</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">datasets</span><span class="o">.</span><span class="n">set_format</span><span class="p">(</span>
+    <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;torch&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">,</span> <span class="s2">&quot;token_type_ids&quot;</span><span class="p">,</span> <span class="s2">&quot;attention_mask&quot;</span><span class="p">,</span> <span class="s2">&quot;labels&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+<span class="n">loaders</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;train&quot;</span><span class="p">:</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">datasets</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">],</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="s2">&quot;valid&quot;</span><span class="p">:</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">datasets</span><span class="p">[</span><span class="s2">&quot;test&quot;</span><span class="p">],</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">),</span>
+<span class="p">}</span>
+
+<span class="n">teacher_model</span> <span class="o">=</span> <span class="n">AutoModelForSequenceClassification</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+    <span class="s2">&quot;google/bert_uncased_L-4_H-512_A-8&quot;</span><span class="p">,</span> <span class="n">num_labels</span><span class="o">=</span><span class="mi">4</span>
+<span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="n">teacher_model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;teacher.pth&quot;</span><span class="p">))</span>
+
+<span class="n">student_model</span> <span class="o">=</span> <span class="n">AutoModelForSequenceClassification</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+    <span class="s2">&quot;google/bert_uncased_L-2_H-128_A-2&quot;</span><span class="p">,</span> <span class="n">num_labels</span><span class="o">=</span><span class="mi">4</span>
+<span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+<span class="n">kl_div_loss</span> <span class="o">=</span> <span class="n">KLDivLoss</span><span class="p">()</span>
+<span class="n">mse_hiddens_loss</span> <span class="o">=</span> <span class="n">MSEHiddenStatesLoss</span><span class="p">(</span>
+    <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">need_mapping</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">teacher_hidden_state_dim</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span>
+    <span class="n">student_hidden_state_dim</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
+    <span class="n">num_layers</span><span class="o">=</span><span class="mi">2</span>
+<span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">student_model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">)</span>
+<span class="n">mapping_optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">mse_hiddens_loss</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">train_iter</span><span class="p">(</span>
+    <span class="n">student</span><span class="p">,</span>
+    <span class="n">teacher</span><span class="p">,</span>
+    <span class="n">batch</span><span class="p">,</span>
+    <span class="n">logits_criterion</span><span class="p">,</span>
+    <span class="n">hiddens_criterion</span><span class="p">,</span>
+    <span class="n">weights</span><span class="p">,</span>
+    <span class="n">optimizer</span><span class="p">,</span>
+    <span class="n">mapping_optimizer</span><span class="p">,</span>
+    <span class="n">metric_fn</span>
+<span class="p">):</span>
+    <span class="n">student</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+    <span class="n">teacher</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+        <span class="n">teacher_outputs</span> <span class="o">=</span> <span class="n">teacher</span><span class="p">(</span><span class="o">**</span><span class="n">batch</span><span class="p">,</span> <span class="n">output_hidden_states</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">retrun_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">student_outputs</span> <span class="o">=</span> <span class="n">student</span><span class="p">(</span><span class="o">**</span><span class="n">batch</span><span class="p">,</span> <span class="n">output_hidden_states</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">retrun_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">predictions</span> <span class="o">=</span> <span class="n">student_outputs</span><span class="p">[</span><span class="s2">&quot;logits&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+    <span class="n">metric_fn</span><span class="o">.</span><span class="n">add_batch</span><span class="p">(</span><span class="n">predictions</span><span class="o">=</span><span class="n">predictions</span><span class="p">,</span> <span class="n">references</span><span class="o">=</span><span class="n">batch</span><span class="p">[</span><span class="s2">&quot;labels&quot;</span><span class="p">])</span>
+
+    <span class="n">task_loss</span> <span class="o">=</span> <span class="n">student_outputs</span><span class="p">[</span><span class="s2">&quot;loss&quot;</span><span class="p">]</span>
+
+    <span class="n">logits_loss</span> <span class="o">=</span> <span class="n">logits_criterion</span><span class="p">(</span><span class="n">student_outputs</span><span class="p">[</span><span class="s2">&quot;logits&quot;</span><span class="p">],</span> <span class="n">teacher_outputs</span><span class="p">[</span><span class="s2">&quot;logits&quot;</span><span class="p">])</span>
+
+    <span class="n">t_hiddens</span> <span class="o">=</span> <span class="n">teacher_outputs</span><span class="p">[</span><span class="s2">&quot;hidden_states&quot;</span><span class="p">]</span>
+    <span class="n">t_hiddens</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">t_h</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">t_h</span> <span class="ow">in</span> <span class="n">t_hiddens</span><span class="p">])</span>
+    <span class="n">s_hiddens</span> <span class="o">=</span> <span class="n">student_outputs</span><span class="p">[</span><span class="s2">&quot;hidden_states&quot;</span><span class="p">]</span>
+    <span class="n">s_hiddens</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">s_h</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">s_h</span> <span class="ow">in</span> <span class="n">s_hiddens</span><span class="p">])</span>
+    <span class="n">hiddens_loss</span> <span class="o">=</span> <span class="n">hiddens_criterion</span><span class="p">(</span><span class="n">s_hiddens</span><span class="p">,</span> <span class="n">t_hiddens</span><span class="p">)</span>
+
+    <span class="n">final_loss</span> <span class="o">=</span> <span class="n">weights</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">task_loss</span> <span class="o">+</span> <span class="n">weights</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">logits_loss</span><span class="p">,</span> <span class="n">weights</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">hiddens_loss</span>
+
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+    <span class="n">mapping_optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+    <span class="n">final_loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+    <span class="n">mapping_optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;final_loss&quot;</span><span class="p">:</span> <span class="n">final_loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span>
+        <span class="s2">&quot;task_loss&quot;</span><span class="p">:</span> <span class="n">task_loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span>
+        <span class="s2">&quot;logits_loss&quot;</span><span class="p">:</span> <span class="n">logits_loss</span><span class="o">.</span><span class="n">iten</span><span class="p">(),</span>
+        <span class="s2">&quot;hidden_state_loss&quot;</span><span class="p">:</span> <span class="n">hiddens_loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span>
+    <span class="p">}</span>
+
+<span class="nd">@torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">val_iter</span><span class="p">(</span><span class="n">student</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">metric_fn</span><span class="p">):</span>
+    <span class="n">student</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+    <span class="n">loss</span><span class="p">,</span> <span class="n">logits</span> <span class="o">=</span> <span class="n">student</span><span class="p">(</span><span class="o">**</span><span class="n">batch</span><span class="p">,</span> <span class="n">output_hidden_states</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">predictions</span> <span class="o">=</span> <span class="n">logits</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+    <span class="n">metric_fn</span><span class="o">.</span><span class="n">add_batch</span><span class="p">(</span><span class="n">predictions</span><span class="o">=</span><span class="n">predictions</span><span class="p">,</span> <span class="n">references</span><span class="o">=</span><span class="n">batch</span><span class="p">[</span><span class="s2">&quot;labels&quot;</span><span class="p">])</span>
+
+
+<span class="k">def</span> <span class="nf">dict_to_device</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">batch</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+
+<span class="n">pbar_epochs</span> <span class="o">=</span> <span class="n">trange</span><span class="p">(</span><span class="n">num_epochs</span><span class="p">,</span> <span class="n">leave</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">pbar_epochs</span><span class="o">.</span><span class="n">set_description</span><span class="p">(</span><span class="s2">&quot;Epoch: &quot;</span><span class="p">)</span>
+<span class="n">best_accuracy</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="n">pbar_epochs</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">loader_key</span><span class="p">,</span> <span class="n">loader</span> <span class="ow">in</span> <span class="n">loaders</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">pbar_loader</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">loader</span><span class="p">,</span> <span class="n">leave</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">pbar_loader</span><span class="p">:</span>
+            <span class="n">batch</span> <span class="o">=</span> <span class="n">dict_to_device</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">loader_key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;train&quot;</span><span class="p">):</span>
+                <span class="n">metrics</span> <span class="o">=</span> <span class="n">train_iter</span><span class="p">(</span>
+                    <span class="n">student</span><span class="o">=</span><span class="n">student_model</span><span class="p">,</span>
+                    <span class="n">teacher</span><span class="o">=</span><span class="n">teacher_model</span><span class="p">,</span>
+                    <span class="n">batch</span><span class="o">=</span><span class="n">batch</span><span class="p">,</span>
+                    <span class="n">logits_criterion</span><span class="o">=</span><span class="n">kl_div_loss</span><span class="p">,</span>
+                    <span class="n">hiddens_criterion</span><span class="o">=</span><span class="n">mse_hiddens_loss</span><span class="p">,</span>
+                    <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span>
+                    <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span>
+                    <span class="n">mapping_optimizer</span><span class="o">=</span><span class="n">mapping_optimizer</span><span class="p">,</span>
+                    <span class="n">metric_fn</span><span class="o">=</span><span class="n">metric_fn</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">metrics</span> <span class="o">=</span> <span class="n">val_iter</span><span class="p">(</span>
+                    <span class="n">student</span><span class="o">=</span><span class="n">student_model</span><span class="p">,</span>
+                    <span class="n">batch</span><span class="o">=</span><span class="n">batch</span><span class="p">,</span>
+                    <span class="n">metric_fn</span><span class="o">=</span><span class="n">metric_fn</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="n">log_str</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">met</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">met</span> <span class="ow">in</span> <span class="n">metrics</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+            <span class="n">pbar_loader</span><span class="o">.</span><span class="n">set_description</span><span class="p">(</span><span class="n">log_str</span><span class="p">)</span>
+        <span class="n">accuracy</span> <span class="o">=</span> <span class="n">metric_fn</span><span class="o">.</span><span class="n">compute</span><span class="p">()[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">loader_key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;train&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">accuracy</span> <span class="o">&gt;</span> <span class="n">best_accuracy</span><span class="p">:</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">student_model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span> <span class="s2">&quot;best_student.pth&quot;</span><span class="p">)</span>
+                <span class="n">best_accuracy</span> <span class="o">=</span> <span class="n">accuracy</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">loader_key</span><span class="si">}</span><span class="s2"> accuracy: </span><span class="si">{</span><span class="n">accuracy</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 
 
