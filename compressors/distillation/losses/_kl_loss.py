@@ -15,7 +15,7 @@ class KLDivLoss(nn.Module):
     def forward(self, s_logits, t_logits):
         return self.criterion(
             F.log_softmax(s_logits / self.temperature, dim=1),
-            F.softmax(t_logits / self.temperature, dim=1)
+            F.softmax(t_logits / self.temperature, dim=1),
         ) * (self.temperature ** 2)
 
 

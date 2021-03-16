@@ -11,11 +11,13 @@ class AttentionLoss(nn.Module):
         super().__init__()
         self.p = p
 
-    def forward(self, s_hidden_states: Tuple[FloatTensor], t_hidden_states: Tuple[FloatTensor]) -> FloatTensor:
+    def forward(
+        self, s_hidden_states: Tuple[FloatTensor], t_hidden_states: Tuple[FloatTensor]
+    ) -> FloatTensor:
 
-        return torch.stack([
-            self.at_loss(f_s, f_t) for f_s, f_t in zip(s_hidden_states, t_hidden_states)
-        ]).mean()
+        return torch.stack(
+            [self.at_loss(f_s, f_t) for f_s, f_t in zip(s_hidden_states, t_hidden_states)]
+        ).mean()
 
     def at_loss(self, f_s, f_t):
         # code from

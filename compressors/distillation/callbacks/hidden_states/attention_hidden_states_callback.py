@@ -12,11 +12,9 @@ class AttentionHiddenStatesCallback(Callback):
         exclude_first_and_last: If set to True takes only last hidden state.
                 Usually cosine loss applied in this way. Defaults to True.
     """
+
     def __init__(
-        self,
-        output_key: str = "attention_loss",
-        exclude_first_and_last: bool = True,
-        p: int = 2,
+        self, output_key: str = "attention_loss", exclude_first_and_last: bool = True, p: int = 2,
     ):
         """
         Cosine loss for difference between hidden states of teacher and student model.
@@ -37,9 +35,7 @@ class AttentionHiddenStatesCallback(Callback):
         if self.exclude_first_and_last:
             s_hiddens = s_hiddens[1:-1]
             t_hiddens = t_hiddens[1:-1]
-        runner.batch_metrics[self.output_key] = self.criterion(
-            s_hiddens, t_hiddens
-        )
+        runner.batch_metrics[self.output_key] = self.criterion(s_hiddens, t_hiddens)
 
 
 __all__ = ["AttentionHiddenStatesCallback"]

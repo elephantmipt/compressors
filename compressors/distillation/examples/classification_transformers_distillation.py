@@ -47,11 +47,12 @@ mse_hiddens_loss = MSEHiddenStatesLoss(
     need_mapping=True,
     teacher_hidden_state_dim=512,
     student_hidden_state_dim=128,
-    num_layers=2
+    num_layers=2,
 ).to(device)
 
 optimizer = torch.optim.Adam(student_model.parameters(), lr=1e-4)
 mapping_optimizer = torch.optim.Adam(mse_hiddens_loss.parameters(), lr=1e-3)
+
 
 def train_iter(
     student,
@@ -62,7 +63,7 @@ def train_iter(
     weights,
     optimizer,
     mapping_optimizer,
-    metric_fn
+    metric_fn,
 ):
     student.train()
     teacher.eval()
@@ -98,6 +99,7 @@ def train_iter(
         "hidden_state_loss": hiddens_loss.item(),
     }
 
+
 @torch.no_grad()
 def val_iter(student, batch, metric_fn):
     student.eval()
@@ -131,11 +133,7 @@ for epoch in pbar_epochs:
                     metric_fn=metric_fn,
                 )
             else:
-                metrics = val_iter(
-                    student=student_model,
-                    batch=batch,
-                    metric_fn=metric_fn,
-                )
+                metrics = val_iter(student=student_model, batch=batch, metric_fn=metric_fn,)
             log_str = " ".join([f"{key}: {met:.3f}" for key, met in metrics.items()])
             pbar_loader.set_description(log_str)
         accuracy = metric_fn.compute()["accuracy"]

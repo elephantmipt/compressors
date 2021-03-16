@@ -24,20 +24,19 @@ class MSEHiddenStatesLoss(nn.Module):
             self.teacher_hidden_state_dim = teacher_hidden_state_dim
             self.student_hidden_state_dim = student_hidden_state_dim
             if num_layers is not None:
-                self.proj = nn.ModuleList([nn.Linear(
-                    teacher_hidden_state_dim,
-                    student_hidden_state_dim
-                ) for _ in range(num_layers)])
-            else:
-                self.proj = nn.Linear(
-                    teacher_hidden_state_dim,
-                    student_hidden_state_dim
+                self.proj = nn.ModuleList(
+                    [
+                        nn.Linear(teacher_hidden_state_dim, student_hidden_state_dim)
+                        for _ in range(num_layers)
+                    ]
                 )
+            else:
+                self.proj = nn.Linear(teacher_hidden_state_dim, student_hidden_state_dim)
 
     def forward(
         self,
         s_hidden_states: Union[FloatTensor, Tuple[FloatTensor]],
-        t_hidden_states: Union[FloatTensor, Tuple[FloatTensor]]
+        t_hidden_states: Union[FloatTensor, Tuple[FloatTensor]],
     ) -> FloatTensor:
         if isinstance(s_hidden_states, FloatTensor):
             return self._forward_hidden(
@@ -45,13 +44,19 @@ class MSEHiddenStatesLoss(nn.Module):
             )
         if len(s_hidden_states) != len(t_hidden_states):
             diff = len(t_hidden_states) - len(s_hidden_states)
-            t_hidden_states = tuple([t_hidden_states[i] for i in range(diff, len(t_hidden_states))])
-            warnings.warn("Warning! Teacher's and student's hidden states has different length."
-                          "Using last teacher's hidden states for distillation.")
-        loss = torch.stack([
-            self._forward_hidden(cut_s, cur_t, idx)
-            for idx, (cut_s, cur_t) in enumerate(zip(s_hidden_states, t_hidden_states))
-        ]).mean()
+            t_hidden_states = tuple(
+                [t_hidden_states[i] for i in range(diff, len(t_hidden_states))]
+            )
+            warnings.warn(
+                "Warning! Teacher's and student's hidden states has different length."
+                "Using last teacher's hidden states for distillation."
+            )
+        loss = torch.stack(
+            [
+                self._forward_hidden(cut_s, cur_t, idx)
+                for idx, (cut_s, cur_t) in enumerate(zip(s_hidden_states, t_hidden_states))
+            ]
+        ).mean()
         return loss
 
     def _forward_hidden(
@@ -60,7 +65,9 @@ class MSEHiddenStatesLoss(nn.Module):
 
         if self.need_mapping:
             if s_hidden_states.dim() > 3:
-                raise TypeError("MSE loss with mapping can be applied only to flatten hidden state")
+                raise TypeError(
+                    "MSE loss with mapping can be applied only to flatten hidden state"
+                )
             assert s_hidden_states.size(-1) == self.student_hidden_state_dim
             assert t_hidden_states.size(-1) == self.teacher_hidden_state_dim
             s_hidden_states = s_hidden_states.reshape(-1, self.student_hidden_state_dim)
@@ -69,7 +76,9 @@ class MSEHiddenStatesLoss(nn.Module):
                     t_hidden_states.reshape(-1, self.teacher_hidden_state_dim)
                 )
             else:
-                t_hidden_states = self.proj(t_hidden_states.reshape(-1, self.teacher_hidden_state_dim))
+                t_hidden_states = self.proj(
+                    t_hidden_states.reshape(-1, self.teacher_hidden_state_dim)
+                )
             if self.normalize:
                 s_hidden_states = F.normalize(s_hidden_states)
                 t_hidden_states = F.normalize(t_hidden_states)

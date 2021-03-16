@@ -6,4 +6,13 @@ from ._attention_loss import AttentionLoss
 from .crd import CRDLoss
 
 
-__all__ = ["kl_div_loss", "mse_loss", "mse_loss_mlm", "pkt_loss", "MSEHiddenStatesLoss", "AttentionLoss", "CRDLoss", "KLDivLoss"]
+__all__ = [
+    "kl_div_loss",
+    "mse_loss",
+    "mse_loss_mlm",
+    "pkt_loss",
+    "MSEHiddenStatesLoss",
+    "AttentionLoss",
+    "CRDLoss",
+    "KLDivLoss",
+]

@@ -53,6 +53,7 @@ class ExampleModel(BaseDistilModel):
 
         return logits
 
+
 def test():
     teacher = ExampleModel(num_layers=4)
     student = ExampleModel(num_layers=3)
@@ -69,13 +70,10 @@ def test():
 
     optimizer = torch.optim.Adam(chain(teacher.parameters(), student.parameters()))
 
-    runner = EndToEndDistilRunner(
-        hidden_state_loss="mse",
-        num_train_teacher_epochs=5
-    )
+    runner = EndToEndDistilRunner(hidden_state_loss="mse", num_train_teacher_epochs=5)
 
     runner.train(
-        model = {"teacher": teacher, "student": student},
+        model={"teacher": teacher, "student": student},
         loaders=loaders,
         optimizer=optimizer,
         criterion=nn.CrossEntropyLoss(),
@@ -83,8 +81,9 @@ def test():
         callbacks=[AccuracyCallback(input_key="logits", target_key="targets")],
         valid_metric="accuracy01",
         minimize_valid_metric=False,
-        check=True
+        check=True,
     )
+
 
 if __name__ == "__main__":
     test()

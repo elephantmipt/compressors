@@ -7,6 +7,7 @@ class ContrastMemory(nn.Module):
     """
     memory buffer that supplies large amount of negative samples.
     """
+
     def __init__(self, inputSize, outputSize, K, T=0.07, momentum=0.5):
         super(ContrastMemory, self).__init__()
         self.nLem = outputSize
@@ -15,10 +16,14 @@ class ContrastMemory(nn.Module):
         self.multinomial.cuda()
         self.K = K
 
-        self.register_buffer('params', torch.tensor([K, T, -1, -1, momentum]))
-        stdv = 1. / math.sqrt(inputSize / 3)
-        self.register_buffer('memory_v1', torch.rand(outputSize, inputSize).mul_(2 * stdv).add_(-stdv))
-        self.register_buffer('memory_v2', torch.rand(outputSize, inputSize).mul_(2 * stdv).add_(-stdv))
+        self.register_buffer("params", torch.tensor([K, T, -1, -1, momentum]))
+        stdv = 1.0 / math.sqrt(inputSize / 3)
+        self.register_buffer(
+            "memory_v1", torch.rand(outputSize, inputSize).mul_(2 * stdv).add_(-stdv)
+        )
+        self.register_buffer(
+            "memory_v2", torch.rand(outputSize, inputSize).mul_(2 * stdv).add_(-stdv)
+        )
 
     def forward(self, v1, v2, y, idx=None):
         K = int(self.params[0].item())
@@ -83,20 +88,21 @@ class AliasMethod(object):
     """
     From: https://hips.seas.harvard.edu/blog/2013/03/03/the-alias-method-efficient-sampling-with-many-discrete-outcomes/
     """
+
     def __init__(self, probs):
 
         if probs.sum() > 1:
             probs.div_(probs.sum())
         K = len(probs)
         self.prob = torch.zeros(K)
-        self.alias = torch.LongTensor([0]*K)
+        self.alias = torch.LongTensor([0] * K)
 
         # Sort the data into the outcomes with probabilities
         # that are larger and smaller than 1/K.
         smaller = []
         larger = []
         for kk, prob in enumerate(probs):
-            self.prob[kk] = K*prob
+            self.prob[kk] = K * prob
             if self.prob[kk] < 1.0:
                 smaller.append(kk)
             else:
@@ -117,7 +123,7 @@ class AliasMethod(object):
             else:
                 larger.append(large)
 
-        for last_one in smaller+larger:
+        for last_one in smaller + larger:
             self.prob[last_one] = 1
 
     def cuda(self):
@@ -134,6 +140,6 @@ class AliasMethod(object):
         # b is whether a random number is greater than q
         b = torch.bernoulli(prob)
         oq = kk.mul(b.long())
-        oj = alias.mul((1-b).long())
+        oj = alias.mul((1 - b).long())
 
         return oq + oj

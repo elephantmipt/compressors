@@ -8,7 +8,7 @@ class CosineHiddenStateLoss(nn.Module):
         self,
         need_mapping: bool = False,
         teacher_hidden_state_dim: int = None,
-        student_hidden_state_dim: int = None
+        student_hidden_state_dim: int = None,
     ):
         super(CosineHiddenStateLoss, self).__init__()
         self.loss_fn = nn.CosineEmbeddingLoss()
@@ -16,13 +16,13 @@ class CosineHiddenStateLoss(nn.Module):
         if need_mapping:
             self.teacher_hidden_state_dim = teacher_hidden_state_dim
             self.student_hidden_state_dim = student_hidden_state_dim
-            self.proj = nn.Linear(
-                teacher_hidden_state_dim,
-                student_hidden_state_dim
-            )
+            self.proj = nn.Linear(teacher_hidden_state_dim, student_hidden_state_dim)
 
     def forward(
-        self, s_hidden_states: FloatTensor, t_hidden_states: FloatTensor, attention_mask: LongTensor = None,
+        self,
+        s_hidden_states: FloatTensor,
+        t_hidden_states: FloatTensor,
+        attention_mask: LongTensor = None,
     ) -> FloatTensor:
         if s_hidden_states.dim() > 3:
             raise TypeError("Cosine loss can be applied only to flatten hiddens")

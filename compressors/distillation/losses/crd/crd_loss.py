@@ -36,6 +36,7 @@ class CRDLoss(nn.Module):
         nce_m: the momentum for updating the memory buffer
         n_data: the number of samples in the training set, therefor the memory buffer is: opt.n_data x opt.feat_dim
     """
+
     def __init__(
         self,
         student_dim: int,
@@ -76,6 +77,7 @@ class ContrastLoss(nn.Module):
     """
     contrastive loss, corresponding to Eq (18)
     """
+
     def __init__(self, n_data):
         super(ContrastLoss, self).__init__()
         self.n_data = n_data
@@ -95,13 +97,14 @@ class ContrastLoss(nn.Module):
         P_neg = x.narrow(1, 1, m)
         log_D0 = torch.div(P_neg.clone().fill_(m * Pn), P_neg.add(m * Pn + eps)).log_()
 
-        loss = - (log_D1.sum(0) + log_D0.view(-1, 1).sum(0)) / bsz
+        loss = -(log_D1.sum(0) + log_D0.view(-1, 1).sum(0)) / bsz
 
         return loss
 
 
 class Embed(nn.Module):
     """Embedding module"""
+
     def __init__(self, dim_in=1024, dim_out=128):
         super(Embed, self).__init__()
         self.linear = nn.Linear(dim_in, dim_out)
@@ -116,11 +119,12 @@ class Embed(nn.Module):
 
 class Normalize(nn.Module):
     """normalization layer"""
+
     def __init__(self, power=2):
         super(Normalize, self).__init__()
         self.power = power
 
     def forward(self, x):
-        norm = x.pow(self.power).sum(1, keepdim=True).pow(1. / self.power)
+        norm = x.pow(self.power).sum(1, keepdim=True).pow(1.0 / self.power)
         out = x.div(norm)
         return out

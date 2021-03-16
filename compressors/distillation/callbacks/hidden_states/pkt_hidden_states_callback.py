@@ -14,6 +14,7 @@ class PKTHiddenStatesCallback(Callback):
         last_only: If set to True takes only last hidden state.
                 Usually pkt loss applied in this way. Defaults to True.
     """
+
     def __init__(self, output_key: str = "pkt_loss", last_only: bool = True):
         """
         Probabilistic Knowlewdge Transfer loss for difference between hidden states
@@ -36,8 +37,7 @@ class PKTHiddenStatesCallback(Callback):
             s_hiddens = s_hiddens[-1]
             t_hiddens = t_hiddens[-1]
         runner.batch_metrics[self.output_key] = pkt_loss(
-            s_hidden_states=s_hiddens,
-            t_hidden_states=t_hiddens,
+            s_hidden_states=s_hiddens, t_hidden_states=t_hiddens,
         )
 
 

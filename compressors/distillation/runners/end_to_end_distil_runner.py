@@ -23,9 +23,7 @@ NAME2LOSS = {
     "cos": CosineHiddenStatesCallback,
 }
 
-NAME2LOGITSLOSS = {
-    "kl_loss": KLDivCallback
-}
+NAME2LOGITSLOSS = {"kl_loss": KLDivCallback}
 
 
 class EndToEndDistilRunner(Runner):
@@ -41,6 +39,7 @@ class EndToEndDistilRunner(Runner):
         *runner_args: runner args
         **runner_kwargs: runner kwargs
     """
+
     def __init__(
         self,
         hidden_state_loss: Union[str, Callable] = None,
@@ -48,7 +47,7 @@ class EndToEndDistilRunner(Runner):
         loss_weights: Dict = None,
         num_train_teacher_epochs: int = None,
         *runner_args,
-        **runner_kwargs
+        **runner_kwargs,
     ):
         """
         End to end runner for distillation. Can be used without additional callbacks.
@@ -77,7 +76,9 @@ class EndToEndDistilRunner(Runner):
                     loss_weights = {"task_loss": 0.8, "hidden_state_loss": 0.2}
                 else:
                     loss_weights = {
-                        "task_loss": 0.6, "logits_diff_loss": 0.2, "hidden_state_loss": 0.2
+                        "task_loss": 0.6,
+                        "logits_diff_loss": 0.2,
+                        "hidden_state_loss": 0.2,
                     }
         self.loss_weights = loss_weights
         self.num_train_teacher_epochs = num_train_teacher_epochs
@@ -114,17 +115,14 @@ class EndToEndDistilRunner(Runner):
         if stage == "distillation":
             if self.hidden_state_loss_fn is not None:
                 callbacks["_hidden_state_loss"] = ControlFlowCallback(
-                    self.hidden_state_loss_fn(output_key="hidden_state_loss"),
-                    loaders="train"
+                    self.hidden_state_loss_fn(output_key="hidden_state_loss"), loaders="train"
                 )
             if self.logits_diff_loss_fn is not None:
                 callbacks["_logits_diff_loss"] = ControlFlowCallback(
-                    self.logits_diff_loss_fn(output_key="logits_diff_loss"),
-                    loaders="train"
+                    self.logits_diff_loss_fn(output_key="logits_diff_loss"), loaders="train"
                 )
             callbacks["_aggregation"] = ControlFlowCallback(
-                MetricAggregationCallback(weights=self.loss_weights),
-                loaders="train"
+                MetricAggregationCallback(weights=self.loss_weights), loaders="train"
             )
         return callbacks
 
@@ -163,7 +161,9 @@ class EndToEndDistilRunner(Runner):
             self.batch["s_hidden_states"] = s_outputs["hidden_states"]
             self.batch["t_hidden_states"] = t_outputs["hidden_states"]
         self.batch_metrics["task_loss"] = self.criterion(batch["s_logits"], batch["targets"])
-        self.batch["logits"] = self.batch["s_logits"]  # for accuracy callback or other metric callback
+        self.batch["logits"] = self.batch[
+            "s_logits"
+        ]  # for accuracy callback or other metric callback
 
     @staticmethod
     def get_hidden_state_loss(loss_name: str):
@@ -177,7 +177,9 @@ class EndToEndDistilRunner(Runner):
         if loss_name in NAME2LOGITSLOSS.keys():
             return NAME2LOGITSLOSS[loss_name]
 
-        raise TypeError(f"Loggits diff loss should be in {NAME2LOGITSLOSS.keys()}, got {loss_name}")
+        raise TypeError(
+            f"Loggits diff loss should be in {NAME2LOGITSLOSS.keys()}, got {loss_name}"
+        )
 
     def predict_batch(self, batch: Mapping[str, Any], **kwargs) -> Mapping[str, Any]:
         return self.model["student"](batch["features"])

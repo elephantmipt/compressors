@@ -12,6 +12,7 @@ class CRDHiddenStatesCallback(Callback):
         last_only: If set to True takes only last hidden state.
                 Usually cosine loss applied in this way. Defaults to True.
     """
+
     def __init__(
         self,
         student_dim: int,
@@ -51,9 +52,7 @@ class CRDHiddenStatesCallback(Callback):
         if self.last_only:
             s_hiddens = s_hiddens[-1]
             t_hiddens = t_hiddens[-1]
-        runner.batch_metrics[self.output_key] = self.criterion(
-            s_hiddens, t_hiddens
-        )
+        runner.batch_metrics[self.output_key] = self.criterion(s_hiddens, t_hiddens)
 
 
 __all__ = ["CRDHiddenStatesCallback"]

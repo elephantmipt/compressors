@@ -5,7 +5,13 @@ from compressors.models import BaseDistilModel
 
 
 class MLP(BaseDistilModel):
-    def __init__(self, inp_dim: int = 28*28, num_classes: int = 10, num_layers: int = 4, hidden_dim: int = 128):
+    def __init__(
+        self,
+        inp_dim: int = 28 * 28,
+        num_classes: int = 10,
+        num_layers: int = 4,
+        hidden_dim: int = 128,
+    ):
         super().__init__()
         layers = []
         self.flatten = nn.Flatten()

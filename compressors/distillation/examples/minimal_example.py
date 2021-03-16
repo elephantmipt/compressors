@@ -27,18 +27,15 @@ loaders = {
 
 optimizer = torch.optim.Adam(chain(teacher.parameters(), student.parameters()))
 
-runner = EndToEndDistilRunner(
-    hidden_state_loss="mse",
-    num_train_teacher_epochs=5
-)
+runner = EndToEndDistilRunner(hidden_state_loss="mse", num_train_teacher_epochs=5)
 
 runner.train(
-    model = {"teacher": teacher, "student": student},
+    model={"teacher": teacher, "student": student},
     loaders=loaders,
     optimizer=optimizer,
     num_epochs=4,
     callbacks=[AccuracyCallback(input_key="logits", target_key="targets")],
     valid_metric="accuracy01",
     minimize_valid_metric=False,
-    logdir="./logs"
+    logdir="./logs",
 )

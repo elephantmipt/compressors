@@ -5,7 +5,7 @@ from .hidden_states import (
     HiddenStatesSelectCallback,
     CosineHiddenStatesCallback,
     PKTHiddenStatesCallback,
-    AttentionHiddenStatesCallback
+    AttentionHiddenStatesCallback,
 )
 from .logits_diff import KLDivCallback
 

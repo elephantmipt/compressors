@@ -11,6 +11,7 @@ class MSEHiddenStatesCallback(Callback):
     Args:
         output_key: name for loss. Defaults to mse_loss.
     """
+
     def __init__(
         self,
         output_key: str = "mse_loss",
