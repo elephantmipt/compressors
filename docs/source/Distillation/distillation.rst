@@ -6,3 +6,4 @@ Distillation
    loss_functions
    callbacks
    runners
+   data
