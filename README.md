@@ -36,6 +36,12 @@ pip install git+https://github.com/elephantmipt/compressors.git
 | Constrative Representation Distillation | [Tian et al.](https://arxiv.org/pdf/1910.10699.pdf)| Implemented (without dataset) |
 
 
+## Features
+
+| Name               | References        | Status      |
+| ----------------   | ----------------- | ----------- |
+| Probablility Shift | [Wen et al.](https://arxiv.org/abs/1911.07471) | <span style="color:green">Implemented and tested </span> |
+
 ## Minimal Example
 
 ```python

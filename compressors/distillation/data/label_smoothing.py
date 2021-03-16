@@ -1,7 +1,7 @@
 import torch
 
 
-def swap_smoothing(logits: torch.Tensor, labels: torch.Tensor) -> torch.Tensor:
+def probability_shift(logits: torch.Tensor, labels: torch.Tensor) -> torch.Tensor:
     """
     From "Preparing Lessons: Improve Knowledge Distillation with Better Supervision"
     https://arxiv.org/abs/1911.07471. Swaps argmax and correct label in logits.
