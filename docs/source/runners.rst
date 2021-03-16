@@ -1,0 +1,2 @@
+.. automodule:: compressors.runners
+    :members:
