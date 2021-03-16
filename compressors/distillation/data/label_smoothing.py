@@ -15,5 +15,5 @@ def swap_smoothing(logits: torch.Tensor, labels: torch.Tensor) -> torch.Tensor:
     argmax_values, argmax_labels = logits.max(-1)
     arange_indx = torch.arange(logits.size(0))
     logits[arange_indx, argmax_labels] = logits[arange_indx, labels]
-    logits[torch.arange(logits.size(0)), labels] = argmax_values
+    logits[arange_indx, labels] = argmax_values
     return logits
