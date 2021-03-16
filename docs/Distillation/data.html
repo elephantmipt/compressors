@@ -167,12 +167,16 @@
 <dt id="compressors.distillation.data.label_smoothing.probability_shift">
 <code class="sig-prename descclassname"><span class="pre">compressors.distillation.data.label_smoothing.</span></code><code class="sig-name descname"><span class="pre">probability_shift</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logits</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torch.Tensor</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torch.Tensor</span><a class="headerlink" href="#compressors.distillation.data.label_smoothing.probability_shift" title="Permalink to this definition">¶</a></dt>
 <dd><p>From “Preparing Lessons: Improve Knowledge Distillation with Better Supervision”
-<a class="reference external" href="https://arxiv.org/abs/1911.07471">https://arxiv.org/abs/1911.07471</a>. Swaps argmax and correct label in logits.
-:param logits: logits from teacher model
-:param labels: correct labels</p>
+<a class="reference external" href="https://arxiv.org/abs/1911.07471">https://arxiv.org/abs/1911.07471</a>. Swaps argmax and correct label in logits.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>smoothed labels</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>logits</strong> – logits from teacher model</p></li>
+<li><p><strong>labels</strong> – correct labels</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>smoothed labels</p>
 </dd>
 </dl>
 </dd></dl>
