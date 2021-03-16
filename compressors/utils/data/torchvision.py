@@ -20,8 +20,8 @@ class TorchvisionDatasetWrapper(data.Dataset):
     def __getitem__(self, item):
         features, targets = self.dataset[item]
         return {
-            "features": torch.tensor(features, dtype=torch.float32),
-            "targets": torch.tensor(targets, dtype=torch.long),
+            "features": features,
+            "targets": targets,
         }
 
     def __len__(self):

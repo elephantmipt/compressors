@@ -73,7 +73,7 @@ class LogitsDataset(Dataset):
             batch = any2device(batch, self.device)
             c_logits = self.get_logits_fn(self.model, batch).cpu()
             start_idx = batch_size * idx
-            indx = torch.arange(start_idx, start_idx + batch_size)
+            indx = torch.arange(start_idx, start_idx + c_logits.size(0))
             if logits is None:
                 logits = torch.zeros(len(self.dataset), c_logits.size(1), dtype=torch.float32)
             logits[indx] += c_logits
@@ -92,3 +92,6 @@ class LogitsDataset(Dataset):
         else:
             raise TypeError(f"Can't handle batch type of {type(batch)}")
         return batch
+
+    @staticmethod
+    def _get_current
