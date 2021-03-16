@@ -1,0 +1,5 @@
+torch
+transformers
+catalyst
+torchvision
+sphinx==3.5.2
