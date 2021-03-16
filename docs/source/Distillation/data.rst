@@ -6,5 +6,5 @@ Utils for preparing data.
 .. autoclass:: compressors.distillation.data.LogitsDataset
     :members:
 
-.. autoclass:: compressors.distillation.data.swap_smoothing
+.. automodule:: compressors.distillation.data.label_smoothing
     :members:
