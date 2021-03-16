@@ -92,6 +92,3 @@ class LogitsDataset(Dataset):
         else:
             raise TypeError(f"Can't handle batch type of {type(batch)}")
         return batch
-
-    @staticmethod
-    def _get_current
