@@ -45,7 +45,7 @@ class LogitsDataset(Dataset):
         self.model = model
         self.batched = batched
         self.dataloader_kwargs = data_loader_kwargs
-        self.device = model.device
+        self.device = next(model.parameters()).device
         self.get_logits_fn = get_logits_fn or self._base_get_logits_fn
         self.logits = None
         self._compute_logits()
