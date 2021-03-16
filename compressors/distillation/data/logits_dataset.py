@@ -56,6 +56,9 @@ class LogitsDataset(Dataset):
         data_item = self.dataset[item]
         return self._base_merge_fn(data_item, c_logits)
 
+    def __len__(self):
+        return len(self.dataset)
+
     @torch.no_grad()
     def _compute_logits(self):
         self.model.eval()
