@@ -157,6 +157,20 @@
 </dl>
 </dd></dl>
 
+<dl class="py class">
+<dt id="compressors.distillation.data.swap_smoothing">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">compressors.distillation.data.</span></code><code class="sig-name descname"><span class="pre">swap_smoothing</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logits</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torch.Tensor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.data.swap_smoothing" title="Permalink to this definition">¶</a></dt>
+<dd><p>From “Preparing Lessons: Improve Knowledge Distillation with Better Supervision”
+<a class="reference external" href="https://arxiv.org/abs/1911.07471">https://arxiv.org/abs/1911.07471</a>. Swaps argmax and correct label in logits.
+:param logits: logits from teacher model
+:param labels: correct labels</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>smoothed labels</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 
 
