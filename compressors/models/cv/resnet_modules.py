@@ -47,8 +47,7 @@ class BasicBlock(nn.Module):
         out = F.relu(out)
         if self.is_last:
             return out, preact
-        else:
-            return out
+        return out
 
 
 class Bottleneck(nn.Module):
@@ -89,5 +88,4 @@ class Bottleneck(nn.Module):
         out = F.relu(out)
         if self.is_last:
             return out, preact
-        else:
-            return out
+        return out

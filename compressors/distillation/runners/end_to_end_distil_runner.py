@@ -107,8 +107,7 @@ class EndToEndDistilRunner(Runner):
     def get_stage_len(self, stage: str) -> int:
         if stage == "distillation":
             return self._num_epochs
-        elif stage == "teacher_training":
-            return self.num_train_teacher_epochs
+        return self.num_train_teacher_epochs
 
     def get_callbacks(self, stage: str) -> "OrderedDict[str, Callback]":
         callbacks = super().get_callbacks(stage)
