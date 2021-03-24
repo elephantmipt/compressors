@@ -15,6 +15,7 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
       
       <script src="../_static/theme-vendors.js"></script>
@@ -150,7 +151,90 @@
 <h1>Distillation<a class="headerlink" href="#distillation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="philosophy-and-main-idea">
 <h2>Philosophy and main idea<a class="headerlink" href="#philosophy-and-main-idea" title="Permalink to this headline">¶</a></h2>
+<p>Method proposed in <a class="reference external" href="https://arxiv.org/abs/1503.02531">Distilling the Knowledge in a Neural Network</a>
+paper. We can train one teacher model for a task and then transfer knoweledge to the other student network.
+In classical approach teacher is a big and slow network and student is a smaller model and we need student to perform
+as better as a teacher.</p>
+<p>Let’s take a look on the simple image classification example:</p>
 <img alt="../_images/distillation.png" src="../_images/distillation.png" />
+<p>The most simple way is to look on the probability distribution of the teacher model and the student model and force student
+to produce same distribution as a teacher.</p>
+<img alt="../_images/distributions.png" src="../_images/distributions.png" />
+<p>The most common way to measure difference between distribution called KL-divergence.</p>
+<div class="math notranslate nohighlight">
+\[KL = \sum_x p_1(x) \log\left(\frac{p_1(x)}{p_2(x)}\right)\]</div>
+<p>You can use <code class="docutils literal notranslate"><span class="pre">KLDivLoss</span></code> for applying this loss. It tooks student’s and teacher’s logits.</p>
+<dl class="py class">
+<dt id="compressors.distillation.losses._kl_loss.KLDivLoss">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">compressors.distillation.losses._kl_loss.</span></code><code class="sig-name descname"><span class="pre">KLDivLoss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.losses._kl_loss.KLDivLoss" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="compressors.distillation.losses._kl_loss.KLDivLoss.forward">
+<code class="sig-name descname"><span class="pre">forward</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s_logits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_logits</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.losses._kl_loss.KLDivLoss.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<p>Or just add <code class="docutils literal notranslate"><span class="pre">KLDivCallback</span></code> to <code class="docutils literal notranslate"><span class="pre">DistilRunner</span></code> if you are using Catalyst.</p>
+<dl class="py class">
+<dt id="compressors.distillation.callbacks.KLDivCallback">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">compressors.distillation.callbacks.</span></code><code class="sig-name descname"><span class="pre">KLDivCallback</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'kl_div_loss'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.callbacks.KLDivCallback" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>We also can add difference between hidden states.</p>
+<img alt="../_images/flatten_hiddens.png" src="../_images/flatten_hiddens.png" />
+<p>For example we can use <span class="math notranslate nohighlight">\(L_2\)</span>-norm for this vectors with <code class="docutils literal notranslate"><span class="pre">MSEHiddenStatesLoss</span></code></p>
+<dl class="py class">
+<dt id="compressors.distillation.losses.MSEHiddenStatesLoss">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">compressors.distillation.losses.</span></code><code class="sig-name descname"><span class="pre">MSEHiddenStatesLoss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">need_mapping</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">teacher_hidden_state_dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">student_hidden_state_dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_layers</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.losses.MSEHiddenStatesLoss" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>or callback</p>
+<dl class="py class">
+<dt id="compressors.distillation.callbacks.MSEHiddenStatesCallback">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">compressors.distillation.callbacks.</span></code><code class="sig-name descname"><span class="pre">MSEHiddenStatesCallback</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'mse_loss'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">need_mapping</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">teacher_hidden_state_dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">student_hidden_state_dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_layers</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.callbacks.MSEHiddenStatesCallback" title="Permalink to this definition">¶</a></dt>
+<dd><p>MSE loss aka Hint loss for difference between hidden
+states of teacher and student model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>output_key</strong> – name for loss. Defaults to mse_loss.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>But we can have not only vectors in hidden states. We can also have tensors like here with shapes <span class="math notranslate nohighlight">\((C\times H\times W)\)</span>.</p>
+<img alt="../_images/hiddens.png" src="../_images/hiddens.png" />
+<p>You can also apply <span class="math notranslate nohighlight">\(L_2\)</span>-norm here, but experiments shows that you can use something more complex like
+<a class="reference external" href="https://arxiv.org/abs/1612.03928">Attention Transfer</a>.</p>
+<p>In compressors this method implemented in</p>
+<dl class="py class">
+<dt id="compressors.distillation.losses.AttentionLoss">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">compressors.distillation.losses.</span></code><code class="sig-name descname"><span class="pre">AttentionLoss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.losses.AttentionLoss" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>and</p>
+<dl class="py class">
+<dt id="compressors.distillation.callbacks.AttentionHiddenStatesCallback">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">compressors.distillation.callbacks.</span></code><code class="sig-name descname"><span class="pre">AttentionHiddenStatesCallback</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'attention_loss'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_first_and_last</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.callbacks.AttentionHiddenStatesCallback" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_key</strong> – name for loss. Defaults to attention_loss.</p></li>
+<li><p><strong>exclude_first_and_last</strong> – If set to True doesn’t take first and last hidden states.
+Usually attention loss applied in this way. Defaults to True.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="loss_functions.html">Loss functions</a></li>
