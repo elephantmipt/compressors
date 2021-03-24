@@ -169,18 +169,25 @@ registered hooks while the latter silently ignores them.</p>
 <dd><p>CRD Loss function
 includes two symmetric parts:
 (a) using teacher as anchor, choose positive and negatives over the student side
-(b) using student as anchor, choose positive and negatives over the teacher side
-:param student_dim: the dimension of student’s feature
-:param teacher_dim: the dimension of teacher’s feature
-:param feature_dim: the dimension of the projection space
-:param nce_k: number of negatives paired with each positive
-:param nce_t: the temperature
-:param nce_m: the momentum for updating the memory buffer
-:param n_data: the number of samples in the training set, therefor the memory buffer is: opt.n_data x opt.feat_dim</p>
+(b) using student as anchor, choose positive and negatives over the teacher side</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>student_dim</strong> – the dimension of student’s feature</p></li>
+<li><p><strong>teacher_dim</strong> – the dimension of teacher’s feature</p></li>
+<li><p><strong>feature_dim</strong> – the dimension of the projection space</p></li>
+<li><p><strong>nce_k</strong> – number of negatives paired with each positive</p></li>
+<li><p><strong>nce_t</strong> – the temperature</p></li>
+<li><p><strong>nce_m</strong> – the momentum for updating the memory buffer</p></li>
+<li><p><strong>n_data</strong> – the number of samples in the training set, therefor the memory buffer is: opt.n_data x opt.feat_dim</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt id="compressors.distillation.losses.CRDLoss.forward">
 <code class="sig-name descname"><span class="pre">forward</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contrast_idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.losses.CRDLoss.forward" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Forward pass.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>f_s</strong> – the feature of student network, size [batch_size, s_dim]</p></li>
