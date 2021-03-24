@@ -53,7 +53,7 @@ from torch.utils.data import DataLoader
 from torchvision import transforms as T
 
 from catalyst.contrib.datasets import MNIST
-from catalyst.callbacks import AccuracyCallback
+from catalyst.callbacks import AccuracyCallback, OptimizerCallback
 
 from compressors.distillation.runners import EndToEndDistilRunner
 from compressors.models import MLP
@@ -81,13 +81,18 @@ runner = EndToEndDistilRunner(
 )
 
 runner.train(
-    model = {"teacher": teacher, "student": student},
+    model = torch.nn.ModuleDict({"teacher": teacher, "student": student}),
     loaders=loaders,
     optimizer=optimizer,
     num_epochs=4,
-    callbacks=[AccuracyCallback(input_key="logits", target_key="targets")],
+    callbacks=[
+        OptimizerCallback(metric_key="loss"), 
+        AccuracyCallback(input_key="logits", target_key="targets")
+    ],
     valid_metric="accuracy01",
     minimize_valid_metric=False,
-    logdir="./logs"
+    logdir="./logs",
+    valid_loader="valid",
+    criterion=torch.nn.CrossEntropyLoss()
 )
 ```
