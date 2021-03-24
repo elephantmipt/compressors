@@ -9,8 +9,8 @@ class AttentionHiddenStatesCallback(Callback):
 
     Args:
         output_key: name for loss. Defaults to attention_loss.
-        exclude_first_and_last: If set to True takes only last hidden state.
-                Usually cosine loss applied in this way. Defaults to True.
+        exclude_first_and_last: If set to True doesn't take first and last hidden states.
+                Usually attention loss applied in this way. Defaults to True.
     """
 
     def __init__(
