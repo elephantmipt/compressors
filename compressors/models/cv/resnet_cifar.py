@@ -1,4 +1,4 @@
-from typing import Union, Tuple, Dict
+from typing import Union, Tuple, Dict, Any
 
 from torch import nn
 from torch import FloatTensor
@@ -124,73 +124,118 @@ class ResNetCifar(BaseDistilModel):
         return x
 
 
-def resnet_cifar_8(**kwargs):
+def resnet_cifar_8(**kwargs) -> ResNetCifar:
+    r"""
+    ResNet-8 model from
+    `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_.
+    CIFAR version.
+    """
     return ResNetCifar(8, [16, 16, 32, 64], "basicblock", **kwargs)
 
 
-def resnet_cifar_14(**kwargs):
+def resnet_cifar_14(**kwargs) -> ResNetCifar:
+    r"""
+    ResNet-14 model from
+    `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_.
+    CIFAR version.
+    """
     return ResNetCifar(14, [16, 16, 32, 64], "basicblock", **kwargs)
 
 
-def resnet_cifar_20(**kwargs):
+def resnet_cifar_20(**kwargs) -> ResNetCifar:
+    r"""
+    ResNet-20 model from
+    `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_.
+    CIFAR version.
+    """
     return ResNetCifar(20, [16, 16, 32, 64], "basicblock", **kwargs)
 
 
-def resnet_cifar_32(**kwargs):
+def resnet_cifar_32(**kwargs) -> ResNetCifar:
+    r"""
+    ResNet-32 model from
+    `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_.
+    CIFAR version.
+    """
     return ResNetCifar(32, [16, 16, 32, 64], "basicblock", **kwargs)
 
 
-def resnet_cifar_44(**kwargs):
+def resnet_cifar_44(**kwargs) -> ResNetCifar:
+    r"""
+    ResNet-44 model from
+    `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_.
+    CIFAR version.
+    """
     return ResNetCifar(44, [16, 16, 32, 64], "basicblock", **kwargs)
 
 
-def resnet_cifar_56(**kwargs):
+def resnet_cifar_56(**kwargs) -> ResNetCifar:
+    r"""
+    ResNet-56 model from
+    `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_.
+    CIFAR version.
+    """
     return ResNetCifar(56, [16, 16, 32, 64], "basicblock", **kwargs)
 
 
-def resnet_cifar_110(**kwargs):
+def resnet_cifar_110(**kwargs) -> ResNetCifar:
+    r"""
+    ResNet-110 model from
+    `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_.
+    CIFAR version.
+    """
     return ResNetCifar(110, [16, 16, 32, 64], "basicblock", **kwargs)
 
 
-def resnet_cifar_8x4(**kwargs):
+def resnet_cifar_8x4(**kwargs) -> ResNetCifar:
+    r"""
+    ResNet-8x4 model from
+    `"Wide Residual Networks" <https://arxiv.org/pdf/1605.07146.pdf>`_.
+    CIFAR version.
+    """
     return ResNetCifar(8, [32, 64, 128, 256], "basicblock", **kwargs)
 
 
-def resnet_cifar_32x4(**kwargs):
+def resnet_cifar_32x4(**kwargs) -> ResNetCifar:
+    r"""
+    ResNet-32x4 model from
+    `"Wide Residual Networks" <https://arxiv.org/pdf/1605.07146.pdf>`_.
+    CIFAR version.
+    """
     return ResNetCifar(32, [32, 64, 128, 256], "basicblock", **kwargs)
 
 
-def preact_resnet_cifar_8(**kwargs):
+def preact_resnet_cifar_8(**kwargs) -> ResNetCifar:
     return ResNetCifar(8, [16, 16, 32, 64], "preactblock", **kwargs)
 
 
-def preact_resnet_cifar_14(**kwargs):
+def preact_resnet_cifar_14(**kwargs) -> ResNetCifar:
     return ResNetCifar(14, [16, 16, 32, 64], "preactblock", **kwargs)
 
 
-def preact_resnet_cifar_20(**kwargs):
+def preact_resnet_cifar_20(**kwargs) -> ResNetCifar:
     return ResNetCifar(20, [16, 16, 32, 64], "preaactblock", **kwargs)
 
 
-def preact_resnet_cifar_32(**kwargs):
+def preact_resnet_cifar_32(**kwargs: Any) -> ResNetCifar:
     return ResNetCifar(32, [16, 16, 32, 64], "preactblock", **kwargs)
 
 
-def preact_resnet_cifar_44(**kwargs):
+def preact_resnet_cifar_44(**kwargs) -> ResNetCifar:
     return ResNetCifar(44, [16, 16, 32, 64], "preactblock", **kwargs)
 
 
-def preact_resnet_cifar_56(**kwargs):
+def preact_resnet_cifar_56(**kwargs) -> ResNetCifar:
     return ResNetCifar(56, [16, 16, 32, 64], "preactblock", **kwargs)
 
 
-def preact_resnet_cifar_110(**kwargs):
+def preact_resnet_cifar_110(**kwargs) -> ResNetCifar:
     return ResNetCifar(110, [16, 16, 32, 64], "preactblock", **kwargs)
 
 
-def preact_resnet_cifar_8x4(**kwargs):
+def preact_resnet_cifar_8x4(**kwargs) -> ResNetCifar:
     return ResNetCifar(8, [32, 64, 128, 256], "preactblock", **kwargs)
 
 
-def preact_resnet_cifar_32x4(**kwargs):
+def preact_resnet_cifar_32x4(**kwargs) -> ResNetCifar:
     return ResNetCifar(32, [32, 64, 128, 256], "preactblock", **kwargs)
