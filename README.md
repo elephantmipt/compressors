@@ -48,8 +48,9 @@ pip install git+https://github.com/elephantmipt/compressors.git
 from itertools import chain
 
 import torch
-from torch import nn
 from torch.utils.data import DataLoader
+
+from torchvision import transforms as T
 
 from catalyst.contrib.datasets import MNIST
 from catalyst.callbacks import AccuracyCallback
@@ -63,13 +64,13 @@ teacher = MLP(num_layers=4)
 student = MLP(num_layers=3)
 
 datasets = {
-    "train": Wrp(MNIST("./data", train=True, download=True)),
-    "valid": Wrp(MNIST("./data", train=False)),
+    "train": Wrp(MNIST("./data", train=True, download=True, transform=T.ToTensor())),
+    "valid": Wrp(MNIST("./data", train=False, transform=T.ToTensor())),
 }
 
 loaders = {
     dl_key: DataLoader(dataset, shuffle=dl_key == "train", batch_size=32)
-    for dl_key, dataset in datasets.item()
+    for dl_key, dataset in datasets.items()
 }
 
 optimizer = torch.optim.Adam(chain(teacher.parameters(), student.parameters()))
