@@ -25,9 +25,9 @@ class DistilRunner(Runner):
         if self.is_train_loader:
             self.batch["t_logits"] = t_outputs["logits"]
         if self.output_hidden_states:
-            self.batch["student_hidden_states"] = s_outputs["hidden_states"]
+            self.batch["s_hidden_states"] = s_outputs["hidden_states"]
             if self.is_train_loader:
-                self.batch["teacher_hidden_states"] = t_outputs["hidden_states"]
+                self.batch["t_hidden_states"] = t_outputs["hidden_states"]
 
 
 __all__ = ["DistilRunner"]
