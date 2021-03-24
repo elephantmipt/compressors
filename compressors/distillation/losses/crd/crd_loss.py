@@ -27,6 +27,7 @@ class CRDLoss(nn.Module):
     includes two symmetric parts:
     (a) using teacher as anchor, choose positive and negatives over the student side
     (b) using student as anchor, choose positive and negatives over the teacher side
+
     Args:
         student_dim: the dimension of student's feature
         teacher_dim: the dimension of teacher's feature
@@ -56,6 +57,8 @@ class CRDLoss(nn.Module):
 
     def forward(self, f_s, f_t, idx, contrast_idx=None):
         """
+        Forward pass.
+
         Args:
             f_s: the feature of student network, size [batch_size, s_dim]
             f_t: the feature of teacher network, size [batch_size, t_dim]
