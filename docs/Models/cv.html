@@ -12,9 +12,11 @@
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
 
       <!-- sphinx script_files -->
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
       
       <script src="../_static/theme-vendors.js"></script>
@@ -142,187 +144,8 @@
 <hr>
           <div class="content" role="main">
             
-  <div class="section" id="module-compressors.models.cv">
-<span id="computer-vision"></span><h1>Computer Vision<a class="headerlink" href="#module-compressors.models.cv" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
-<dt id="compressors.models.cv.resnet101">
-<code class="sig-prename descclassname"><span class="pre">compressors.models.cv.</span></code><code class="sig-name descname"><span class="pre">resnet101</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pretrained</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">compressors.models.cv.resnet.ResNet</span><a class="headerlink" href="#compressors.models.cv.resnet101" title="Permalink to this definition">¶</a></dt>
-<dd><p>ResNet-101 model from
-<a class="reference external" href="https://arxiv.org/pdf/1512.03385.pdf">“Deep Residual Learning for Image Recognition”</a>.
-:param pretrained: If True, returns a model pre-trained on ImageNet
-:type pretrained: bool
-:param progress: If True, displays a progress bar of the download to stderr
-:type progress: bool</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="compressors.models.cv.resnet152">
-<code class="sig-prename descclassname"><span class="pre">compressors.models.cv.</span></code><code class="sig-name descname"><span class="pre">resnet152</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pretrained</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">compressors.models.cv.resnet.ResNet</span><a class="headerlink" href="#compressors.models.cv.resnet152" title="Permalink to this definition">¶</a></dt>
-<dd><p>ResNet-152 model from
-<a class="reference external" href="https://arxiv.org/pdf/1512.03385.pdf">“Deep Residual Learning for Image Recognition”</a>.
-:param pretrained: If True, returns a model pre-trained on ImageNet
-:type pretrained: bool
-:param progress: If True, displays a progress bar of the download to stderr
-:type progress: bool</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="compressors.models.cv.resnet18">
-<code class="sig-prename descclassname"><span class="pre">compressors.models.cv.</span></code><code class="sig-name descname"><span class="pre">resnet18</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pretrained</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">compressors.models.cv.resnet.ResNet</span><a class="headerlink" href="#compressors.models.cv.resnet18" title="Permalink to this definition">¶</a></dt>
-<dd><p>ResNet-18 model from
-<a class="reference external" href="https://arxiv.org/pdf/1512.03385.pdf">“Deep Residual Learning for Image Recognition”</a>.
-:param pretrained: If True, returns a model pre-trained on ImageNet
-:type pretrained: bool
-:param progress: If True, displays a progress bar of the download to stderr
-:type progress: bool</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="compressors.models.cv.resnet34">
-<code class="sig-prename descclassname"><span class="pre">compressors.models.cv.</span></code><code class="sig-name descname"><span class="pre">resnet34</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pretrained</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">compressors.models.cv.resnet.ResNet</span><a class="headerlink" href="#compressors.models.cv.resnet34" title="Permalink to this definition">¶</a></dt>
-<dd><p>ResNet-34 model from
-<a class="reference external" href="https://arxiv.org/pdf/1512.03385.pdf">“Deep Residual Learning for Image Recognition”</a>.
-:param pretrained: If True, returns a model pre-trained on ImageNet
-:type pretrained: bool
-:param progress: If True, displays a progress bar of the download to stderr
-:type progress: bool</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="compressors.models.cv.resnet50">
-<code class="sig-prename descclassname"><span class="pre">compressors.models.cv.</span></code><code class="sig-name descname"><span class="pre">resnet50</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pretrained</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">compressors.models.cv.resnet.ResNet</span><a class="headerlink" href="#compressors.models.cv.resnet50" title="Permalink to this definition">¶</a></dt>
-<dd><p>ResNet-50 model from
-<a class="reference external" href="https://arxiv.org/pdf/1512.03385.pdf">“Deep Residual Learning for Image Recognition”</a>.
-:param pretrained: If True, returns a model pre-trained on ImageNet
-:type pretrained: bool
-:param progress: If True, displays a progress bar of the download to stderr
-:type progress: bool</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="compressors.models.cv.resnet_cifar_110">
-<code class="sig-prename descclassname"><span class="pre">compressors.models.cv.</span></code><code class="sig-name descname"><span class="pre">resnet_cifar_110</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">compressors.models.cv.resnet_cifar.ResNetCifar</span><a class="headerlink" href="#compressors.models.cv.resnet_cifar_110" title="Permalink to this definition">¶</a></dt>
-<dd><p>ResNet-110 model from
-<a class="reference external" href="https://arxiv.org/pdf/1512.03385.pdf">“Deep Residual Learning for Image Recognition”</a>.
-CIFAR version.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="compressors.models.cv.resnet_cifar_14">
-<code class="sig-prename descclassname"><span class="pre">compressors.models.cv.</span></code><code class="sig-name descname"><span class="pre">resnet_cifar_14</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">compressors.models.cv.resnet_cifar.ResNetCifar</span><a class="headerlink" href="#compressors.models.cv.resnet_cifar_14" title="Permalink to this definition">¶</a></dt>
-<dd><p>ResNet-14 model from
-<a class="reference external" href="https://arxiv.org/pdf/1512.03385.pdf">“Deep Residual Learning for Image Recognition”</a>.
-CIFAR version.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="compressors.models.cv.resnet_cifar_20">
-<code class="sig-prename descclassname"><span class="pre">compressors.models.cv.</span></code><code class="sig-name descname"><span class="pre">resnet_cifar_20</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">compressors.models.cv.resnet_cifar.ResNetCifar</span><a class="headerlink" href="#compressors.models.cv.resnet_cifar_20" title="Permalink to this definition">¶</a></dt>
-<dd><p>ResNet-20 model from
-<a class="reference external" href="https://arxiv.org/pdf/1512.03385.pdf">“Deep Residual Learning for Image Recognition”</a>.
-CIFAR version.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="compressors.models.cv.resnet_cifar_32">
-<code class="sig-prename descclassname"><span class="pre">compressors.models.cv.</span></code><code class="sig-name descname"><span class="pre">resnet_cifar_32</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">compressors.models.cv.resnet_cifar.ResNetCifar</span><a class="headerlink" href="#compressors.models.cv.resnet_cifar_32" title="Permalink to this definition">¶</a></dt>
-<dd><p>ResNet-32 model from
-<a class="reference external" href="https://arxiv.org/pdf/1512.03385.pdf">“Deep Residual Learning for Image Recognition”</a>.
-CIFAR version.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="compressors.models.cv.resnet_cifar_32x4">
-<code class="sig-prename descclassname"><span class="pre">compressors.models.cv.</span></code><code class="sig-name descname"><span class="pre">resnet_cifar_32x4</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">compressors.models.cv.resnet_cifar.ResNetCifar</span><a class="headerlink" href="#compressors.models.cv.resnet_cifar_32x4" title="Permalink to this definition">¶</a></dt>
-<dd><p>ResNet-32x4 model from
-<a class="reference external" href="https://arxiv.org/pdf/1605.07146.pdf">“Wide Residual Networks”</a>.
-CIFAR version.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="compressors.models.cv.resnet_cifar_44">
-<code class="sig-prename descclassname"><span class="pre">compressors.models.cv.</span></code><code class="sig-name descname"><span class="pre">resnet_cifar_44</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">compressors.models.cv.resnet_cifar.ResNetCifar</span><a class="headerlink" href="#compressors.models.cv.resnet_cifar_44" title="Permalink to this definition">¶</a></dt>
-<dd><p>ResNet-44 model from
-<a class="reference external" href="https://arxiv.org/pdf/1512.03385.pdf">“Deep Residual Learning for Image Recognition”</a>.
-CIFAR version.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="compressors.models.cv.resnet_cifar_56">
-<code class="sig-prename descclassname"><span class="pre">compressors.models.cv.</span></code><code class="sig-name descname"><span class="pre">resnet_cifar_56</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">compressors.models.cv.resnet_cifar.ResNetCifar</span><a class="headerlink" href="#compressors.models.cv.resnet_cifar_56" title="Permalink to this definition">¶</a></dt>
-<dd><p>ResNet-56 model from
-<a class="reference external" href="https://arxiv.org/pdf/1512.03385.pdf">“Deep Residual Learning for Image Recognition”</a>.
-CIFAR version.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="compressors.models.cv.resnet_cifar_8">
-<code class="sig-prename descclassname"><span class="pre">compressors.models.cv.</span></code><code class="sig-name descname"><span class="pre">resnet_cifar_8</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">compressors.models.cv.resnet_cifar.ResNetCifar</span><a class="headerlink" href="#compressors.models.cv.resnet_cifar_8" title="Permalink to this definition">¶</a></dt>
-<dd><p>ResNet-8 model from
-<a class="reference external" href="https://arxiv.org/pdf/1512.03385.pdf">“Deep Residual Learning for Image Recognition”</a>.
-CIFAR version.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="compressors.models.cv.resnet_cifar_8x4">
-<code class="sig-prename descclassname"><span class="pre">compressors.models.cv.</span></code><code class="sig-name descname"><span class="pre">resnet_cifar_8x4</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">compressors.models.cv.resnet_cifar.ResNetCifar</span><a class="headerlink" href="#compressors.models.cv.resnet_cifar_8x4" title="Permalink to this definition">¶</a></dt>
-<dd><p>ResNet-8x4 model from
-<a class="reference external" href="https://arxiv.org/pdf/1605.07146.pdf">“Wide Residual Networks”</a>.
-CIFAR version.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="compressors.models.cv.resnext101_32x8d">
-<code class="sig-prename descclassname"><span class="pre">compressors.models.cv.</span></code><code class="sig-name descname"><span class="pre">resnext101_32x8d</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pretrained</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">compressors.models.cv.resnet.ResNet</span><a class="headerlink" href="#compressors.models.cv.resnext101_32x8d" title="Permalink to this definition">¶</a></dt>
-<dd><p>ResNeXt-101 32x8d model from
-<a class="reference external" href="https://arxiv.org/pdf/1611.05431.pdf">“Aggregated Residual Transformation for Deep Neural Networks”</a>.
-:param pretrained: If True, returns a model pre-trained on ImageNet
-:type pretrained: bool
-:param progress: If True, displays a progress bar of the download to stderr
-:type progress: bool</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="compressors.models.cv.resnext50_32x4d">
-<code class="sig-prename descclassname"><span class="pre">compressors.models.cv.</span></code><code class="sig-name descname"><span class="pre">resnext50_32x4d</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pretrained</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">compressors.models.cv.resnet.ResNet</span><a class="headerlink" href="#compressors.models.cv.resnext50_32x4d" title="Permalink to this definition">¶</a></dt>
-<dd><p>ResNeXt-50 32x4d model from
-<a class="reference external" href="https://arxiv.org/pdf/1611.05431.pdf">“Aggregated Residual Transformation for Deep Neural Networks”</a>.
-:param pretrained: If True, returns a model pre-trained on ImageNet
-:type pretrained: bool
-:param progress: If True, displays a progress bar of the download to stderr
-:type progress: bool</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="compressors.models.cv.wide_resnet101_2">
-<code class="sig-prename descclassname"><span class="pre">compressors.models.cv.</span></code><code class="sig-name descname"><span class="pre">wide_resnet101_2</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pretrained</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">compressors.models.cv.resnet.ResNet</span><a class="headerlink" href="#compressors.models.cv.wide_resnet101_2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wide ResNet-101-2 model from
-<a class="reference external" href="https://arxiv.org/pdf/1605.07146.pdf">“Wide Residual Networks”</a>.
-The model is the same as ResNet except for the bottleneck number of channels
-which is twice larger in every block. The number of channels in outer 1x1
-convolutions is the same, e.g. last block in ResNet-50 has 2048-512-2048
-channels, and in Wide ResNet-50-2 has 2048-1024-2048.
-:param pretrained: If True, returns a model pre-trained on ImageNet
-:type pretrained: bool
-:param progress: If True, displays a progress bar of the download to stderr
-:type progress: bool</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="compressors.models.cv.wide_resnet50_2">
-<code class="sig-prename descclassname"><span class="pre">compressors.models.cv.</span></code><code class="sig-name descname"><span class="pre">wide_resnet50_2</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pretrained</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">compressors.models.cv.resnet.ResNet</span><a class="headerlink" href="#compressors.models.cv.wide_resnet50_2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wide ResNet-50-2 model from
-<a class="reference external" href="https://arxiv.org/pdf/1605.07146.pdf">“Wide Residual Networks”</a>.
-The model is the same as ResNet except for the bottleneck number of channels
-which is twice larger in every block. The number of channels in outer 1x1
-convolutions is the same, e.g. last block in ResNet-50 has 2048-512-2048
-channels, and in Wide ResNet-50-2 has 2048-1024-2048.
-:param pretrained: If True, returns a model pre-trained on ImageNet
-:type pretrained: bool
-:param progress: If True, displays a progress bar of the download to stderr
-:type progress: bool</p>
-</dd></dl>
-
+  <div class="section" id="computer-vision">
+<h1>Computer Vision<a class="headerlink" href="#computer-vision" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -340,7 +163,7 @@ channels, and in Wide ResNet-50-2 has 2048-1024-2048.
 </ul><div class="footer" role="contentinfo">
       &#169; Copyright 2021, Nikita Balagansky.
     <br>
-    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a>.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a>.
 </div>
             </div>
           </div>

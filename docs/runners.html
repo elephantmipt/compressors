@@ -12,9 +12,11 @@
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
 
       <!-- sphinx script_files -->
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
       
       <script src="_static/theme-vendors.js"></script>
@@ -96,7 +98,7 @@
             
               <ul>
                 
-                  <li class="toctree-l2"><a href="#module-compressors.runners" class="reference internal">Runners</a></li>
+                  <li class="toctree-l2"><a href="#runners" class="reference internal">Runners</a></li>
                 
               </ul>
             
@@ -146,27 +148,8 @@
 <hr>
           <div class="content" role="main">
             
-  <div class="section" id="module-compressors.runners">
-<span id="runners"></span><h1>Runners<a class="headerlink" href="#module-compressors.runners" title="Permalink to this headline">¶</a></h1>
-<dl class="py class">
-<dt id="compressors.runners.HFRunner">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">compressors.runners.</span></code><code class="sig-name descname"><span class="pre">HFRunner</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.runners.HFRunner" title="Permalink to this definition">¶</a></dt>
-<dd><p>Runner for supervised task for Huggingface transformers.</p>
-<dl class="py method">
-<dt id="compressors.runners.HFRunner.handle_batch">
-<code class="sig-name descname"><span class="pre">handle_batch</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.runners.HFRunner.handle_batch" title="Permalink to this definition">¶</a></dt>
-<dd><p>Inner method to handle specified data batch.
-Used to make a train/valid/infer stage during Experiment run.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>batch</strong> (<em>Mapping</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – dictionary with data batches
-from DataLoader.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+  <div class="section" id="runners">
+<h1>Runners<a class="headerlink" href="#runners" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -184,7 +167,7 @@ from DataLoader.</p>
 </ul><div class="footer" role="contentinfo">
       &#169; Copyright 2021, Nikita Balagansky.
     <br>
-    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.2 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a>.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a>.
 </div>
             </div>
           </div>
