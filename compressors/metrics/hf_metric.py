@@ -17,7 +17,7 @@ class HFMetric(ICallbackLoaderMetric):
         self.metric = metric
         self.regression = regression
 
-    def reset(self):
+    def reset(self, num_batches=None, num_samples=None):
         try:
             self.metric.compute()
         except ValueError:
