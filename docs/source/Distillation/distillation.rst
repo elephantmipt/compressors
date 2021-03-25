@@ -25,7 +25,6 @@ The most common way to measure difference between distribution called KL-diverge
 You can use ``KLDivLoss`` for applying this loss. It tooks student's and teacher's logits.
 
 .. autoclass:: compressors.distillation.losses._kl_loss.KLDivLoss
-    :members:
 
 Or just add ``KLDivCallback`` to ``DistilRunner`` if you are using Catalyst.
 
