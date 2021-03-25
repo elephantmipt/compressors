@@ -5,7 +5,7 @@ from datasets import load_dataset, load_metric
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
 from catalyst.callbacks.metric import LoaderMetricCallback
-from catalyst.callbacks import ControlFlowCallback
+from catalyst.callbacks import ControlFlowCallback, OptimizerCallback
 
 from compressors.runners.hf_runner import HFRunner
 from compressors.metrics.hf_metric import HFMetric
@@ -85,7 +85,7 @@ def test_hf():
         "google/bert_uncased_L-2_H-128_A-2", num_labels=4
     )
     runner.train(
-        model={"teacher": teacher_model, "student": student_model,},
+        model=torch.nn.ModuleDict({"teacher": teacher_model, "student": student_model}),
         loaders=loaders,
         optimizer=torch.optim.Adam(student_model.parameters(), lr=1e-4),
         callbacks=[
@@ -95,9 +95,11 @@ def test_hf():
             mse_hiddens,
             kl_div,
             aggregator,
+            OptimizerCallback(metric_key="loss"),
         ],
         check=True,
         num_epochs=3,
         valid_metric="accuracy",
         minimize_valid_metric=False,
+        valid_loader="valid"
     )
