@@ -4,3 +4,4 @@ datasets
 catalyst
 torchvision
 sphinx==3.5.2
+sklearn
