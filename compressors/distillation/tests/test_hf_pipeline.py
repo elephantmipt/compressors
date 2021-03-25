@@ -63,8 +63,8 @@ def test_hf():
     lambda_hiddens_callback = ControlFlowCallback(
         LambdaSelectCallback(
             lambda s_hiddens, t_hiddens: (
-                (c_s[:, 0] for c_s in s_hiddens),
-                (t_s[:, 0] for t_s in t_hiddens),  # tooks only CLS token
+                [c_s[:, 0] for c_s in s_hiddens],
+                [t_s[:, 0] for t_s in t_hiddens],  # tooks only CLS token
             )
         ),
         loaders="train",
