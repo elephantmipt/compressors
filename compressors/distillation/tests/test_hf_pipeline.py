@@ -75,7 +75,15 @@ def test_hf():
     kl_div = ControlFlowCallback(KLDivCallback(), loaders="train")
 
     aggregator = ControlFlowCallback(
-        MetricAggregationCallback(weights={"kl_div_loss": 0.2, "mse_loss": 0.2, "task_loss": 0.6}),
+        MetricAggregationCallback(
+            prefix="loss",
+            metrics={
+                "kl_div_loss": 0.2,
+                "mse_loss": 0.2,
+                "task_loss": 0.6
+            },
+            mode="weighted_sum"
+        ),
         loaders="train",
     )
 
