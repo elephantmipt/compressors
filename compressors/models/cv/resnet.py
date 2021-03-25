@@ -4,6 +4,7 @@ from typing import Type, Union, List, Optional, Callable, Any
 
 from torch import nn
 from torch import FloatTensor
+from torch.hub import load_state_dict_from_url
 
 from .resnet_modules import BasicBlock, Bottleneck
 from compressors.models import BaseDistilModel
