@@ -121,7 +121,9 @@ class EndToEndDistilRunner(Runner):
                     self.logits_diff_loss_fn(output_key="logits_diff_loss"), loaders="train"
                 )
             callbacks["_aggregation"] = ControlFlowCallback(
-                MetricAggregationCallback(weights=self.loss_weights), loaders="train"
+                MetricAggregationCallback(
+                    prefix="loss", metrics=self.loss_weights, mode="weighted_sum"
+                ), loaders="train"
             )
         return callbacks
 
