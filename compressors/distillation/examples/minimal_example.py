@@ -1,7 +1,6 @@
 from itertools import chain
 
 import torch
-from torch import nn
 from torch.utils.data import DataLoader
 
 from catalyst.contrib.datasets import MNIST

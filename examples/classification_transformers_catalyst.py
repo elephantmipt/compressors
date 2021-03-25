@@ -71,12 +71,24 @@ def main(args):
         loaders="train",
     )
 
-    mse_hiddens = ControlFlowCallback(MSEHiddenStatesCallback(), loaders="train")
+    mse_hiddens = ControlFlowCallback(
+        MSEHiddenStatesCallback(), loaders="train"
+    )
 
-    kl_div = ControlFlowCallback(KLDivCallback(), loaders="train")
+    kl_div = ControlFlowCallback(
+        KLDivCallback(temperature=args.kl_temperature), loaders="train"
+    )
 
     aggregator = ControlFlowCallback(
-        MetricAggregationCallback(weights={"kl_div_loss": 0.2, "mse_loss": 0.2, "task_loss": 0.6}),
+        MetricAggregationCallback(
+            prefix="loss",
+            metrics={
+                "kl_div_loss": 0.2,
+                "mse_loss": 0.2,
+                "task_loss": 0.6
+            },
+            mode="weighted_sum"
+        ),
         loaders="train",
     )
 
@@ -101,6 +113,7 @@ def main(args):
         num_epochs=args.num_distil_epochs,
         valid_metric="accuracy",
         minimize_valid_metric=False,
+        valid_loader="valid"
     )
 
 
@@ -113,5 +126,6 @@ if __name__ == "__main__":
     parser.add_argument("--train-lr", default=1e-4, type=float)
     parser.add_argument("--distil-lr", default=1e-4, type=float)
     parser.add_argument("--batch-size", default=32, type=int)
+    parser.add_argument("--kl-temperature", default=4.0, type=float)
     args = parser.parse_args()
     main(args)
