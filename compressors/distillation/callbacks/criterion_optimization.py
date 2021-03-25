@@ -1,5 +1,5 @@
 from .order import CallbackOrder
-from catalyst.core import Callback
+from catalyst.core import Callback, IRunner
 
 
 class CriterionOptimizationCallback(Callback):
@@ -8,8 +8,7 @@ class CriterionOptimizationCallback(Callback):
         self.callback_key = callback_key
         self.optimizer = optimizer
 
-    def on_loader_start(self, runner: "IRunner") -> None:
-
+    def on_stage_start(self, runner: "IRunner") -> None:
         callback = runner.callbacks[self.callback_key]
         criterion = callback.criterion
         runner.engine.sync_device(criterion)
