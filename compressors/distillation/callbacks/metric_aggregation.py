@@ -106,7 +106,6 @@ class MetricAggregationCallback(Callback):
         prefix: str,
         metrics: Union[str, List[str], Dict[str, float]] = None,
         mode: Union[str, Callable] = "mean",
-        scope: str = "batch",
         multiplier: float = 1.0,
     ) -> None:
         """Init."""
@@ -133,7 +132,6 @@ class MetricAggregationCallback(Callback):
                 "mode must be `sum`, `mean` " "or `weighted_sum` or `weighted_mean` or be Callable"
             )
 
-        assert scope in ("batch", "loader")
 
         if isinstance(metrics, str):
             metrics = [metrics]
@@ -141,7 +139,6 @@ class MetricAggregationCallback(Callback):
         self.prefix = prefix
         self.metrics = metrics
         self.mode = mode
-        self.scope = scope
         self.multiplier = multiplier
 
         if mode in ("sum", "weighted_sum", "weighted_mean"):
@@ -182,8 +179,7 @@ class MetricAggregationCallback(Callback):
         Args:
             runner: current runner
         """
-        if self.scope == "batch":
-            self._process_metrics(runner.batch_metrics, runner)
+        self._process_metrics(runner.batch_metrics, runner)
 
 
 __all__ = [
