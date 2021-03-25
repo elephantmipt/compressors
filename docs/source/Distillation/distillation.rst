@@ -57,7 +57,8 @@ and
 
 .. autoclass:: compressors.distillation.callbacks.AttentionHiddenStatesCallback
 
-
+Submodules
+----------
 
 .. toctree::
 
