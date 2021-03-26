@@ -6,7 +6,16 @@ from compressors.pruning.callbacks.prepare_for_pruning_callback import PrepareFo
 
 
 class FinePruneRunner(PruneRunner):
+    @property
+    def stages(self):
+        return ["preparing"] + [f"pruning_session_{i}" for i in range(self._num_sessions)]
+
+    def get_stage_len(self, stage: str) -> int:
+        if stage == "preparing":
+            return 0
+        return self._num_epochs
+
     def get_callbacks(self, stage: str) -> "OrderedDict[str, Callback]":
-        if stage == "prepare":
+        if stage == "preparing":
             return OrderedDict([("prepare_fine_pruning", PrepareForFinePruningCallback())])
         return super().get_callbacks(stage=stage)
