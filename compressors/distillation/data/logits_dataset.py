@@ -69,7 +69,7 @@ class LogitsDataset(Dataset):
             batch_size = dataloader.batch_size
 
         logits = None
-        for idx, batch in enumerate(tqdm(dataloader, desc="Taking logits from model", ncols=1000)):
+        for idx, batch in enumerate(tqdm(dataloader, desc="Taking logits from model", ncols=200)):
             batch = any2device(batch, self.device)
             c_logits = self.get_logits_fn(self.model, batch).cpu()
             start_idx = batch_size * idx
