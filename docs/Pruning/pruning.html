@@ -154,9 +154,72 @@
 <h1>Pruning<a class="headerlink" href="#pruning" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-compressors.pruning.runners">
 <span id="runners"></span><h2>Runners<a class="headerlink" href="#module-compressors.pruning.runners" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="compressors.pruning.runners.FinePruneRunner">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">compressors.pruning.runners.</span></code><code class="sig-name descname"><span class="pre">FinePruneRunner</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_sessions</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">runner_args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">runner_kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.pruning.runners.FinePruneRunner" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="compressors.pruning.runners.FinePruneRunner.get_callbacks">
+<code class="sig-name descname"><span class="pre">get_callbacks</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stage</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">collections.OrderedDict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">catalyst.core.callback.Callback</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#compressors.pruning.runners.FinePruneRunner.get_callbacks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the callbacks for a given stage.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="compressors.pruning.runners.FinePruneRunner.get_stage_len">
+<code class="sig-name descname"><span class="pre">get_stage_len</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stage</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">int</span><a class="headerlink" href="#compressors.pruning.runners.FinePruneRunner.get_stage_len" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the stage length in epochs for a given stage.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="compressors.pruning.runners.FinePruneRunner.stages">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">stages</span></code><a class="headerlink" href="#compressors.pruning.runners.FinePruneRunner.stages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Experiment’s stage names (array with one value).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="compressors.pruning.runners.PruneRunner">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">compressors.pruning.runners.</span></code><code class="sig-name descname"><span class="pre">PruneRunner</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_sessions</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">runner_args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">runner_kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.pruning.runners.PruneRunner" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="compressors.pruning.runners.PruneRunner.handle_batch">
+<code class="sig-name descname"><span class="pre">handle_batch</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="headerlink" href="#compressors.pruning.runners.PruneRunner.handle_batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inner method to handle specified data batch.
+Used to make a train/valid/infer stage during Experiment run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>batch</strong> (<em>Mapping</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – dictionary with data batches
+from DataLoader.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="compressors.pruning.runners.PruneRunner.stages">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">stages</span></code><a class="headerlink" href="#compressors.pruning.runners.PruneRunner.stages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Experiment’s stage names (array with one value).</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="module-compressors.pruning.callbacks">
 <span id="callbacks"></span><h2>Callbacks<a class="headerlink" href="#module-compressors.pruning.callbacks" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="compressors.pruning.callbacks.PrepareForFinePruningCallback">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">compressors.pruning.callbacks.</span></code><code class="sig-name descname"><span class="pre">PrepareForFinePruningCallback</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_loader_key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'train'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.pruning.callbacks.PrepareForFinePruningCallback" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="compressors.pruning.callbacks.PrepareForFinePruningCallback.on_stage_start">
+<code class="sig-name descname"><span class="pre">on_stage_start</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">runner</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">catalyst.core.runner.IRunner</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="headerlink" href="#compressors.pruning.callbacks.PrepareForFinePruningCallback.on_stage_start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event handler for stage start.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>runner</strong> – IRunner instance.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="module-compressors.pruning.utils">
 <span id="utils"></span><h2>Utils<a class="headerlink" href="#module-compressors.pruning.utils" title="Permalink to this headline">¶</a></h2>
