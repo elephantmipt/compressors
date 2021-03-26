@@ -1,15 +1,16 @@
-from compressors.distillation.losses import KLDivLoss
-from compressors.distillation.callbacks.order import CallbackOrder
 from catalyst.core import Callback
+
+from compressors.distillation.callbacks.order import CallbackOrder
+from compressors.distillation.losses import KLDivLoss
 
 
 class KLDivCallback(Callback):
     def __init__(
         self,
         output_key: str = "kl_div_loss",
-        temperature: float = 1.,
+        temperature: float = 1.0,
         student_logits_key: str = "s_logits",
-        teacher_logits_key: str = "t_logits"
+        teacher_logits_key: str = "t_logits",
     ):
         super().__init__(order=CallbackOrder.Metric)
         self.output_key = output_key

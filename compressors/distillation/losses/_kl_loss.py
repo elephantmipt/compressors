@@ -1,8 +1,7 @@
 """Module with loss functions for knoweledge distillation.
 
 """
-from torch import FloatTensor
-from torch import nn
+from torch import FloatTensor, nn
 from torch.nn import functional as F
 
 

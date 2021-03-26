@@ -1,15 +1,13 @@
 from itertools import chain
 
+from catalyst.callbacks import AccuracyCallback
+from catalyst.contrib.datasets import MNIST
 import torch
 from torch.utils.data import DataLoader
-
-from catalyst.contrib.datasets import MNIST
-from catalyst.callbacks import AccuracyCallback
 
 from compressors.distillation.runners import EndToEndDistilRunner
 from compressors.models import MLP
 from compressors.utils.data import TorchvisionDatasetWrapper as Wrp
-
 
 teacher = MLP(num_layers=4)
 student = MLP(num_layers=3)

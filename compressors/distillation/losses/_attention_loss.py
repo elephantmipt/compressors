@@ -1,9 +1,8 @@
 from typing import Tuple
 
 import torch
-from torch import nn
+from torch import FloatTensor, nn
 from torch.nn import functional as F
-from torch import FloatTensor
 
 
 class AttentionLoss(nn.Module):

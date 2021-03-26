@@ -1,6 +1,6 @@
+from catalyst.core import Callback, CallbackNode, CallbackOrder, IRunner
 from torch.utils.data import DataLoader
 
-from catalyst.core import Callback, CallbackOrder, CallbackNode, IRunner
 from compressors.distillation.data import LogitsDataset
 
 

@@ -1,15 +1,15 @@
-import torch
 from typing import TYPE_CHECKING
+
+import torch
 
 if TYPE_CHECKING:
     from numpy import ndarray
 
 import os
+from pathlib import Path
 
 from catalyst.utils.checkpoint import load_checkpoint, unpack_checkpoint
-
 from torch.nn import Module
-from pathlib import Path
 
 
 def get_loss_coefs(alpha: float, beta: float = None) -> "ndarray":

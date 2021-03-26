@@ -1,5 +1,6 @@
-from .order import CallbackOrder
 from catalyst.core import Callback, IRunner
+
+from .order import CallbackOrder
 
 
 class CriterionOptimizationCallback(Callback):

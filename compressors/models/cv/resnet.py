@@ -1,14 +1,13 @@
 """Adapted from https://github.com/pytorch/vision/blob/master/torchvision/models/resnet.py"""
 
-from typing import Type, Union, List, Optional, Callable, Any
+from typing import Any, Callable, List, Optional, Type, Union
 
-from torch import nn
-from torch import FloatTensor
+from torch import FloatTensor, nn
 from torch.hub import load_state_dict_from_url
 
-from .resnet_modules import BasicBlock, Bottleneck
 from compressors.models import BaseDistilModel
 
+from .resnet_modules import BasicBlock, Bottleneck
 
 model_urls = {
     "resnet18": "https://download.pytorch.org/models/resnet18-5c106cde.pth",

@@ -1,6 +1,7 @@
-from compressors.distillation.losses import AttentionLoss
-from compressors.distillation.callbacks.order import CallbackOrder
 from catalyst.core import Callback
+
+from compressors.distillation.callbacks.order import CallbackOrder
+from compressors.distillation.losses import AttentionLoss
 
 
 class AttentionHiddenStatesCallback(Callback):

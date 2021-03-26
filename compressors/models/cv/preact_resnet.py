@@ -1,12 +1,11 @@
-from typing import Union, Tuple, List
+from typing import List, Tuple, Union
 
-from torch import Tensor
-from torch import nn
+from torch import nn, Tensor
 from torch.nn import functional as F
 
-from .preact_modules import PreActBlock, PreActBottleneck
-
 from compressors.models import BaseDistilModel
+
+from .preact_modules import PreActBlock, PreActBottleneck
 
 
 class PreActResNet(BaseDistilModel):

@@ -1,4 +1,5 @@
 from typing import List
+
 from compressors.settings import IS_TRANSFORMERS_AVAILABLE
 
 if IS_TRANSFORMERS_AVAILABLE:

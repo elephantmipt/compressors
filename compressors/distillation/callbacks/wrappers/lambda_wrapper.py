@@ -1,6 +1,7 @@
-from typing import Callable, Union, List
-from catalyst.core import Callback
+from typing import Callable, List, Union
 from copy import deepcopy
+
+from catalyst.core import Callback
 
 
 class LambdaWrp(Callback):

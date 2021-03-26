@@ -1,6 +1,5 @@
 import torch
-from torch import FloatTensor, LongTensor
-from torch import nn
+from torch import FloatTensor, LongTensor, nn
 
 
 class CosineHiddenStateLoss(nn.Module):

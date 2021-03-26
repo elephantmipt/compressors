@@ -1,6 +1,5 @@
 # Code from author: https://github.com/passalis/probabilistic_kt
 import torch
-
 from torch import FloatTensor
 
 

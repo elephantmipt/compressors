@@ -17,6 +17,7 @@ modification, are permitted provided that the following conditions are met:
 
 import torch
 from torch import nn
+
 from .memory import ContrastMemory
 
 eps = 1e-7

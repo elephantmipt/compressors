@@ -1,5 +1,5 @@
+from typing import Any, Callable, Dict, Mapping, OrderedDict, Union
 import inspect
-from typing import Mapping, Any, Union, Callable, Dict, OrderedDict
 
 from catalyst.callbacks import ControlFlowCallback
 from catalyst.core import Callback
@@ -7,14 +7,13 @@ from catalyst.runners import Runner
 from catalyst.utils import get_nn_from_ddp_module, set_requires_grad
 
 from compressors.distillation.callbacks import (
-    MSEHiddenStatesCallback,
-    PKTHiddenStatesCallback,
+    AttentionHiddenStatesCallback,
     CosineHiddenStatesCallback,
     KLDivCallback,
-    AttentionHiddenStatesCallback,
+    MetricAggregationCallback,
+    MSEHiddenStatesCallback,
+    PKTHiddenStatesCallback,
 )
-from compressors.distillation.callbacks import MetricAggregationCallback
-
 
 NAME2LOSS = {
     "mse": MSEHiddenStatesCallback,
@@ -123,7 +122,8 @@ class EndToEndDistilRunner(Runner):
             callbacks["_aggregation"] = ControlFlowCallback(
                 MetricAggregationCallback(
                     prefix="loss", metrics=self.loss_weights, mode="weighted_sum"
-                ), loaders="train"
+                ),
+                loaders="train",
             )
         return callbacks
 

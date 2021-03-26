@@ -1,4 +1,5 @@
 import os
+
 import setuptools
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
@@ -8,6 +9,7 @@ def load_requirements(filename):
     """Docs? Contribution is welcome."""
     with open(os.path.join(PROJECT_ROOT, filename), "r") as f:
         return f.read().splitlines()
+
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()

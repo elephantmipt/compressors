@@ -1,5 +1,5 @@
-from catalyst.utils import get_nn_from_ddp_module, set_requires_grad
 from catalyst.runners import Runner
+from catalyst.utils import get_nn_from_ddp_module, set_requires_grad
 
 from compressors.distillation.data.label_smoothing import probability_shift
 

@@ -1,6 +1,7 @@
-from typing import Union, List, Callable
+from typing import Callable, List, Union
 
 from catalyst.core import Callback
+
 from compressors.distillation.callbacks.order import CallbackOrder
 
 

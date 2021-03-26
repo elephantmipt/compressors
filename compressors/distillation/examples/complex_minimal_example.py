@@ -1,20 +1,19 @@
+from catalyst.callbacks import AccuracyCallback, CriterionCallback
+from catalyst.contrib.datasets import MNIST
+from catalyst.runners import SupervisedRunner
 import torch
 from torch import nn
 from torch.utils.data import DataLoader
 
-from catalyst.contrib.datasets import MNIST
-from catalyst.callbacks import AccuracyCallback, CriterionCallback
-from catalyst.runners import SupervisedRunner
-
-from compressors.utils.data import TorchvisionDatasetWrapper as Wrp
-from compressors.models import BaseDistilModel
 from compressors.distillation.callbacks import (
-    MSEHiddenStatesCallback,
     HiddenStatesSelectCallback,
     KLDivCallback,
     MetricAggregationCallback,
+    MSEHiddenStatesCallback,
 )
 from compressors.distillation.runners import DistilRunner
+from compressors.models import BaseDistilModel
+from compressors.utils.data import TorchvisionDatasetWrapper as Wrp
 
 
 class ExampleModel(BaseDistilModel):

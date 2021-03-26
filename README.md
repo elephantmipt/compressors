@@ -6,6 +6,17 @@ _Warning! Deep alpha version! This is not product-ready solutiion so far._
 
 Compressors is a library with a lot of pipelines connected with model compression without significantly performance lose.
 
+
+   * [Compressors](#compressors)
+      * [Why Compressors?](#why-compressors)
+      * [Install](#install)
+      * [Losses](#losses)
+      * [Features](#features)
+      * [Minimal Examples](#minimal-examples)
+         * [Distillation](#distillation)
+         * [Pruning](#pruning)
+
+
 ## Why Compressors?
 
 Compressors provides many ways to compress your model. You can use it for CV and NLP task.

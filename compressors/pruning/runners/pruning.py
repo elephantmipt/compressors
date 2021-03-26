@@ -1,16 +1,11 @@
+from typing import Any, Mapping
 from collections import OrderedDict
-from typing import Mapping, Any
 
-from catalyst.dl import Runner, Callback
+from catalyst.dl import Callback, Runner
 
 
 class PruneRunner(Runner):
-    def __init__(
-            self,
-            num_sessions: int = 5,
-            *runner_args,
-            **runner_kwargs
-    ):
+    def __init__(self, num_sessions: int = 5, *runner_args, **runner_kwargs):
         """
         Base runner for iterative pruning.
         Args:

@@ -1,6 +1,7 @@
-from compressors.distillation.losses import CosineHiddenStateLoss
-from compressors.distillation.callbacks.order import CallbackOrder
 from catalyst.core import Callback
+
+from compressors.distillation.callbacks.order import CallbackOrder
+from compressors.distillation.losses import CosineHiddenStateLoss
 
 
 class CosineHiddenStatesCallback(Callback):

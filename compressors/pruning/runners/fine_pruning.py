@@ -1,8 +1,11 @@
 from collections import OrderedDict
 
 from catalyst.dl import Callback
+
+from compressors.pruning.callbacks.prepare_for_pruning_callback import (
+    PrepareForFinePruningCallback,
+)
 from compressors.pruning.runners.pruning import PruneRunner
-from compressors.pruning.callbacks.prepare_for_pruning_callback import PrepareForFinePruningCallback
 
 
 class FinePruneRunner(PruneRunner):

@@ -1,4 +1,5 @@
-from typing import Union, Tuple, Mapping
+from typing import Mapping, Tuple, Union
+
 from torch.nn import Module
 
 

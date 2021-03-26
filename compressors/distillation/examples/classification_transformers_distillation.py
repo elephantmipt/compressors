@@ -1,15 +1,10 @@
-from tqdm.autonotebook import trange, tqdm
-
+from datasets import load_dataset, load_metric
 import torch
 from torch.utils.data import DataLoader
+from tqdm.autonotebook import tqdm, trange
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
-from datasets import load_dataset, load_metric
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
-
-from compressors.distillation.losses import (
-    MSEHiddenStatesLoss,
-    KLDivLoss,
-)
+from compressors.distillation.losses import KLDivLoss, MSEHiddenStatesLoss
 
 num_epochs = 5
 device = "cuda" if torch.cuda.is_available() else "cpu"

@@ -2,7 +2,6 @@
 From https://github.com/catalyst-team/catalyst/blob/master/catalyst/utils/torch.py
 """
 import numpy as np
-
 import torch
 from torch import nn
 

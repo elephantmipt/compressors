@@ -1,13 +1,11 @@
 def test_distil():
     from itertools import chain
 
+    from catalyst.callbacks import AccuracyCallback, OptimizerCallback
+    from catalyst.contrib.datasets import MNIST
     import torch
     from torch.utils.data import DataLoader
-
     from torchvision import transforms as T
-
-    from catalyst.contrib.datasets import MNIST
-    from catalyst.callbacks import AccuracyCallback, OptimizerCallback
 
     from compressors.distillation.runners import EndToEndDistilRunner
     from compressors.models import MLP
@@ -28,10 +26,7 @@ def test_distil():
 
     optimizer = torch.optim.Adam(chain(teacher.parameters(), student.parameters()))
 
-    runner = EndToEndDistilRunner(
-        hidden_state_loss="mse",
-        num_train_teacher_epochs=5
-    )
+    runner = EndToEndDistilRunner(hidden_state_loss="mse", num_train_teacher_epochs=5)
 
     runner.train(
         model=torch.nn.ModuleDict({"teacher": teacher, "student": student}),
@@ -40,7 +35,7 @@ def test_distil():
         num_epochs=4,
         callbacks=[
             OptimizerCallback(metric_key="loss"),
-            AccuracyCallback(input_key="logits", target_key="targets")
+            AccuracyCallback(input_key="logits", target_key="targets"),
         ],
         valid_metric="accuracy01",
         minimize_valid_metric=False,
@@ -50,23 +45,21 @@ def test_distil():
         check=True,
     )
 
+
 def test_pruning():
-    import torch
-    from torch.utils.data import DataLoader
-
-    from torchvision.transforms import ToTensor
-
     from catalyst.callbacks import (
-        PruningCallback,
-        OptimizerCallback,
-        CriterionCallback,
         AccuracyCallback,
-        ControlFlowCallback
+        ControlFlowCallback,
+        CriterionCallback,
+        OptimizerCallback,
+        PruningCallback,
     )
     from catalyst.contrib.datasets import MNIST
+    import torch
+    from torch.utils.data import DataLoader
+    from torchvision.transforms import ToTensor
 
-    from compressors.distillation.callbacks import MetricAggregationCallback
-    from compressors.distillation.callbacks import KLDivCallback
+    from compressors.distillation.callbacks import KLDivCallback, MetricAggregationCallback
     from compressors.models import MLP
     from compressors.pruning.runners import FinePruneRunner
     from compressors.utils.data import TorchvisionDatasetWrapper as Wrp
@@ -93,19 +86,21 @@ def test_pruning():
         optimizer=optimizer,
         criterion=torch.nn.CrossEntropyLoss(),
         callbacks=[
-            PruningCallback(pruning_fn="l1_unstructured", amount=0.2, remove_reparametrization_on_stage_end=False),
+            PruningCallback(
+                pruning_fn="l1_unstructured",
+                amount=0.2,
+                remove_reparametrization_on_stage_end=False,
+            ),
             OptimizerCallback(metric_key="loss"),
             CriterionCallback(input_key="logits", target_key="targets", metric_key="loss"),
             AccuracyCallback(input_key="logits", target_key="targets"),
             ControlFlowCallback(KLDivCallback(student_logits_key="logits"), loaders="train"),
-            MetricAggregationCallback(
-                prefix="loss",
-                metrics={
-                    "loss": 0.6,
-                    "kl_div_loss": 0.4,
-                },
-                mode="weighted_sum"
-            )
+            ControlFlowCallback(
+                MetricAggregationCallback(
+                    prefix="loss", metrics={"loss": 0.6, "kl_div_loss": 0.4,}, mode="weighted_sum"
+                ),
+                loaders="train",
+            ),
         ],
         logdir="./pruned_model",
         valid_loader="valid",

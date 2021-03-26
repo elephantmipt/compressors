@@ -1,12 +1,11 @@
-from typing import Union, Tuple, Dict, Any
+from typing import Any, Dict, Tuple, Union
 
-from torch import nn
-from torch import FloatTensor
-
-from .resnet_modules import BasicBlock, Bottleneck
-from .preact_modules import PreActBlock, PreActBottleneck
+from torch import FloatTensor, nn
 
 from compressors.models import BaseDistilModel
+
+from .preact_modules import PreActBlock, PreActBottleneck
+from .resnet_modules import BasicBlock, Bottleneck
 
 
 class ResNetCifar(BaseDistilModel):
@@ -15,26 +14,26 @@ class ResNetCifar(BaseDistilModel):
         # Model type specifies number of layers for CIFAR-10 model
         if block_name.lower() == "basicblock":
             assert (
-                           depth - 2
-                   ) % 6 == 0, "When use basicblock, depth should be 6n+2, e.g. 20, 32, 44, 56, 110, 1202"
+                depth - 2
+            ) % 6 == 0, "When use basicblock, depth should be 6n+2, e.g. 20, 32, 44, 56, 110, 1202"
             n = (depth - 2) // 6
             block = BasicBlock
         elif block_name.lower() == "bottleneck":
             assert (
-                           depth - 2
-                   ) % 9 == 0, "When use bottleneck, depth should be 9n+2, e.g. 20, 29, 47, 56, 110, 1199"
+                depth - 2
+            ) % 9 == 0, "When use bottleneck, depth should be 9n+2, e.g. 20, 29, 47, 56, 110, 1199"
             n = (depth - 2) // 9
             block = Bottleneck
         elif block_name.lower() == "preactblock":
             assert (
-                           depth - 2
-                   ) % 6 == 0, "When use basicblock, depth should be 6n+2, e.g. 20, 32, 44, 56, 110, 1202"
+                depth - 2
+            ) % 6 == 0, "When use basicblock, depth should be 6n+2, e.g. 20, 32, 44, 56, 110, 1202"
             n = (depth - 2) // 6
             block = PreActBlock
         elif block_name.lower() == "preactbottleneck":
             assert (
-                           depth - 2
-                   ) % 9 == 0, "When use bottleneck, depth should be 9n+2, e.g. 20, 29, 47, 56, 110, 1199"
+                depth - 2
+            ) % 9 == 0, "When use bottleneck, depth should be 9n+2, e.g. 20, 29, 47, 56, 110, 1199"
             n = (depth - 2) // 9
             block = PreActBottleneck
         else:
@@ -80,11 +79,11 @@ class ResNetCifar(BaseDistilModel):
         return nn.Sequential(*layers)
 
     def forward(
-            self,
-            x: FloatTensor,
-            output_hidden_states: bool = False,
-            return_dict: bool = False,
-            preact: bool = False,
+        self,
+        x: FloatTensor,
+        output_hidden_states: bool = False,
+        return_dict: bool = False,
+        preact: bool = False,
     ) -> Union[FloatTensor, Tuple[FloatTensor], Dict[str, FloatTensor]]:
 
         x = self.conv1(x)

@@ -1,23 +1,22 @@
 import argparse
 
+from catalyst.callbacks import ControlFlowCallback, OptimizerCallback
+from catalyst.callbacks.metric import LoaderMetricCallback
+from datasets import load_dataset, load_metric
 import torch
 from torch.utils.data import DataLoader
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
-from datasets import load_dataset, load_metric
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
-from catalyst.callbacks.metric import LoaderMetricCallback
-from catalyst.callbacks import ControlFlowCallback, OptimizerCallback
-
-from compressors.runners.hf_runner import HFRunner
-from compressors.metrics.hf_metric import HFMetric
 from compressors.distillation.callbacks import (
-    MetricAggregationCallback,
     HiddenStatesSelectCallback,
-    MSEHiddenStatesCallback,
     KLDivCallback,
     LambdaSelectCallback,
+    MetricAggregationCallback,
+    MSEHiddenStatesCallback,
 )
 from compressors.distillation.runners import HFDistilRunner
+from compressors.metrics.hf_metric import HFMetric
+from compressors.runners.hf_runner import HFRunner
 
 
 def main(args):
@@ -71,23 +70,15 @@ def main(args):
         loaders="train",
     )
 
-    mse_hiddens = ControlFlowCallback(
-        MSEHiddenStatesCallback(), loaders="train"
-    )
+    mse_hiddens = ControlFlowCallback(MSEHiddenStatesCallback(), loaders="train")
 
-    kl_div = ControlFlowCallback(
-        KLDivCallback(temperature=args.kl_temperature), loaders="train"
-    )
+    kl_div = ControlFlowCallback(KLDivCallback(temperature=args.kl_temperature), loaders="train")
 
     aggregator = ControlFlowCallback(
         MetricAggregationCallback(
             prefix="loss",
-            metrics={
-                "kl_div_loss": 0.2,
-                "mse_loss": 0.2,
-                "task_loss": 0.6
-            },
-            mode="weighted_sum"
+            metrics={"kl_div_loss": 0.2, "mse_loss": 0.2, "task_loss": 0.6},
+            mode="weighted_sum",
         ),
         loaders="train",
     )
@@ -108,13 +99,13 @@ def main(args):
             mse_hiddens,
             kl_div,
             aggregator,
-            OptimizerCallback(metric_key="loss")
+            OptimizerCallback(metric_key="loss"),
         ],
         check=True,
         num_epochs=args.num_distil_epochs,
         valid_metric="accuracy",
         minimize_valid_metric=False,
-        valid_loader="valid"
+        valid_loader="valid",
     )
 
 

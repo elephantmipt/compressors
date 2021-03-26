@@ -1,8 +1,7 @@
 from typing import Any, Callable, Dict, List, TYPE_CHECKING, Union
 
-import torch
-
 from catalyst.core.callback import Callback, CallbackNode, CallbackOrder
+import torch
 
 if TYPE_CHECKING:
     from catalyst.core.runner import IRunner
@@ -131,7 +130,6 @@ class MetricAggregationCallback(Callback):
             raise NotImplementedError(
                 "mode must be `sum`, `mean` " "or `weighted_sum` or `weighted_mean` or be Callable"
             )
-
 
         if isinstance(metrics, str):
             metrics = [metrics]

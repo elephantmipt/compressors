@@ -1,9 +1,9 @@
 from typing import Callable
 
-from tqdm.autonotebook import tqdm
 import torch
 from torch import nn
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import DataLoader, Dataset
+from tqdm.autonotebook import tqdm
 
 from compressors.utils import any2device
 
