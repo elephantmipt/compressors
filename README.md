@@ -56,7 +56,7 @@ pip install git+https://github.com/elephantmipt/compressors.git
 | Name               | References        | Status      |
 | ----------------   | ----------------- | ----------- |
 | Lottery ticket hypothesis | [Frankle et al.](https://arxiv.org/abs/1803.03635) | Implemented |
-| Iterative pruning  | [Paganini et al.](https://arxiv.org/pdf/2001.05050.pdf) | Implemented |
+| Iterative pruning  | [Paganini et al.](https://arxiv.org/pdf/2001.05050.pdf)   | Implemented |
 
 ## Minimal Examples
 

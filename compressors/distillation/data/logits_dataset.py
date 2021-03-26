@@ -63,7 +63,7 @@ class LogitsDataset(Dataset):
     def _compute_logits(self):
         self.model.eval()
         dataloader = self.dataset
-        batch_size = 1
+        batch_size = 32
         if self.batched:
             dataloader = DataLoader(dataset=self.dataset, **self.dataloader_kwargs)
             batch_size = dataloader.batch_size
