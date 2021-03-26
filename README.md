@@ -42,7 +42,9 @@ pip install git+https://github.com/elephantmipt/compressors.git
 | ----------------   | ----------------- | ----------- |
 | Probablility Shift | [Wen et al.](https://arxiv.org/abs/1911.07471) | <span style="color:green">Implemented and tested </span> |
 
-## Minimal Example
+## Minimal Examples
+
+### Distillation
 
 ```python
 from itertools import chain
@@ -94,5 +96,73 @@ runner.train(
     logdir="./logs",
     valid_loader="valid",
     criterion=torch.nn.CrossEntropyLoss()
+)
+```
+
+### Pruning
+
+```python
+import torch
+from torch.utils.data import DataLoader
+
+from torchvision.transforms import ToTensor
+
+from catalyst.callbacks import (
+    PruningCallback, 
+    OptimizerCallback, 
+    CriterionCallback, 
+    AccuracyCallback, 
+    ControlFlowCallback
+)
+from catalyst.contrib.datasets import MNIST
+
+from compressors.distillation.callbacks import MetricAggregationCallback
+from compressors.distillation.callbacks import KLDivCallback
+from compressors.models import MLP
+from compressors.pruning.runners import FinePruneRunner
+from compressors.utils.data import TorchvisionDatasetWrapper as Wrp
+
+model = MLP(num_layers=3)
+
+model = model.load_state_dict(torch.load("trained_model.pth"))
+
+datasets = {
+    "train": Wrp(MNIST("./data", train=True, download=True, transform=ToTensor())),
+    "valid": Wrp(MNIST("./data", train=False, transform=ToTensor())),
+}
+
+loaders = {
+    dl_key: DataLoader(dataset, shuffle=dl_key == "train", batch_size=32)
+    for dl_key, dataset in datasets.items()
+}
+
+optimizer = torch.optim.Adam(model.parameters())
+
+runner = FinePruneRunner(num_sessions=10)
+
+runner.train(
+    model=model,
+    loaders=loaders,
+    optimizer=optimizer,
+    criterion=torch.nn.CrossEntropyLoss(),
+    callbacks=[
+        PruningCallback(pruning_fn="l1_unstructured", amount=0.2, remove_reparametrization_on_stage_end=False),
+        OptimizerCallback(metric_key="loss"),
+        CriterionCallback(input_key="logits", target_key="targets", metric_key="loss"),
+        AccuracyCallback(input_key="logits", target_key="targets"),
+        ControlFlowCallback(KLDivCallback(student_logits_key="logits"), loaders="train"),
+        MetricAggregationCallback(
+            prefix="loss",
+            metrics={
+                "loss": 0.6,
+                "kl_div_loss": 0.4,   
+            },
+            mode="weighted_sum"
+        )
+    ],
+    logdir="./pruned_model",
+    valid_loader="valid",
+    valid_metric="accuracy",
+    minimize_valid_metric=False,
 )
 ```
