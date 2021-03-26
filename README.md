@@ -1,6 +1,6 @@
 # Compressors
 
-_Warning! Deep alpha version! This is not product-ready solutiion so far._
+_Warning! Alpha version! This is not product-ready solution so far._
 
 [![CodeFactor](https://www.codefactor.io/repository/github/elephantmipt/compressors/badge)](https://www.codefactor.io/repository/github/elephantmipt/compressors)
 
@@ -55,6 +55,7 @@ pip install git+https://github.com/elephantmipt/compressors.git
 
 | Name               | References        | Status      |
 | ----------------   | ----------------- | ----------- |
+| Lottery ticket hypothesis | [Frankle et al.](https://arxiv.org/abs/1803.03635) | Implemented |
 | Iterative pruning  | [Paganini et al.](https://arxiv.org/pdf/2001.05050.pdf) | Implemented |
 
 ## Minimal Examples
