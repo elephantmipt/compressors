@@ -16,6 +16,7 @@ class FinePruneRunner(PruneRunner):
         return self._num_epochs
 
     def get_callbacks(self, stage: str) -> "OrderedDict[str, Callback]":
+        callbacks = super().get_callbacks(stage=stage)
         if stage == "preparing":
-            return OrderedDict([("prepare_fine_pruning", PrepareForFinePruningCallback())])
-        return super().get_callbacks(stage=stage)
+            callbacks["preparing"] = PrepareForFinePruningCallback()
+        return callbacks
