@@ -7,14 +7,16 @@ _Warning! Deep alpha version! This is not product-ready solutiion so far._
 Compressors is a library with a lot of pipelines connected with model compression without significantly performance lose.
 
 
-   * [Compressors](#compressors)
-      * [Why Compressors?](#why-compressors)
-      * [Install](#install)
-      * [Losses](#losses)
-      * [Features](#features)
-      * [Minimal Examples](#minimal-examples)
-         * [Distillation](#distillation)
-         * [Pruning](#pruning)
+* [Compressors](#compressors)
+   * [Why Compressors?](#why-compressors)
+   * [Install](#install)
+   * [Features](#features)
+      * [Distillation](#distillation)
+      * [Pruning](#pruning)
+   * [Minimal Examples](#minimal-examples)
+      * [Distillation](#distillation-1)
+      * [Pruning](#pruning-1)
+
 
 
 ## Why Compressors?
@@ -35,9 +37,11 @@ There are two ways to use Compressors: with Catalyst or just use functional API.
 pip install git+https://github.com/elephantmipt/compressors.git
 ```
 
-## Losses
+## Features
 
-| Loss               | References        | Status      |
+### Distillation
+
+| Name               | References        | Status      |
 | ----------------   | ----------------- | ----------- |
 | KL-divergence      | [Hinton et al.](https://arxiv.org/abs/1503.02531)     | Implemented |
 | MSE                | [Hinton et al.](https://arxiv.org/abs/1503.02531)     | Implemented |
@@ -45,13 +49,13 @@ pip install git+https://github.com/elephantmipt/compressors.git
 | Cosine             | ???                                                   | Implemented |
 | Attention Transfer | [Zagoruyko et al.](https://arxiv.org/abs/1612.03928)  | Implemented |
 | Constrative Representation Distillation | [Tian et al.](https://arxiv.org/pdf/1910.10699.pdf)| Implemented (without dataset) |
+| Probablility Shift  | [Wen et al.](https://arxiv.org/abs/1911.07471) | Implemented and tested |
 
-
-## Features
+### Pruning
 
 | Name               | References        | Status      |
 | ----------------   | ----------------- | ----------- |
-| Probablility Shift | [Wen et al.](https://arxiv.org/abs/1911.07471) | <span style="color:green">Implemented and tested </span> |
+| Iterative pruning  | [Paganini et al.](https://arxiv.org/pdf/2001.05050.pdf) | Implemented |
 
 ## Minimal Examples
 
@@ -162,7 +166,8 @@ runner.train(
         CriterionCallback(input_key="logits", target_key="targets", metric_key="loss"),
         AccuracyCallback(input_key="logits", target_key="targets"),
         ControlFlowCallback(KLDivCallback(student_logits_key="logits"), loaders="train"),
-        ControlFlowCallback(MetricAggregationCallback(
+        ControlFlowCallback(
+            MetricAggregationCallback(
                 prefix="loss",
                 metrics={
                     "loss": 0.6,
