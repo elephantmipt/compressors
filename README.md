@@ -8,14 +8,17 @@ Compressors is a library with a lot of pipelines connected with model compressio
 
 
 * [Compressors](#compressors)
-   * [Why Compressors?](#why-compressors)
-   * [Install](#install)
-   * [Features](#features)
-      * [Distillation](#distillation)
-      * [Pruning](#pruning)
-   * [Minimal Examples](#minimal-examples)
-      * [Distillation](#distillation-1)
-      * [Pruning](#pruning-1)
+  * [Why Compressors?](#why-compressors)
+  * [Install](#install)
+  * [Features](#features)
+     * [Distillation](#distillation)
+     * [Pruning](#pruning)
+  * [Minimal Examples](#minimal-examples)
+     * [Distillation](#distillation-1)
+        * [CIFAR100 ResNet](#cifar100-resnet)
+        * [AG NEWS BERT (transformers)](#ag-news-bert-transformers)
+     * [Pruning](#pruning-1)
+
 
 
 
@@ -160,7 +163,7 @@ metric_callback = LoaderMetricCallback(
     metric=HFMetric(metric=load_metric("accuracy")), input_key="logits", target_key="labels",
 )
 
-################### TEACHER TRAINING #####################
+################### Teacher Training #####################
 
 teacher_model = AutoModelForSequenceClassification.from_pretrained(
     "google/bert_uncased_L-4_H-128_A-2", num_labels=4
@@ -177,7 +180,7 @@ runner.train(
     verbose=True
 )
 
-############### Distilation ##################
+############### Distillation ##################
 
 slct_callback = ControlFlowCallback(
     HiddenStatesSelectCallback(hiddens_key="t_hidden_states", layers=[1, 3]), loaders="train",
