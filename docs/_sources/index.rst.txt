@@ -20,7 +20,7 @@ Library separated into three parts:
 There are two ways to use Compressors: with Catalyst or just use functional API.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
 
    Distillation/distillation
