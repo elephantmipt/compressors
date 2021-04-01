@@ -167,7 +167,7 @@ datasets = {
 }
 
 loaders = {
-    k: DataLoader(v, batch_size=args.batch_size, shuffle=k == "train", num_workers=2)
+    k: DataLoader(v, batch_size=32, shuffle=k == "train", num_workers=2)
     for k, v in datasets.items()
 }
 
@@ -183,7 +183,7 @@ optimizer = torch.optim.SGD(
 )
 scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
 
-runner = DistilRunner(apply_probability_shift=args.probability_shift)
+runner = DistilRunner(apply_probability_shift=True)
 runner.train(
     model={"teacher": teacher_model, "student": student_model},
     loaders=loaders,
@@ -285,7 +285,7 @@ slct_callback = ControlFlowCallback(
 )
 
 lambda_hiddens_callback = ControlFlowCallback(
-    LambdaSelectCallback(
+    LambdaPreprocessCallback(
         lambda s_hiddens, t_hiddens: (
             [c_s[:, 0] for c_s in s_hiddens],
             [t_s[:, 0] for t_s in t_hiddens],  # tooks only CLS token
