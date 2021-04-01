@@ -1,4 +1,4 @@
-from .lambda_wrapper import LambdaWrp
+from .lambda_wrapper import LambdaWrapperCallback
 
 
-__all__ = ["LambdaWrp"]
+__all__ = ["LambdaWrapperCallback"]

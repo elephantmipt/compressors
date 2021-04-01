@@ -135,7 +135,7 @@ from catalyst.callbacks.metric import LoaderMetricCallback
 from compressors.distillation.callbacks import (
     HiddenStatesSelectCallback,
     KLDivCallback,
-    LambdaSelectCallback,
+    LambdaPreprocessCallback,
     MetricAggregationCallback,
     MSEHiddenStatesCallback,
 )

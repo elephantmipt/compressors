@@ -5,8 +5,8 @@ from catalyst.core import Callback
 from compressors.distillation.callbacks.order import CallbackOrder
 
 
-class LambdaSelectCallback(Callback):
-    """Filters output with your lambda function. Inplace analog of ``LambdaWrp``.
+class LambdaPreprocessCallback(Callback):
+    """Filters output with your lambda function. Inplace analog of ``LambdaWrapper``.
 
         Args:
             base_callback (Callback): Base callback.
@@ -58,4 +58,4 @@ class LambdaSelectCallback(Callback):
             runner.batch[self.keys_to_apply] = self.lambda_fn(self.keys_to_apply)
 
 
-__all__ = ["LambdaSelectCallback"]
+__all__ = ["LambdaPreprocessCallback"]

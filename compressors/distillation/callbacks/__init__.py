@@ -1,7 +1,7 @@
 from .metric_aggregation import MetricAggregationCallback
 from .hidden_states import (
     MSEHiddenStatesCallback,
-    LambdaSelectCallback,
+    LambdaPreprocessCallback,
     HiddenStatesSelectCallback,
     CosineHiddenStatesCallback,
     PKTHiddenStatesCallback,
@@ -12,7 +12,7 @@ from .logits_diff import KLDivCallback
 __all__ = [
     "MetricAggregationCallback",
     "MSEHiddenStatesCallback",
-    "LambdaSelectCallback",
+    "LambdaPreprocessCallback",
     "HiddenStatesSelectCallback",
     "CosineHiddenStatesCallback",
     "PKTHiddenStatesCallback",

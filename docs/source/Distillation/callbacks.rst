@@ -23,6 +23,20 @@ but you don't want to modify batch in your runner.
     :members:
     :exclude-members: on_batch_end
 
+Preprocessors
+-------------
+
+Inplace analogs of wrappers. Preprocess your ``runner.batch`` before applying callbacks.
+
+.. autoclass:: compressors.distillation.callbacks.LambdaPreprocessCallback
+    :members:
+    :exclude-members: on_batch_end
+
+.. autoclass:: compressors.distillation.callbacks.HiddenStatesSelectCallback
+    :members:
+    :exclude-members: on_batch_end
+
+
 Hiddens states
 -------------------------
 

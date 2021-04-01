@@ -4,7 +4,7 @@ from copy import deepcopy
 from catalyst.core import Callback
 
 
-class LambdaWrp(Callback):
+class LambdaWrapperCallback(Callback):
     """Wraps input for your callback with specified function.
 
         Args:
@@ -65,4 +65,4 @@ class LambdaWrp(Callback):
         runner.batch = orig_batch
 
 
-__all__ = ["LambdaWrp"]
+__all__ = ["LambdaWrapperCallback"]

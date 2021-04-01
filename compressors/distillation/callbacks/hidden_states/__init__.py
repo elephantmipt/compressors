@@ -1,5 +1,5 @@
 from .hidden_states_select_callback import HiddenStatesSelectCallback
-from .lambda_select_callback import LambdaSelectCallback
+from .lambda_select_callback import LambdaPreprocessCallback
 
 from .mse_hidden_states_callback import MSEHiddenStatesCallback
 from .cosine_hidden_states_callback import CosineHiddenStatesCallback
@@ -10,7 +10,7 @@ from .crd_hidden_states_callback import CRDHiddenStatesCallback
 
 __all__ = [
     "MSEHiddenStatesCallback",
-    "LambdaSelectCallback",
+    "LambdaPreprocessCallback",
     "HiddenStatesSelectCallback",
     "CosineHiddenStatesCallback",
     "PKTHiddenStatesCallback",
