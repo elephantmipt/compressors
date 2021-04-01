@@ -7,20 +7,18 @@ _Warning! Alpha version! This is not product-ready solution so far._
 Compressors is a library with a lot of pipelines connected with model compression without significantly performance lose.
 
 
-* [Compressors](#compressors)
-  * [Why Compressors?](#why-compressors)
-  * [Install](#install)
-  * [Features](#features)
-     * [Distillation](#distillation)
-     * [Pruning](#pruning)
-  * [Minimal Examples](#minimal-examples)
-     * [Distillation](#distillation-1)
-        * [CIFAR100 ResNet](#cifar100-resnet)
-        * [AG NEWS BERT (transformers)](#ag-news-bert-transformers)
-     * [Pruning](#pruning-1)
-
-
-
+   * [Compressors](#compressors)
+      * [Why Compressors?](#why-compressors)
+      * [Install](#install)
+      * [Features](#features)
+         * [Distillation](#distillation)
+         * [Pruning](#pruning)
+      * [Minimal Examples](#minimal-examples)
+         * [Distillation](#distillation-1)
+            * [MNIST](#mnist)
+            * [CIFAR100 ResNet](#cifar100-resnet)
+            * [AG NEWS BERT (transformers)](#ag-news-bert-transformers)
+         * [Pruning](#pruning-1)
 
 ## Why Compressors?
 
@@ -65,7 +63,7 @@ pip install git+https://github.com/elephantmipt/compressors.git
 
 ### Distillation
 
-#### CIFAR100 ResNet
+#### MNIST
 
 ```python
 from itertools import chain
@@ -117,6 +115,106 @@ runner.train(
     logdir="./logs",
     valid_loader="valid",
     criterion=torch.nn.CrossEntropyLoss()
+)
+```
+
+#### CIFAR100 ResNet
+
+```python
+from catalyst.callbacks import (
+    AccuracyCallback,
+    ControlFlowCallback,
+    CriterionCallback,
+    OptimizerCallback,
+    SchedulerCallback,
+)
+import torch
+from torch.hub import load_state_dict_from_url
+from torch.utils.data import DataLoader
+from torchvision import transforms
+from torchvision.datasets import CIFAR100
+
+from compressors.distillation.callbacks import (
+    AttentionHiddenStatesCallback,
+    KLDivCallback,
+    MetricAggregationCallback,
+)
+from compressors.distillation.runners import DistilRunner
+from compressors.models.cv import resnet_cifar_8, resnet_cifar_56
+
+from compressors.utils.data import TorchvisionDatasetWrapper as Wrp
+
+
+transform_train = transforms.Compose(
+    [
+        transforms.RandomCrop(32, padding=4),
+        transforms.RandomHorizontalFlip(),
+           transforms.ToTensor(),
+        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
+    ]
+)
+
+transform_test = transforms.Compose(
+    [
+        transforms.ToTensor(),
+        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
+    ]
+)
+
+datasets = {
+    "train": Wrp(CIFAR100(root=".", train=True, download=True, transform=transform_train)),
+    "valid": Wrp(CIFAR100(root=".", train=False, transform=transform_test)),
+}
+
+loaders = {
+    k: DataLoader(v, batch_size=args.batch_size, shuffle=k == "train", num_workers=2)
+    for k, v in datasets.items()
+}
+
+teacher_sd = load_state_dict_from_url(
+    "https://github.com/chenyaofo/CIFAR-pretrained-models/releases/download/resnet/cifar100-resnet56-2f147f26.pth"
+)
+teacher_model = resnet56(num_classes=100)
+teacher_model.load_state_dict(teacher_sd)
+student_model = resnet_cifar_8(num_classes=100)
+
+optimizer = torch.optim.SGD(
+    student_model.parameters(), lr=1e-2, momentum=0.9, weight_decay=5e-4
+)
+scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
+
+runner = DistilRunner(apply_probability_shift=args.probability_shift)
+runner.train(
+    model={"teacher": teacher_model, "student": student_model},
+    loaders=loaders,
+    optimizer=optimizer,
+    scheduler=scheduler,
+    valid_metric="accuracy",
+    minimize_valid_metric=False,
+    logdir="./cifar100_logs",
+    callbacks=[
+        ControlFlowCallback(AttentionHiddenStatesCallback(), loaders="train"),
+        ControlFlowCallback(KLDivCallback(temperature=4), loaders="train"),
+        CriterionCallback(input_key="s_logits", target_key="targets", metric_key="cls_loss"),
+        ControlFlowCallback(
+            MetricAggregationCallback(
+                prefix="loss",
+                metrics={
+                    "attention_loss": 1000,
+                    "kl_div_loss": 0.9,
+                    "cls_loss": 0.1,
+                },
+                mode="weighted_sum",
+            ),
+            loaders="train",
+        ),
+        AccuracyCallback(input_key="s_logits", target_key="targets"),
+        OptimizerCallback(metric_key="loss", model_key="student"),
+        SchedulerCallback(),
+    ],
+    valid_loader="valid",
+    num_epochs=200,
+    criterion=torch.nn.CrossEntropyLoss(),
 )
 ```
 
