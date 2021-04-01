@@ -174,7 +174,7 @@ loaders = {
 teacher_sd = load_state_dict_from_url(
     "https://github.com/chenyaofo/CIFAR-pretrained-models/releases/download/resnet/cifar100-resnet56-2f147f26.pth"
 )
-teacher_model = resnet56(num_classes=100)
+teacher_model = resnet_cifar_56(num_classes=100)
 teacher_model.load_state_dict(teacher_sd)
 student_model = resnet_cifar_8(num_classes=100)
 
