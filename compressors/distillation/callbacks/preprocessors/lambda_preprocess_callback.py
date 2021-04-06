@@ -9,7 +9,6 @@ class LambdaPreprocessCallback(Callback):
     """Filters output with your lambda function. Inplace analog of ``LambdaWrapper``.
 
         Args:
-            base_callback (Callback): Base callback.
             lambda_fn (Callable): Function to apply.
             keys_to_apply (Union[List[str], str], optional): Keys in batch dict to apply function.
                 Defaults to ["s_hidden_states", "t_hidden_states"].

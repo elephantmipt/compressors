@@ -3,14 +3,24 @@ from typing import Any, Dict
 from catalyst.core import Callback, CallbackOrder, IRunner
 
 
+def merge_state_dict(start_dict, new_dict):
+    out_dict = {}
+    for k, v in new_dict.items():
+        if "mask" in k:
+            out_dict[k] = v
+        else:
+            out_dict[k] = start_dict[k]
+    return out_dict
+
+
 class LotteryTicketCallback(Callback):
     def __init__(self, initial_state_dict: Dict[str, Any]):
         """
-        Reinitialize model with initial state dict
+        Reinitialize model with initial state dict on stage end.
         Args:
-            initial_state_dict:
+            initial_state_dict: initial model state dict
         """
-        super(LotteryTicketCallback, self).__init__(order=CallbackOrder.Internal)
+        super(LotteryTicketCallback, self).__init__(order=CallbackOrder.ExternalExtra)
         self.initial_state_dict = initial_state_dict
 
     def on_stage_start(self, runner: "IRunner") -> None:
@@ -20,4 +30,8 @@ class LotteryTicketCallback(Callback):
         Args:
             runner: experiment runner
         """
-        runner.model.load_state_dict(self.initial_state_dict)
+        state_dict = merge_state_dict(self.initial_state_dict, runner.model.state_dict())
+        runner.model.load_state_dict(state_dict)
+
+
+__all__ = ["LotteryTicketCallback"]
