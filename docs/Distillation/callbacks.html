@@ -2,7 +2,8 @@
 <html >
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+
       <title>Callbacks</title>
     
       <link rel="stylesheet" href="../_static/pygments.css">
@@ -142,11 +143,11 @@
 <hr>
           <div class="content" role="main">
             
-  <div class="section" id="callbacks">
+  <section id="callbacks">
 <h1>Callbacks<a class="headerlink" href="#callbacks" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
-<div class="section" id="logits-difference-callbacks">
+<section id="logits-difference-callbacks">
 <h2>Logits difference callbacks<a class="headerlink" href="#logits-difference-callbacks" title="Permalink to this headline">¶</a></h2>
 <p>Callbacks which use difference between probabilities distribution over last layers.
 Useful for classification task.</p>
@@ -155,8 +156,8 @@ Useful for classification task.</p>
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">compressors.distillation.callbacks.logits_diff.</span></code><code class="sig-name descname"><span class="pre">KLDivCallback</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'kl_div_loss'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">student_logits_key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'s_logits'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">teacher_logits_key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'t_logits'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.callbacks.logits_diff.KLDivCallback" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-</div>
-<div class="section" id="wrappers">
+</section>
+<section id="wrappers">
 <h2>Wrappers<a class="headerlink" href="#wrappers" title="Permalink to this headline">¶</a></h2>
 <p>Wrappers is useful when your callback inputs something different then hidden states or logits,
 but you don’t want to modify batch in your runner.</p>
@@ -179,8 +180,8 @@ Defaults to [“s_hidden_states”, “t_hidden_states”].</p></li>
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="preprocessors">
+</section>
+<section id="preprocessors">
 <h2>Preprocessors<a class="headerlink" href="#preprocessors" title="Permalink to this headline">¶</a></h2>
 <p>Inplace analogs of wrappers. Preprocess your <code class="docutils literal notranslate"><span class="pre">runner.batch</span></code> before applying callbacks.</p>
 <dl class="py class">
@@ -190,7 +191,6 @@ Defaults to [“s_hidden_states”, “t_hidden_states”].</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>base_callback</strong> (<em>Callback</em>) – Base callback.</p></li>
 <li><p><strong>lambda_fn</strong> (<em>Callable</em>) – Function to apply.</p></li>
 <li><p><strong>keys_to_apply</strong> (<em>Union</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Keys in batch dict to apply function.
 Defaults to [“s_hidden_states”, “t_hidden_states”].</p></li>
@@ -207,8 +207,8 @@ Defaults to [“s_hidden_states”, “t_hidden_states”].</p></li>
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">compressors.distillation.callbacks.</span></code><code class="sig-name descname"><span class="pre">HiddenStatesSelectCallback</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layers</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hiddens_key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'t_hidden_states'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#compressors.distillation.callbacks.HiddenStatesSelectCallback" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-</div>
-<div class="section" id="module-compressors.distillation.callbacks.hidden_states">
+</section>
+<section id="module-compressors.distillation.callbacks.hidden_states">
 <span id="hiddens-states"></span><h2>Hiddens states<a class="headerlink" href="#module-compressors.distillation.callbacks.hidden_states" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="compressors.distillation.callbacks.hidden_states.AttentionHiddenStatesCallback">
@@ -251,7 +251,6 @@ Usually cosine loss applied in this way. Defaults to True.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>base_callback</strong> (<em>Callback</em>) – Base callback.</p></li>
 <li><p><strong>lambda_fn</strong> (<em>Callable</em>) – Function to apply.</p></li>
 <li><p><strong>keys_to_apply</strong> (<em>Union</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Keys in batch dict to apply function.
 Defaults to [“s_hidden_states”, “t_hidden_states”].</p></li>
@@ -292,8 +291,8 @@ Usually pkt loss applied in this way. Defaults to True.</p></li>
 </dl>
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
