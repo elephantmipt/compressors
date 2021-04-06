@@ -27,6 +27,10 @@ class PruneRunner(Runner):
 
         self.input_key = input_key
         self.output_key = output_key
+        if len(output_key) > 1:
+            self.handler = self.handle_tuple
+        else:
+            self.handler = self.handle_object
         self._num_sessions = num_sessions
 
     @property
@@ -36,13 +40,19 @@ class PruneRunner(Runner):
     def handle_batch(self, batch: Mapping[str, Any]) -> None:
         model_inp = [batch[key] for key in self.input_key]
         model_out = self.model(*model_inp)
-        for idx, key in enumerate(self.output_key):
-            self.batch[key] = model_out[idx]
+        self.handler(model_out)
 
     def predict_batch(self, batch: Mapping[str, Any], **kwargs) -> Mapping[str, Any]:
         model_inp = [batch[key] for key in self.input_key]
         model_out = self.model(*model_inp)
         return model_out
+
+    def handle_tuple(self, model_out):
+        for idx, key in enumerate(self.output_key):
+            self.batch[key] = model_out[idx]
+
+    def handle_object(self, model_out):
+        self.batch[self.output_key[0]] = model_out
 
 
 __all__ = ["PruneRunner"]
