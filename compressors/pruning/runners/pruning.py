@@ -39,5 +39,10 @@ class PruneRunner(Runner):
         for idx, key in enumerate(self.output_key):
             self.batch[key] = model_out[idx]
 
+    def predict_batch(self, batch: Mapping[str, Any], **kwargs) -> Mapping[str, Any]:
+        model_inp = [batch[key] for key in self.input_key]
+        model_out = self.model(*model_inp)
+        return model_out
+
 
 __all__ = ["PruneRunner"]
