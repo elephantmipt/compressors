@@ -195,6 +195,29 @@ from DataLoader.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="compressors.pruning.runners.PruneRunner.predict_batch">
+<code class="sig-name descname"><span class="pre">predict_batch</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#compressors.pruning.runners.PruneRunner.predict_batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run model inference on specified data batch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>batch</strong> – dictionary with data batches from DataLoader.</p></li>
+<li><p><strong>**kwargs</strong> – additional kwargs to pass to the model</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>model output dictionary</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Mapping</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – if not implemented yet</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="compressors.pruning.runners.PruneRunner.stages">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">stages</span></code><a class="headerlink" href="#compressors.pruning.runners.PruneRunner.stages" title="Permalink to this definition">¶</a></dt>
 <dd><p>Experiment’s stage names (array with one value).</p>
