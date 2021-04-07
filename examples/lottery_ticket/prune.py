@@ -153,7 +153,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--num_sessions", default=35, type=int)
     parser.add_argument("--num-epochs", default=10, type=int)
-    parser.add_argument("--pruning-factor", default=0.1, type=float)
+    parser.add_argument("--pruning-factor", "--amount", default=0.1, type=float)
     parser.add_argument(
         "--pruning-method",
         type=str,
