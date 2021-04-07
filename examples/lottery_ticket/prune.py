@@ -103,7 +103,7 @@ def main(args):
         callbacks = [
             dl.AccuracyCallback(input_key="logits", target_key="targets", num_classes=10),
             dl.PruningCallback(
-                args.method_name,
+                args.pruning_method,
                 keys_to_prune=["weight"],
                 amount=args.amount,
                 remove_reparametrization_on_stage_end=False,
