@@ -1,5 +1,9 @@
-from compressors.distillation.callbacks.preprocessors.hidden_states_select_callback import HiddenStatesSelectCallback
-from compressors.distillation.callbacks.preprocessors.lambda_preprocess_callback import LambdaPreprocessCallback
+from compressors.distillation.callbacks.preprocessors.hidden_states_select_callback import (
+    HiddenStatesSelectCallback,
+)
+from compressors.distillation.callbacks.preprocessors.lambda_preprocess_callback import (
+    LambdaPreprocessCallback,
+)
 
 from .mse_hidden_states_callback import MSEHiddenStatesCallback
 from .cosine_hidden_states_callback import CosineHiddenStatesCallback

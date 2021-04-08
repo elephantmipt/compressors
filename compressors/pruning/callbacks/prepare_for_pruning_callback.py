@@ -6,10 +6,7 @@ from compressors.distillation.data import LogitsDataset
 
 class PrepareForFinePruningCallback(Callback):
     def __init__(
-        self,
-        train_loader_key: str = "train",
-        *logits_dataset_args,
-        **logits_dataset_kwargs
+        self, train_loader_key: str = "train", *logits_dataset_args, **logits_dataset_kwargs
     ):
         super(PrepareForFinePruningCallback, self).__init__(
             order=CallbackOrder.External, node=CallbackNode.Master

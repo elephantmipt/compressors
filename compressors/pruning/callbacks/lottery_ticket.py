@@ -20,6 +20,7 @@ class LotteryTicketCallback(Callback):
             if "mask" in k:
                 out_dict[k] = v
             elif "orig" in k:
+                # weight_orig -> weight
                 out_dict[k] = start_dict[k[:-5]]
             else:
                 out_dict[k] = start_dict[k]
@@ -32,9 +33,7 @@ class LotteryTicketCallback(Callback):
         Args:
             runner: experiment runner
         """
-        state_dict = self.merge_state_dict(
-            self.initial_state_dict, runner.model.state_dict()
-        )
+        state_dict = self.merge_state_dict(self.initial_state_dict, runner.model.state_dict())
         runner.model.load_state_dict(state_dict)
 
 

@@ -10,7 +10,7 @@ class PruneRunner(Runner):
         input_key: Union[str, List[str]] = "features",
         output_key: Union[str, List[str]] = "logits",
         *runner_args,
-        **runner_kwargs
+        **runner_kwargs,
     ):
         """
         Base runner for iterative pruning.

@@ -13,9 +13,7 @@ from catalyst.data.transforms import ToTensor
 from compressors.pruning.runners import PruneRunner
 from compressors.utils.data import TorchvisionDatasetWrapper
 from compressors.distillation.callbacks import KLDivCallback, MetricAggregationCallback
-from compressors.pruning.callbacks import (
-    LotteryTicketCallback, PrepareForFinePruningCallback
-)
+from compressors.pruning.callbacks import LotteryTicketCallback, PrepareForFinePruningCallback
 
 
 def validate_model(runner, loader, pruning_fn, num_sessions):
@@ -27,7 +25,9 @@ def validate_model(runner, loader, pruning_fn, num_sessions):
         len_dataset = 0
         for batch in loader:
             outp = runner.predict_batch(utils.any2device(batch, "cuda"))
-            c_correct = torch.sum(outp["logits"].argmax(-1).detach().cpu() == batch["targets"]).item()
+            c_correct = torch.sum(
+                outp["logits"].argmax(-1).detach().cpu() == batch["targets"]
+            ).item()
             correct += c_correct
             len_dataset += batch["features"].size(0)
         pruned_weights.append(c_p)
@@ -38,16 +38,14 @@ def validate_model(runner, loader, pruning_fn, num_sessions):
 
 
 def main(args):
-    train_dataset = TorchvisionDatasetWrapper(MNIST(
-        root="./", download=True, train=True, transform=ToTensor()
-    ))
-    val_dataset = TorchvisionDatasetWrapper(MNIST(
-        root="./", download=True, train=False, transform=ToTensor()
-    ))
-
-    train_dataloader = torch.utils.data.DataLoader(
-        train_dataset, batch_size=32, shuffle=True
+    train_dataset = TorchvisionDatasetWrapper(
+        MNIST(root="./", download=True, train=True, transform=ToTensor())
     )
+    val_dataset = TorchvisionDatasetWrapper(
+        MNIST(root="./", download=True, train=False, transform=ToTensor())
+    )
+
+    train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=32, shuffle=True)
     val_dataloader = torch.utils.data.DataLoader(val_dataset, batch_size=64)
     loaders = {"train": train_dataloader, "valid": val_dataloader}
     utils.set_global_seed(args.seed)
@@ -57,7 +55,7 @@ def main(args):
         nn.ReLU(),
         nn.Linear(300, 100),
         nn.ReLU(),
-        nn.Linear(100, 10)
+        nn.Linear(100, 10),
     )
     initial_state_dict = net.state_dict()
 
@@ -79,7 +77,7 @@ def main(args):
             load_best_on_end=True,
             valid_metric="accuracy01",
             minimize_valid_metric=False,
-            valid_loader="valid"
+            valid_loader="valid",
         )
         pruning_fn = partial(
             utils.pruning.prune_model,
@@ -90,10 +88,7 @@ def main(args):
             l_norm=args.n,
         )
         acc, amount = validate_model(
-            runner,
-            pruning_fn=pruning_fn,
-            loader=loaders["valid"],
-            num_sessions=args.num_sessions
+            runner, pruning_fn=pruning_fn, loader=loaders["valid"], num_sessions=args.num_sessions
         )
         torch.save(acc, "accuracy.pth")
         torch.save(amount, "amount.pth")
@@ -109,28 +104,19 @@ def main(args):
                 remove_reparametrization_on_stage_end=False,
             ),
             dl.CriterionCallback(input_key="logits", target_key="targets", metric_key="loss"),
-            dl.OptimizerCallback(metric_key="loss")
+            dl.OptimizerCallback(metric_key="loss"),
         ]
         if args.lottery_ticket:
-            callbacks.append(
-                LotteryTicketCallback(initial_state_dict=initial_state_dict)
-            )
+            callbacks.append(LotteryTicketCallback(initial_state_dict=initial_state_dict))
         if args.kd:
             net.load_state_dict(torch.load(args.state_dict))
             callbacks.append(
-                PrepareForFinePruningCallback(
-                    probability_shift=args.probability_shift
-                )
+                PrepareForFinePruningCallback(probability_shift=args.probability_shift)
             )
             callbacks.append(KLDivCallback(temperature=4, student_logits_key="logits"))
             callbacks.append(
                 MetricAggregationCallback(
-                    prefix="loss",
-                    metrics={
-                        "loss": 0.1,
-                        "kl_div_loss": 0.9
-                    },
-                    mode="weighted_sum"
+                    prefix="loss", metrics={"loss": 0.1, "kl_div_loss": 0.9}, mode="weighted_sum"
                 )
             )
 
@@ -145,7 +131,7 @@ def main(args):
             load_best_on_end=True,
             valid_metric="accuracy01",
             minimize_valid_metric=False,
-            valid_loader="valid"
+            valid_loader="valid",
         )
 
 
@@ -157,20 +143,10 @@ if __name__ == "__main__":
     parser.add_argument(
         "--pruning-method",
         type=str,
-        choices=[
-            "ln_structured",
-            "l1_unstructured",
-            "random_unstructured",
-            "random_structured"
-        ],
-        default="l1_unstructured"
+        choices=["ln_structured", "l1_unstructured", "random_unstructured", "random_structured"],
+        default="l1_unstructured",
     )
-    parser.add_argument(
-        "--dim",
-        type=int,
-        choices=[0, 1, None],
-        default=None
-    )
+    parser.add_argument("--dim", type=int, choices=[0, 1, None], default=None)
     parser.add_argument("-n", type=int, default=None)
     parser.add_argument("--kd", action="store_true")
     parser.add_argument("--lottery-ticket", action="store_true")
