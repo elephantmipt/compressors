@@ -19,8 +19,10 @@ class LotteryTicketCallback(Callback):
         for k, v in new_dict.items():
             if "mask" in k:
                 out_dict[k] = v
-            else:
+            elif "orig" in k:
                 out_dict[k] = start_dict[k[:-5]]
+            else:
+                out_dict[k] = start_dict[k]
         return out_dict
 
     def on_stage_start(self, runner: "IRunner") -> None:
