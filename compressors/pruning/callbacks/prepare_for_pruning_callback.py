@@ -16,9 +16,10 @@ class PrepareForFinePruningCallback(Callback):
 
     def on_experiment_start(self, runner: "IRunner") -> None:
         train_loader = runner.loaders[self.train_loader_key]
+        model = self.logits_dataset_args_kwargs[1].pop("model", runner.model)
         train_dataset = LogitsDataset(
             train_loader.dataset,
-            runner.model,
+            model=model,
             *self.logits_dataset_args_kwargs[0],
             **self.logits_dataset_args_kwargs[1]
         )
