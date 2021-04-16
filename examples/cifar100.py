@@ -31,10 +31,10 @@ from compressors.models.cv import (
 from compressors.utils.data import TorchvisionDatasetWrapper as Wrp
 
 NAME2URL = {
-    "resnet20": "https://github.com/chenyaofo/CIFAR-pretrained-models/releases/download/resnet/cifar100-resnet20-8412cc70.pth",
-    "resnet32": "https://github.com/chenyaofo/CIFAR-pretrained-models/releases/download/resnet/cifar100-resnet32-6568a0a0.pth",
-    "resnet44": "https://github.com/chenyaofo/CIFAR-pretrained-models/releases/download/resnet/cifar100-resnet44-20aaa8cf.pth",
-    "resnet56": "https://github.com/chenyaofo/CIFAR-pretrained-models/releases/download/resnet/cifar100-resnet56-2f147f26.pth",
+    "resnet20": "https://github.com/chenyaofo/pytorch-cifar-models/releases/download/resnet/cifar100-resnet20-8412cc70.pth",
+    "resnet32": "https://github.com/chenyaofo/pytorch-cifar-models/releases/download/resnet/cifar100-resnet32-6568a0a0.pth",
+    "resnet44": "https://github.com/chenyaofo/pytorch-cifar-models/releases/download/resnet/cifar100-resnet44-20aaa8cf.pth",
+    "resnet56": "https://github.com/chenyaofo/pytorch-cifar-models/releases/download/resnet/cifar10_resnet56-187c023a.pt",
 }
 
 NAME2MODEL = {

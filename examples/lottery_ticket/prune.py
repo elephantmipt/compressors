@@ -61,8 +61,12 @@ def main(args):
 
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(net.parameters())
+    if args.device is not None:
+        engine = dl.DeviceEngine(args.device)
+    else:
+        engine = None
     if args.vanilla_pruning:
-        runner = dl.SupervisedRunner()
+        runner = dl.SupervisedRunner(engine=engine)
 
         runner.train(
             model=net,
@@ -94,7 +98,7 @@ def main(args):
         torch.save(amount, "amount.pth")
 
     else:
-        runner = PruneRunner(num_sessions=args.num_sessions)
+        runner = PruneRunner(num_sessions=args.num_sessions, engine=engine)
         callbacks = [
             dl.AccuracyCallback(input_key="logits", target_key="targets", num_classes=10),
             dl.PruningCallback(
@@ -137,7 +141,7 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--num-sessions", default=35, type=int)
+    parser.add_argument("--num-sessions", default=40, type=int)
     parser.add_argument("--num-epochs", default=10, type=int)
     parser.add_argument("--amount", default=0.1, type=float)
     parser.add_argument(
@@ -155,5 +159,6 @@ if __name__ == "__main__":
     parser.add_argument("--probability-shift", action="store_true")
     parser.add_argument("--logdir", default="logs", type=str)
     parser.add_argument("--state-dict", type=str)
+    parser.add_argument("--device", type=str, default=None)
     args = parser.parse_args()
     main(args)

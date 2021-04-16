@@ -1,4 +1,4 @@
-from typing import Any, Callable, Dict, Mapping, OrderedDict, Union
+from typing import Any, Callable, Dict, Mapping, Union
 import inspect
 
 from catalyst.callbacks import ControlFlowCallback
@@ -108,7 +108,7 @@ class EndToEndDistilRunner(Runner):
             return self._num_epochs
         return self.num_train_teacher_epochs
 
-    def get_callbacks(self, stage: str) -> "OrderedDict[str, Callback]":
+    def get_callbacks(self, stage: str) -> "Dict[str, Callback]":
         callbacks = super().get_callbacks(stage)
         if stage == "distillation":
             if self.hidden_state_loss_fn is not None:
