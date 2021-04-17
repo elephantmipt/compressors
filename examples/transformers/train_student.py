@@ -90,7 +90,6 @@ def main(args):
             aggregator,
             OptimizerCallback(metric_key="loss"),
         ],
-        check=True,
         num_epochs=args.num_epochs,
         valid_metric="accuracy",
         logdir=args.logdir,
@@ -102,9 +101,10 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset", "-d", default="ag_news")
-    parser.add_argument("--teacher-model", default="google/bert_uncased_L-4_H-128_A-2", type=str)
-    parser.add_argument("--student-model", default="google/bert_uncased_L-2_H-128_A-2", type=str)
-    parser.add_argument("--layers", default="1,3", type=str)
+    parser.add_argument("--teacher-model", default="google/bert_uncased_L-8_H-512_A-8", type=str)
+    parser.add_argument("--student-model", default="google/bert_uncased_L-4_H-512_A-8", type=str)
+    parser.add_argument("--teacher-path", default="bert_teacher/checkpoint/best.pth", type=str)
+    parser.add_argument("--layers", default="1,3,5,7", type=str)
     parser.add_argument("--alpha", default=0.3, type=float)
     parser.add_argument("--beta", default=1., type=float)
     parser.add_argument("--num-labels", default=4, type=int)

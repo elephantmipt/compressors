@@ -42,18 +42,19 @@ def main(args):
         num_epochs=args.num_epochs,
         valid_metric="accuracy",
         minimize_valid_metric=False,
-        check=True,
+        logdir=args.logdir,
+        valid_loader="valid"
     )
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset", "-d", default="ag_news")
-    parser.add_argument("--model", default="google/bert_uncased_L-4_H-128_A-2")
+    parser.add_argument("--model", default="google/bert_uncased_L-8_H-512_A-8")
     parser.add_argument("--num-labels", default=4, type=int)
     parser.add_argument("--num-epochs", default=5, type=int)
     parser.add_argument("--lr", default=1e-4, type=float)
     parser.add_argument("--batch-size", default=32, type=int)
-    parser.add_argument("--logdir", default="ag_news_teacher", type=str)
+    parser.add_argument("--logdir", default="bert_teacher", type=str)
     args = parser.parse_args()
     main(args)
