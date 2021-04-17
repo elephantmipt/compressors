@@ -1,6 +1,6 @@
 import argparse
 
-from catalyst.callbacks import ControlFlowCallback, OptimizerCallback
+from catalyst.callbacks import OptimizerCallback
 from catalyst.callbacks.metric import LoaderMetricCallback
 from datasets import load_dataset, load_metric
 import torch
@@ -38,12 +38,16 @@ def main(args):
         model=teacher_model,
         loaders=loaders,
         optimizer=torch.optim.Adam(teacher_model.parameters(), lr=args.lr),
-        callbacks=[metric_callback],
+        callbacks=[
+            metric_callback,
+            OptimizerCallback(metric_key="loss"),
+        ],
         num_epochs=args.num_epochs,
         valid_metric="accuracy",
         minimize_valid_metric=False,
         logdir=args.logdir,
-        valid_loader="valid"
+        valid_loader="valid",
+        verbose=args.verbose
     )
 
 
@@ -56,5 +60,6 @@ if __name__ == "__main__":
     parser.add_argument("--lr", default=1e-4, type=float)
     parser.add_argument("--batch-size", default=32, type=int)
     parser.add_argument("--logdir", default="bert_teacher", type=str)
+    parser.add_argument("--verbose", action="store_true")
     args = parser.parse_args()
     main(args)
