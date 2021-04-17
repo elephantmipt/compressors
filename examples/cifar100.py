@@ -34,7 +34,7 @@ NAME2URL = {
     "resnet20": "https://github.com/chenyaofo/pytorch-cifar-models/releases/download/resnet/cifar100-resnet20-8412cc70.pth",
     "resnet32": "https://github.com/chenyaofo/pytorch-cifar-models/releases/download/resnet/cifar100-resnet32-6568a0a0.pth",
     "resnet44": "https://github.com/chenyaofo/pytorch-cifar-models/releases/download/resnet/cifar100-resnet44-20aaa8cf.pth",
-    "resnet56": "https://github.com/chenyaofo/pytorch-cifar-models/releases/download/resnet/cifar100-resnet56-2f147f26.pth",
+    "resnet56": "https://github.com/chenyaofo/pytorch-cifar-models/releases/download/resnet/cifar100_resnet56-f2eff4c8.pt",
 }
 
 NAME2MODEL = {
@@ -83,7 +83,9 @@ def main(args):
     optimizer = torch.optim.SGD(
         student_model.parameters(), lr=args.lr, momentum=0.9, weight_decay=5e-4
     )
-    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
+    scheduler = torch.optim.lr_scheduler.MultiStepLR(
+        optimizer, [150, 180, 210], gamma=0.1
+    )
 
     runner = DistilRunner(apply_probability_shift=args.probability_shift)
     runner.train(
@@ -93,7 +95,7 @@ def main(args):
         scheduler=scheduler,
         valid_metric="accuracy",
         minimize_valid_metric=False,
-        logdir="./cifar100_logs",
+        logdir=args.logdir,
         callbacks=[
             ControlFlowCallback(AttentionHiddenStatesCallback(), loaders="train"),
             ControlFlowCallback(KLDivCallback(temperature=4), loaders="train"),
@@ -115,7 +117,7 @@ def main(args):
             SchedulerCallback(),
         ],
         valid_loader="valid",
-        num_epochs=200,
+        num_epochs=args.num_epochs,
         criterion=torch.nn.CrossEntropyLoss(),
     )
 
@@ -142,11 +144,12 @@ if __name__ == "__main__":
         default="resnet14",
         type=str,
     )
-    parser.add_argument("--lr", default=0.01, type=float)
-    parser.add_argument("--num-epochs", default=200, type=int)
+    parser.add_argument("--lr", default=0.05, type=float)
+    parser.add_argument("--num-epochs", default=240, type=int)
     parser.add_argument("--probability-shift", action="store_true")
     parser.add_argument("--batch-size", default=64, type=int)
     parser.add_argument("--alpha", default=0.9, type=float)
     parser.add_argument("--beta", default=1000, type=float)
+    parser.add_argument("--logdir", default="cifar100_logs")
     args = parser.parse_args()
     main(args)

@@ -2,6 +2,7 @@ import argparse
 
 from catalyst.callbacks import ControlFlowCallback, OptimizerCallback
 from catalyst.callbacks.metric import LoaderMetricCallback
+from catalyst.utils import unpack_checkpoint
 from datasets import load_dataset, load_metric
 import torch
 from torch.utils.data import DataLoader
@@ -16,13 +17,12 @@ from compressors.distillation.callbacks import (
 )
 from compressors.distillation.runners import HFDistilRunner
 from compressors.metrics.hf_metric import HFMetric
-from compressors.runners.hf_runner import HFRunner
 
 
 def main(args):
     datasets = load_dataset(args.dataset)
 
-    tokenizer = AutoTokenizer.from_pretrained("google/bert_uncased_L-4_H-128_A-2")
+    tokenizer = AutoTokenizer.from_pretrained(args.teacher_model)
     datasets = datasets.map(
         lambda e: tokenizer(e["text"], truncation=True, padding="max_length", max_length=128),
         batched=True,
@@ -35,29 +35,16 @@ def main(args):
         "train": DataLoader(datasets["train"], batch_size=args.batch_size, shuffle=True),
         "valid": DataLoader(datasets["test"], batch_size=args.batch_size),
     }
-    metric_callback = LoaderMetricCallback(
-        metric=HFMetric(metric=load_metric("accuracy")), input_key="logits", target_key="labels",
-    )
     teacher_model = AutoModelForSequenceClassification.from_pretrained(
-        "google/bert_uncased_L-4_H-128_A-2", num_labels=args.num_labels
+        args.teacher_model, num_labels=args.num_labels
     )
-    runner = HFRunner()
-    runner.train(
-        model=teacher_model,
-        loaders=loaders,
-        optimizer=torch.optim.Adam(teacher_model.parameters(), lr=args.train_lr),
-        callbacks=[metric_callback],
-        num_epochs=args.num_train_epochs,
-        valid_metric="accuracy",
-        minimize_valid_metric=False,
-        check=True,
-    )
+    unpack_checkpoint(torch.load(args.teacher_path), model=teacher_model)
     metric_callback = LoaderMetricCallback(
         metric=HFMetric(metric=load_metric("accuracy")), input_key="s_logits", target_key="labels",
     )
-
+    layers = [int(layer) for layer in args.layers.split(",")]
     slct_callback = ControlFlowCallback(
-        HiddenStatesSelectCallback(hiddens_key="t_hidden_states", layers=[1, 3]), loaders="train",
+        HiddenStatesSelectCallback(hiddens_key="t_hidden_states", layers=layers), loaders="train",
     )
 
     lambda_hiddens_callback = ControlFlowCallback(
@@ -77,7 +64,9 @@ def main(args):
     aggregator = ControlFlowCallback(
         MetricAggregationCallback(
             prefix="loss",
-            metrics={"kl_div_loss": 0.2, "mse_loss": 0.2, "task_loss": 0.6},
+            metrics={
+                "kl_div_loss": args.alpha, "mse_loss": args.beta, "task_loss": 1 - args.alpha
+            },
             mode="weighted_sum",
         ),
         loaders="train",
@@ -86,12 +75,12 @@ def main(args):
     runner = HFDistilRunner()
 
     student_model = AutoModelForSequenceClassification.from_pretrained(
-        "google/bert_uncased_L-2_H-128_A-2", num_labels=args.num_labels
+        args.student_model, num_labels=args.num_labels
     )
     runner.train(
         model=torch.nn.ModuleDict({"teacher": teacher_model, "student": student_model}),
         loaders=loaders,
-        optimizer=torch.optim.Adam(student_model.parameters(), lr=args.distil_lr),
+        optimizer=torch.optim.Adam(student_model.parameters(), lr=args.lr),
         callbacks=[
             metric_callback,
             slct_callback,
@@ -102,8 +91,9 @@ def main(args):
             OptimizerCallback(metric_key="loss"),
         ],
         check=True,
-        num_epochs=args.num_distil_epochs,
+        num_epochs=args.num_epochs,
         valid_metric="accuracy",
+        logdir=args.logdir,
         minimize_valid_metric=False,
         valid_loader="valid",
     )
@@ -112,11 +102,15 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset", "-d", default="ag_news")
+    parser.add_argument("--teacher-model", default="google/bert_uncased_L-4_H-128_A-2", type=str)
+    parser.add_argument("--student-model", default="google/bert_uncased_L-2_H-128_A-2", type=str)
+    parser.add_argument("--layers", default="1,3", type=str)
+    parser.add_argument("--alpha", default=0.3, type=float)
+    parser.add_argument("--beta", default=1., type=float)
     parser.add_argument("--num-labels", default=4, type=int)
-    parser.add_argument("--num-train-epochs", default=5, type=int)
-    parser.add_argument("--num-distil-epochs", default=5, type=int)
-    parser.add_argument("--train-lr", default=1e-4, type=float)
-    parser.add_argument("--distil-lr", default=1e-4, type=float)
+    parser.add_argument("--num-epochs", default=5, type=int)
+    parser.add_argument("--lr", default=1e-4, type=float)
+    parser.add_argument("--logdir", default="bert_student")
     parser.add_argument("--batch-size", default=32, type=int)
     parser.add_argument("--kl-temperature", default=4.0, type=float)
     args = parser.parse_args()
