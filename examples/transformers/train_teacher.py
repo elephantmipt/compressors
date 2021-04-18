@@ -17,6 +17,8 @@ except ImportError:
 
 
 def main(args):
+    if args.wandb:
+        wandb.init()
     datasets = load_dataset(args.dataset)
 
     tokenizer = AutoTokenizer.from_pretrained(args.model)
@@ -50,19 +52,19 @@ def main(args):
         minimize_valid_metric=False,
         logdir=args.logdir,
         valid_loader="valid",
-        verbose=args.verbose
+        verbose=args.verbose,
     )
-    if wandb:
+    if args.wandb:
         import csv
         with open(args.logdir + "/valid.csv") as fi:
             reader = csv.DictReader(fi)
             accuracy = []
             for row in reader:
-                accuracy.append(row["accuracy"])
-            best_accuracy = max(accuracy)
+                if row["accuracy"] == "accuracy":
+                    continue
+                accuracy.append(float(row["accuracy"]))
 
-        wandb.init()
-        wandb.log({"accuracy": best_accuracy})
+        wandb.log({"accuracy": max(accuracy)})
 
 
 if __name__ == "__main__":
