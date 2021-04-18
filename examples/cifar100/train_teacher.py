@@ -1,24 +1,15 @@
 import argparse
 
-from catalyst.callbacks import (
-    AccuracyCallback,
-    ControlFlowCallback,
-    CriterionCallback,
-    OptimizerCallback,
-    SchedulerCallback,
-)
 import torch
-from torch.hub import load_state_dict_from_url
+from catalyst.callbacks import (
+    CriterionCallback, OptimizerCallback, SchedulerCallback, AccuracyCallback
+)
+from catalyst.runners import SupervisedRunner
 from torch.utils.data import DataLoader
+
 from torchvision import transforms
 from torchvision.datasets import CIFAR100
 
-from compressors.distillation.callbacks import (
-    AttentionHiddenStatesCallback,
-    KLDivCallback,
-    MetricAggregationCallback,
-)
-from compressors.distillation.runners import DistilRunner
 from compressors.models.cv import (
     resnet_cifar_8,
     resnet_cifar_14,
@@ -29,13 +20,6 @@ from compressors.models.cv import (
     resnet_cifar_110,
 )
 from compressors.utils.data import TorchvisionDatasetWrapper as Wrp
-
-NAME2URL = {
-    "resnet20": "https://github.com/chenyaofo/pytorch-cifar-models/releases/download/resnet/cifar100-resnet20-8412cc70.pth",
-    "resnet32": "https://github.com/chenyaofo/pytorch-cifar-models/releases/download/resnet/cifar100-resnet32-6568a0a0.pth",
-    "resnet44": "https://github.com/chenyaofo/pytorch-cifar-models/releases/download/resnet/cifar100-resnet44-20aaa8cf.pth",
-    "resnet56": "https://github.com/chenyaofo/pytorch-cifar-models/releases/download/resnet/cifar100_resnet56-f2eff4c8.pt",
-}
 
 NAME2MODEL = {
     "resnet8": resnet_cifar_8,
@@ -74,22 +58,18 @@ def main(args):
         k: DataLoader(v, batch_size=args.batch_size, shuffle=k == "train", num_workers=2)
         for k, v in datasets.items()
     }
-
-    teacher_sd = load_state_dict_from_url(NAME2URL[args.teacher])
-    teacher_model = NAME2MODEL[args.teacher](num_classes=100)
-    teacher_model.load_state_dict(teacher_sd)
-    student_model = NAME2MODEL[args.student](num_classes=100)
+    model = NAME2MODEL[args.model](num_classes=100)
 
     optimizer = torch.optim.SGD(
-        student_model.parameters(), lr=args.lr, momentum=0.9, weight_decay=5e-4
+        model.parameters(), lr=args.lr, momentum=0.9, weight_decay=5e-4
     )
     scheduler = torch.optim.lr_scheduler.MultiStepLR(
         optimizer, [150, 180, 210], gamma=0.1
     )
 
-    runner = DistilRunner(apply_probability_shift=args.probability_shift)
+    runner = SupervisedRunner()
     runner.train(
-        model={"teacher": teacher_model, "student": student_model},
+        model=model,
         loaders=loaders,
         optimizer=optimizer,
         scheduler=scheduler,
@@ -97,23 +77,9 @@ def main(args):
         minimize_valid_metric=False,
         logdir=args.logdir,
         callbacks=[
-            ControlFlowCallback(AttentionHiddenStatesCallback(), loaders="train"),
-            ControlFlowCallback(KLDivCallback(temperature=4), loaders="train"),
-            CriterionCallback(input_key="s_logits", target_key="targets", metric_key="cls_loss"),
-            ControlFlowCallback(
-                MetricAggregationCallback(
-                    prefix="loss",
-                    metrics={
-                        "attention_loss": args.beta,
-                        "kl_div_loss": args.alpha,
-                        "cls_loss": 1 - args.alpha,
-                    },
-                    mode="weighted_sum",
-                ),
-                loaders="train",
-            ),
-            AccuracyCallback(input_key="s_logits", target_key="targets"),
-            OptimizerCallback(metric_key="loss", model_key="student"),
+            CriterionCallback(input_key="logits", target_key="targets", metric_key="loss"),
+            AccuracyCallback(input_key="logits", target_key="targets"),
+            OptimizerCallback(metric_key="loss"),
             SchedulerCallback(),
         ],
         valid_loader="valid",
@@ -125,13 +91,7 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--teacher",
-        default="resnet56",
-        choices=["resnet20", "resnet32", "resnet44", "resnet56"],
-        type=str,
-    )
-    parser.add_argument(
-        "--student",
+        "--model",
         choices=[
             "resnet8",
             "resnet14",
@@ -146,10 +106,7 @@ if __name__ == "__main__":
     )
     parser.add_argument("--lr", default=0.05, type=float)
     parser.add_argument("--num-epochs", default=240, type=int)
-    parser.add_argument("--probability-shift", action="store_true")
     parser.add_argument("--batch-size", default=64, type=int)
-    parser.add_argument("--alpha", default=0.9, type=float)
-    parser.add_argument("--beta", default=1000, type=float)
-    parser.add_argument("--logdir", default="cifar100_logs")
+    parser.add_argument("--logdir", default="cifar100_teacher")
     args = parser.parse_args()
     main(args)

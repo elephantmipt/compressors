@@ -95,6 +95,7 @@ def main(args):
         logdir=args.logdir,
         minimize_valid_metric=False,
         valid_loader="valid",
+        verbose=args.verbose
     )
 
 
@@ -113,5 +114,6 @@ if __name__ == "__main__":
     parser.add_argument("--logdir", default="bert_student")
     parser.add_argument("--batch-size", default=32, type=int)
     parser.add_argument("--kl-temperature", default=4.0, type=float)
+    parser.add_argument("--verbose", action="store_true")
     args = parser.parse_args()
     main(args)

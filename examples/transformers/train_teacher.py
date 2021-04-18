@@ -10,6 +10,11 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer
 from compressors.metrics.hf_metric import HFMetric
 from compressors.runners.hf_runner import HFRunner
 
+try:
+    import wandb
+except ImportError:
+    pass
+
 
 def main(args):
     datasets = load_dataset(args.dataset)
@@ -33,15 +38,13 @@ def main(args):
     teacher_model = AutoModelForSequenceClassification.from_pretrained(
         args.model, num_labels=args.num_labels
     )
+    callbacks = [metric_callback, OptimizerCallback(metric_key="loss")]
     runner = HFRunner()
     runner.train(
         model=teacher_model,
         loaders=loaders,
         optimizer=torch.optim.Adam(teacher_model.parameters(), lr=args.lr),
-        callbacks=[
-            metric_callback,
-            OptimizerCallback(metric_key="loss"),
-        ],
+        callbacks=callbacks,
         num_epochs=args.num_epochs,
         valid_metric="accuracy",
         minimize_valid_metric=False,
@@ -49,6 +52,17 @@ def main(args):
         valid_loader="valid",
         verbose=args.verbose
     )
+    if wandb:
+        import csv
+        with open(args.logdir + "/valid.csv") as fi:
+            reader = csv.DictReader(fi)
+            accuracy = []
+            for row in reader:
+                accuracy.append(row["accuracy"])
+            best_accuracy = max(accuracy)
+
+        wandb.init()
+        wandb.log({"accuracy": best_accuracy})
 
 
 if __name__ == "__main__":
@@ -61,5 +75,6 @@ if __name__ == "__main__":
     parser.add_argument("--batch-size", default=32, type=int)
     parser.add_argument("--logdir", default="bert_teacher", type=str)
     parser.add_argument("--verbose", action="store_true")
+    parser.add_argument("--wandb", action="store_true")
     args = parser.parse_args()
     main(args)

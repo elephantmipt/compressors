@@ -1,0 +1,21 @@
+command:
+  - ${env}
+  - python3
+  - examples/transformers/train_teacher.py
+  - ${args}
+  - --wandb
+  - --model
+  - google/bert_uncased_L-4_H-512_A-8
+  - --logdir
+  - bert_small_teacher
+method: grid
+name: "bert-training"
+project: "bert-distillation"
+metric:
+  name: accuracy
+  goal: maximize
+parameters:
+  lr:
+    values: [1e-5, 3e-5, 1e-4]
+  batch-size:
+    values: [8, 16, 32]
