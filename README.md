@@ -19,6 +19,7 @@ Compressors is a library with a lot of pipelines connected with model compressio
             * [CIFAR100 ResNet](#cifar100-resnet)
             * [AG NEWS BERT (transformers)](#ag-news-bert-transformers)
          * [Pruning](#pruning-1)
+      * [Examples](#examples)
 
 ## Why Compressors?
 
@@ -408,3 +409,9 @@ runner.train(
     minimize_valid_metric=False,
 )
 ```
+
+## Examples
+
+ - [CIFAR100](https://github.com/elephantmipt/compressors/tree/master/examples/cifar100)
+ - [Transformers](https://github.com/elephantmipt/compressors/tree/master/examples/transformers)
+ - [Lottery ticket](https://github.com/elephantmipt/compressors/tree/master/examples/lottery_ticket)
