@@ -358,7 +358,7 @@ from catalyst.contrib.datasets import MNIST
 from compressors.distillation.callbacks import MetricAggregationCallback
 from compressors.distillation.callbacks import KLDivCallback
 from compressors.models import MLP
-from compressors.pruning.runners import FinePruneRunner
+from compressors.pruning.runners import PruneRunner
 from compressors.utils.data import TorchvisionDatasetWrapper as Wrp
 
 model = MLP(num_layers=3)
@@ -377,7 +377,7 @@ loaders = {
 
 optimizer = torch.optim.Adam(model.parameters())
 
-runner = FinePruneRunner(num_sessions=10)
+runner = PruneRunner(num_sessions=10)
 
 runner.train(
     model=model,

@@ -61,7 +61,7 @@ def test_pruning():
 
     from compressors.distillation.callbacks import KLDivCallback, MetricAggregationCallback
     from compressors.models import MLP
-    from compressors.pruning.runners import FinePruneRunner
+    from compressors.pruning.runners import PruneRunner
     from compressors.utils.data import TorchvisionDatasetWrapper as Wrp
 
     model = MLP(num_layers=3)
@@ -78,7 +78,7 @@ def test_pruning():
 
     optimizer = torch.optim.Adam(model.parameters())
 
-    runner = FinePruneRunner(num_sessions=10)
+    runner = PruneRunner(num_sessions=10)
 
     runner.train(
         model=model,
@@ -106,4 +106,5 @@ def test_pruning():
         valid_loader="valid",
         valid_metric="accuracy",
         minimize_valid_metric=False,
+        check=True
     )
