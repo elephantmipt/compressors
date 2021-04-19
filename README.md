@@ -390,18 +390,6 @@ runner.train(
         OptimizerCallback(metric_key="loss"),
         CriterionCallback(input_key="logits", target_key="targets", metric_key="loss"),
         AccuracyCallback(input_key="logits", target_key="targets"),
-        ControlFlowCallback(KLDivCallback(student_logits_key="logits"), loaders="train"),
-        ControlFlowCallback(
-            MetricAggregationCallback(
-                prefix="loss",
-                metrics={
-                    "loss": 0.6,
-                    "kl_div_loss": 0.4,   
-                },
-                mode="weighted_sum"
-            ),
-            loaders="train"
-        )
     ],
     logdir="./pruned_model",
     valid_loader="valid",
