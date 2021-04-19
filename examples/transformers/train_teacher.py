@@ -2,6 +2,7 @@ import argparse
 
 from catalyst.callbacks import OptimizerCallback
 from catalyst.callbacks.metric import LoaderMetricCallback
+from catalyst.utils import set_global_seed
 from datasets import load_dataset, load_metric
 import torch
 from torch.utils.data import DataLoader
@@ -10,15 +11,15 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer
 from compressors.metrics.hf_metric import HFMetric
 from compressors.runners.hf_runner import HFRunner
 
-try:
-    import wandb
-except ImportError:
-    pass
-
 
 def main(args):
     if args.wandb:
+        import wandb
         wandb.init()
+        logdir = args.logdir + "/" + wandb.run.name
+    else:
+        logdir = args.logdir
+    set_global_seed(args.seed)
     datasets = load_dataset(args.dataset)
 
     tokenizer = AutoTokenizer.from_pretrained(args.model)
@@ -50,13 +51,14 @@ def main(args):
         num_epochs=args.num_epochs,
         valid_metric="accuracy",
         minimize_valid_metric=False,
-        logdir=args.logdir,
+        logdir=logdir,
         valid_loader="valid",
         verbose=args.verbose,
+        seed=args.seed
     )
     if args.wandb:
         import csv
-        with open(args.logdir + "/valid.csv") as fi:
+        with open(logdir + "/valid.csv") as fi:
             reader = csv.DictReader(fi)
             accuracy = []
             for row in reader:
@@ -64,7 +66,7 @@ def main(args):
                     continue
                 accuracy.append(float(row["accuracy"]))
 
-        wandb.log({"accuracy": max(accuracy)})
+        wandb.log({"accuracy": max(accuracy[-args.num_epochs:])})
 
 
 if __name__ == "__main__":
@@ -78,5 +80,6 @@ if __name__ == "__main__":
     parser.add_argument("--logdir", default="bert_teacher", type=str)
     parser.add_argument("--verbose", action="store_true")
     parser.add_argument("--wandb", action="store_true")
+    parser.add_argument("--seed", default=42, type=int)
     args = parser.parse_args()
     main(args)

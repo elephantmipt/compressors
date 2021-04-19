@@ -13,7 +13,7 @@ from catalyst.callbacks import (
     OptimizerCallback,
     SchedulerCallback,
 )
-from catalyst.utils import unpack_checkpoint
+from catalyst.utils import unpack_checkpoint, set_global_seed
 
 from compressors.distillation.callbacks import (
     AttentionHiddenStatesCallback,
@@ -51,6 +51,9 @@ NAME2MODEL = {
 
 
 def main(args):
+
+    set_global_seed(42)
+
     transform_train = transforms.Compose(
         [
             transforms.RandomCrop(32, padding=4),
@@ -123,6 +126,7 @@ def main(args):
         valid_loader="valid",
         num_epochs=args.num_epochs,
         criterion=torch.nn.CrossEntropyLoss(),
+        seed=args.seed
     )
 
 
@@ -156,5 +160,6 @@ if __name__ == "__main__":
     parser.add_argument("--alpha", default=0.1, type=float)
     parser.add_argument("--beta", default=1000, type=float)
     parser.add_argument("--logdir", default="cifar100_logs")
+    parser.add_argument("--seed", default=42, type=int)
     args = parser.parse_args()
     main(args)

@@ -5,6 +5,7 @@ from catalyst.callbacks import (
     CriterionCallback, OptimizerCallback, SchedulerCallback, AccuracyCallback
 )
 from catalyst.runners import SupervisedRunner
+from catalyst.utils import set_global_seed
 from torch.utils.data import DataLoader
 
 from torchvision import transforms
@@ -33,6 +34,9 @@ NAME2MODEL = {
 
 
 def main(args):
+
+    set_global_seed(args.seed)
+
     transform_train = transforms.Compose(
         [
             transforms.RandomCrop(32, padding=4),
@@ -85,6 +89,7 @@ def main(args):
         valid_loader="valid",
         num_epochs=args.num_epochs,
         criterion=torch.nn.CrossEntropyLoss(),
+        seed=args.seed
     )
 
 
@@ -108,5 +113,6 @@ if __name__ == "__main__":
     parser.add_argument("--num-epochs", default=240, type=int)
     parser.add_argument("--batch-size", default=64, type=int)
     parser.add_argument("--logdir", default="cifar100_teacher")
+    parser.add_argument("--seed", default=42, type=int)
     args = parser.parse_args()
     main(args)

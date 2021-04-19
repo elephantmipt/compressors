@@ -1,8 +1,8 @@
 import argparse
 
-from catalyst.callbacks import ControlFlowCallback, OptimizerCallback
+from catalyst.callbacks import ControlFlowCallback, OptimizerCallback, CheckpointCallback
 from catalyst.callbacks.metric import LoaderMetricCallback
-from catalyst.utils import unpack_checkpoint
+from catalyst.utils import unpack_checkpoint, set_global_seed
 from datasets import load_dataset, load_metric
 import torch
 from torch.utils.data import DataLoader
@@ -20,6 +20,13 @@ from compressors.metrics.hf_metric import HFMetric
 
 
 def main(args):
+    if args.wandb:
+        import wandb
+        wandb.init()
+        logdir = args.logdir + "/" + wandb.run.name
+    else:
+        logdir = args.logdir
+    set_global_seed(args.seed)
     datasets = load_dataset(args.dataset)
 
     tokenizer = AutoTokenizer.from_pretrained(args.teacher_model)
@@ -61,42 +68,77 @@ def main(args):
 
     kl_div = ControlFlowCallback(KLDivCallback(temperature=args.kl_temperature), loaders="train")
 
-    aggregator = ControlFlowCallback(
-        MetricAggregationCallback(
-            prefix="loss",
-            metrics={
-                "kl_div_loss": args.alpha, "mse_loss": args.beta, "task_loss": 1 - args.alpha
-            },
-            mode="weighted_sum",
-        ),
-        loaders="train",
-    )
-
     runner = HFDistilRunner()
 
     student_model = AutoModelForSequenceClassification.from_pretrained(
         args.student_model, num_labels=args.num_labels
     )
+    callbacks = [
+        metric_callback,
+        slct_callback,
+        lambda_hiddens_callback,
+        kl_div,
+        OptimizerCallback(metric_key="loss"),
+        CheckpointCallback(
+            logdir=logdir,
+            loader_key="valid",
+            mode="model",
+            metric_key="accuracy",
+            minimize=False
+        )
+    ]
+    if args.beta > 0:
+        aggregator = ControlFlowCallback(
+            MetricAggregationCallback(
+                prefix="loss",
+                metrics={
+                    "kl_div_loss": args.alpha, "mse_loss": args.beta, "task_loss": 1 - args.alpha
+                },
+                mode="weighted_sum",
+            ),
+            loaders="train",
+        )
+        callbacks.append(mse_hiddens)
+        callbacks.append(aggregator)
+    else:
+        aggregator = ControlFlowCallback(
+            MetricAggregationCallback(
+                prefix="loss",
+                metrics={
+                    "kl_div_loss": args.alpha, "task_loss": 1 - args.alpha
+                },
+                mode="weighted_sum",
+            ),
+            loaders="train",
+        )
+        callbacks.append(aggregator)
     runner.train(
         model=torch.nn.ModuleDict({"teacher": teacher_model, "student": student_model}),
         loaders=loaders,
         optimizer=torch.optim.Adam(student_model.parameters(), lr=args.lr),
-        callbacks=[
-            metric_callback,
-            slct_callback,
-            lambda_hiddens_callback,
-            mse_hiddens,
-            kl_div,
-            aggregator,
-            OptimizerCallback(metric_key="loss"),
-        ],
+        callbacks=callbacks,
         num_epochs=args.num_epochs,
         valid_metric="accuracy",
-        logdir=args.logdir,
+        logdir=logdir,
         minimize_valid_metric=False,
         valid_loader="valid",
-        verbose=args.verbose
+        verbose=args.verbose,
+        seed=args.seed
     )
+
+    if args.wandb:
+        import csv
+        import shutil
+        with open(logdir + "/valid.csv") as fi:
+            reader = csv.DictReader(fi)
+            accuracy = []
+            for row in reader:
+                if row["accuracy"] == "accuracy":
+                    continue
+                accuracy.append(float(row["accuracy"]))
+
+        wandb.log({"accuracy": max(accuracy[-args.num_epochs:])})
+        shutil.rmtree(logdir)
 
 
 if __name__ == "__main__":
@@ -115,5 +157,7 @@ if __name__ == "__main__":
     parser.add_argument("--batch-size", default=32, type=int)
     parser.add_argument("--kl-temperature", default=4.0, type=float)
     parser.add_argument("--verbose", action="store_true")
+    parser.add_argument("--wandb", action="store_true")
+    parser.add_argument("--seed", default=42, type=int)
     args = parser.parse_args()
     main(args)
