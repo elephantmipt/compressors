@@ -37,7 +37,7 @@ Or you can use Weights and Biases for parameter tuning
 wandb sweep examples/transformers/configs/student.yml
 ```
 
-Here is a logs for models I trained:
+Here are the logs for models I trained:
 
 | Teacher | Student | Accuracy | Accuracy (without kd) | Improvement |
 | ------- | ------- | -------- | --------------------- | ----------- |
