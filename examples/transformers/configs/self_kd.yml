@@ -1,0 +1,29 @@
+command:
+  - ${env}
+  - python3
+  - examples/transformers/train_student.py
+  -  ${args}
+  - --wandb
+  - --teacher-path
+  - bert_teacher/checkpoints/best.pth
+  - --layers
+  - "0,1,2,3,4,5,6,7"
+  - --student-model
+  - "google/bert_uncased_L-8_H-512_A-8"
+method: bayes
+name: "self-distillation"
+project: "bert-distillation"
+metric:
+  name: accuracy
+  goal: maximize
+parameters:
+  lr:
+    values: [1e-5, 3e-5, 1e-4]
+  batch-size:
+    values: [8, 16, 32]
+  alpha:
+    values: [0.1, 0.3, 0.5]
+  beta:
+    values: [0, 0.1, 0.2]
+  kl-temperature:
+    values: [2, 4, 8]

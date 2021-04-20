@@ -42,8 +42,4 @@ Here are the logs for models I trained:
 | Teacher | Student | Accuracy | Accuracy (without kd) | Improvement |
 | ------- | ------- | -------- | --------------------- | ----------- |
 | BERT Medium | BERT Small | [0.9443](https://wandb.ai/torchwave/bert-distillation/sweeps/68nz4bmr) | 0.9429 | +0.014 |
-
-
-
-
-
+| BERT Medium | BERT Medium | [0.9466](https://wandb.ai/torchwave/bert-distillation/sweeps/mpcocdp6) | 0.9454 | +0.012 |
